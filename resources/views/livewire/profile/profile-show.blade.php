@@ -390,20 +390,39 @@
                             </h5>
                             <div class="activities-list">
                                 @forelse($activities as $activity)
-                                    <div class="activity-item mb-2 p-3 rounded bg-white shadow-sm">
-                                        <div class="d-flex align-items-start gap-3">
-                                            <div class="activity-icon flex-shrink-0">
-                                                <i class="{{ $activity->icon }} f-s-24 text-primary"></i>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <p class="mb-1 f-s-14 f-w-600">{{ $activity->formatted_description }}</p>
-                                                <small class="text-muted f-s-12">
-                                                    <i class="ph ph-clock me-1"></i>
-                                                    {{ $activity->created_at->diffForHumans() }}
-                                                </small>
+                                    @php
+                                        // Generate link to subject based on type
+                                        $link = '#';
+                                        if ($activity->subject) {
+                                            $link = match($activity->subject_type) {
+                                                'App\Models\Poem' => route('poems.show', $activity->subject_id),
+                                                'App\Models\Event' => route('events.show', $activity->subject_id),
+                                                'App\Models\Article' => route('articles.show', $activity->subject_id),
+                                                'App\Models\Video' => route('videos.show', $activity->subject_id),
+                                                'App\Models\Photo' => route('photos.show', $activity->subject_id),
+                                                default => '#'
+                                            };
+                                        }
+                                    @endphp
+                                    <a href="{{ $link }}" class="text-decoration-none d-block">
+                                        <div class="activity-item mb-2 p-3 rounded bg-white shadow-sm hover-effect">
+                                            <div class="d-flex align-items-start gap-3">
+                                                <div class="activity-icon flex-shrink-0">
+                                                    <i class="{{ $activity->icon }} f-s-24 text-primary"></i>
+                                                </div>
+                                                <div class="flex-grow-1">
+                                                    <p class="mb-1 f-s-14 f-w-600 text-dark">{{ $activity->formatted_description }}</p>
+                                                    <small class="text-muted f-s-12">
+                                                        <i class="ph ph-clock me-1"></i>
+                                                        {{ $activity->created_at->diffForHumans() }}
+                                                    </small>
+                                                </div>
+                                                <div class="flex-shrink-0">
+                                                    <i class="ph ph-caret-right text-muted"></i>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </a>
                                 @empty
                                     <div class="col-12">
                                         <div class="text-center py-5">
