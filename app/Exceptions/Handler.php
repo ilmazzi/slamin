@@ -99,9 +99,40 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Throwable $e)
     {
-        // Check if user is admin
-        $user = \Illuminate\Support\Facades\Auth::user();
-        $isAdmin = $user && $user->hasRole('admin');
+        // Check if user is admin (with multiple fallbacks)
+        $isAdmin = false;
+        
+        try {
+            $user = \Illuminate\Support\Facades\Auth::user();
+            
+            if ($user) {
+                // Try hasRole method (Spatie)
+                if (method_exists($user, 'hasRole')) {
+                    $isAdmin = $user->hasRole('admin');
+                }
+                // Fallback: check roles relationship
+                elseif (method_exists($user, 'roles')) {
+                    $isAdmin = $user->roles()->where('name', 'admin')->exists();
+                }
+                // Fallback: check is_admin column
+                elseif (isset($user->is_admin)) {
+                    $isAdmin = (bool) $user->is_admin;
+                }
+            }
+        } catch (\Exception $authException) {
+            // If auth check fails, assume not admin
+            $isAdmin = false;
+        }
+        
+        // Debug log
+        Log::info('Exception Handler Debug', [
+            'environment' => app()->environment(),
+            'is_admin' => $isAdmin,
+            'user_id' => \Illuminate\Support\Facades\Auth::id(),
+            'exception' => get_class($e),
+            'message' => $e->getMessage(),
+            'will_show_details' => !app()->environment('production') || $isAdmin
+        ]);
         
         // In production, don't show detailed error information (unless admin)
         if (app()->environment('production') && !$isAdmin) {
