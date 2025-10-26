@@ -27,8 +27,12 @@
     
     /* Sidebar Badge Animation */
     .sidebar-badge-icon {
+        width: 24px;
+        height: 24px;
+        object-fit: contain;
+        cursor: pointer;
         border: 2px solid rgba(var(--primary), 0.3);
-        padding: 3px;
+        padding: 2px;
         border-radius: 50%;
         transition: all 0.3s ease;
         animation: badgePulse 3s ease-in-out infinite;
