@@ -149,10 +149,37 @@ class ProfileEdit extends Component
             ]);
             
             // Update validation rules for current user
-            $this->rules['nickname'] = 'required|string|max:50|unique:users,nickname,' . $this->user->id;
-            $this->rules['email'] = 'required|email|unique:users,email,' . $this->user->id;
+            $rules = [
+                'name' => 'required|string|max:255',
+                'nickname' => 'required|string|max:50|unique:users,nickname,' . $this->user->id,
+                'email' => 'required|email|unique:users,email,' . $this->user->id,
+                'bio' => 'nullable|string|max:1000',
+                'location' => 'nullable|string|max:255',
+                'website' => 'nullable|url|max:255',
+                'birth_date' => 'nullable|date|before:today',
+                'phone' => 'nullable|string|max:20',
+                'social_facebook' => 'nullable|url|max:255',
+                'social_instagram' => 'nullable|url|max:255',
+                'social_twitter' => 'nullable|url|max:255',
+                'social_youtube' => 'nullable|url|max:255',
+                'social_linkedin' => 'nullable|url|max:255',
+                'is_public' => 'boolean',
+                'show_email' => 'boolean',
+                'show_phone' => 'boolean',
+                'show_birth_date' => 'boolean',
+            ];
+            
+            // Only validate files if they exist (Livewire 3)
+            if ($this->avatar) {
+                $rules['avatar'] = 'image|mimes:jpeg,png,jpg,gif,webp|max:2048';
+            }
+            if ($this->banner) {
+                $rules['banner'] = 'image|mimes:jpeg,png,jpg,gif,webp|max:5120';
+            }
 
-            $this->validate();
+            $this->validate($rules);
+            
+            \Log::info('ProfileEdit validation passed');
 
         $data = [
             'name' => $this->name,
