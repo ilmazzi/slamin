@@ -161,108 +161,120 @@
         </div>
     </div>
 
-    <!-- Search and Filters -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="card">
+    <!-- Search and Filters - Premium Design -->
+    <div class="row g-3 mb-4">
+        <!-- Search Card -->
+        <div class="col-lg-5 col-md-12">
+            <div class="card hover-effect h-100">
                 <div class="card-body">
                     <form method="GET" id="filterForm">
-                        <!-- Search and Main Filters -->
-                        <div class="row g-3 align-items-end">
-                            <!-- Search -->
-                            <div class="col-lg-4 col-md-6">
-                                <label class="form-label f-w-500 text-muted mb-2 f-s-13">
-                                    <i class="ph ph-magnifying-glass me-1"></i>{{ __('events.search_events') }}
-                                </label>
-                                <input type="text" name="search" class="form-control" 
-                                       placeholder="Cerca per titolo, città, organizzatore..."
-                                       value="{{ request('search') }}">
-                            </div>
+                        <div class="d-flex align-items-center mb-2">
+                            <i class="ph ph-magnifying-glass text-primary f-s-20 me-2"></i>
+                            <h6 class="mb-0 f-w-600">Cerca Eventi</h6>
+                        </div>
+                        <input type="text" name="search" class="form-control" 
+                               placeholder="Titolo, città, organizzatore..."
+                               value="{{ request('search') }}">
+                    </form>
+                </div>
+            </div>
+        </div>
 
-                            <!-- City -->
-                            <div class="col-lg-2 col-md-3 col-6">
-                                <label class="form-label f-w-500 text-muted mb-2 f-s-13">
-                                    <i class="ph ph-map-pin me-1"></i>{{ __('events.city') }}
-                                </label>
-                                <select name="city" class="form-select">
-                                    <option value="">Tutte</option>
+        <!-- Filters Card -->
+        <div class="col-lg-4 col-md-8">
+            <div class="card hover-effect h-100">
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-2">
+                        <i class="ph ph-faders text-primary f-s-20 me-2"></i>
+                        <h6 class="mb-0 f-w-600">Filtra per</h6>
+                    </div>
+                    <form method="GET" id="filterFormSelects">
+                        <div class="row g-2">
+                            <div class="col-6">
+                                <select name="city" class="form-select form-select-sm">
+                                    <option value="">Tutte le città</option>
                                     @foreach($events->pluck('city')->unique()->filter() as $city)
                                         <option value="{{ $city }}" {{ request('city') == $city ? 'selected' : '' }}>{{ $city }}</option>
                                     @endforeach
                                 </select>
                             </div>
-
-                            <!-- Type -->
-                            <div class="col-lg-2 col-md-3 col-6">
-                                <label class="form-label f-w-500 text-muted mb-2 f-s-13">
-                                    <i class="ph ph-globe me-1"></i>Visibilità
-                                </label>
-                                <select name="type" class="form-select">
-                                    <option value="">Tutti</option>
+                            <div class="col-6">
+                                <select name="type" class="form-select form-select-sm">
+                                    <option value="">Tutti i tipi</option>
                                     <option value="public" {{ request('type') === 'public' ? 'selected' : '' }}>Pubblici</option>
                                     <option value="private" {{ request('type') === 'private' ? 'selected' : '' }}>Privati</option>
                                 </select>
                             </div>
-
-                            <!-- Actions -->
-                            <div class="col-lg-4 col-md-12">
-                                <div class="d-flex gap-2 justify-content-lg-end">
-                                    <button type="submit" class="btn btn-primary flex-fill flex-lg-grow-0">
-                                        <i class="ph ph-funnel me-1"></i>Applica Filtri
-                                    </button>
-                                    @auth
-                                        @can('events.create.public')
-                                            <a href="{{ route('events.create') }}" class="btn btn-success flex-fill flex-lg-grow-0">
-                                                <i class="ph ph-plus me-1"></i>Nuovo Evento
-                                            </a>
-                                        @endcan
-                                    @endauth
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Quick Filters - Minimal Design -->
-                        <div class="row mt-4">
-                            <div class="col-12">
-                                <div class="d-flex flex-wrap gap-2 align-items-center">
-                                    <span class="text-muted f-s-13 me-2">Filtri rapidi:</span>
-                                    
-                                    <button type="button" class="btn btn-sm btn-primary" data-filter="today">
-                                        <i class="ph ph-calendar me-1"></i>Oggi
-                                    </button>
-                                    <button type="button" class="btn btn-sm btn-primary" data-filter="tomorrow">
-                                        <i class="ph ph-calendar-plus me-1"></i>Domani
-                                    </button>
-                                    <button type="button" class="btn btn-sm btn-primary" data-filter="weekend">
-                                        <i class="ph ph-calendar-check me-1"></i>Weekend
-                                    </button>
-                                    
-                                    <div class="vr mx-1"></div>
-                                    
-                                    <button type="button" class="btn btn-sm btn-primary" data-filter="free">
-                                        <i class="ph ph-gift me-1"></i>Gratuiti
-                                    </button>
-                                    <button type="button" class="btn btn-sm btn-primary" data-filter="nearby">
-                                        <i class="ph ph-map-pin me-1"></i>Vicini
-                                    </button>
-                                    
-                                    @auth
-                                    <div class="vr mx-1"></div>
-                                    
-                                    <button type="button" class="btn btn-sm btn-primary" data-filter="my">
-                                        <i class="ph ph-user me-1"></i>I Miei
-                                    </button>
-                                    <button type="button" class="btn btn-sm btn-primary" data-filter="private">
-                                        <i class="ph ph-lock me-1"></i>Privati
-                                    </button>
-                                    <button type="button" class="btn btn-sm btn-primary" data-filter="past">
-                                        <i class="ph ph-clock-counter-clockwise me-1"></i>Passati
-                                    </button>
-                                    @endauth
-                                </div>
-                            </div>
                         </div>
                     </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions Card -->
+        <div class="col-lg-3 col-md-4">
+            <div class="card hover-effect h-100">
+                <div class="card-body d-flex flex-column justify-content-center">
+                    <div class="d-grid gap-2">
+                        <button type="submit" form="filterForm" class="btn btn-primary">
+                            <i class="ph ph-funnel me-1"></i>Applica
+                        </button>
+                        @auth
+                            @can('events.create.public')
+                                <a href="{{ route('events.create') }}" class="btn btn-success">
+                                    <i class="ph ph-plus me-1"></i>Nuovo
+                                </a>
+                            @endcan
+                        @endauth
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Filters - Chip Style -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body py-3">
+                    <div class="d-flex flex-wrap gap-2 align-items-center">
+                        <span class="badge bg-light-primary text-primary f-s-12 f-w-600">
+                            <i class="ph ph-lightning me-1"></i>FILTRI RAPIDI
+                        </span>
+                        
+                        <button type="button" class="badge bg-primary border-0 f-s-12" data-filter="today" style="cursor: pointer;">
+                            <i class="ph ph-calendar me-1"></i>Oggi
+                        </button>
+                        <button type="button" class="badge bg-primary border-0 f-s-12" data-filter="tomorrow" style="cursor: pointer;">
+                            <i class="ph ph-calendar-plus me-1"></i>Domani
+                        </button>
+                        <button type="button" class="badge bg-primary border-0 f-s-12" data-filter="weekend" style="cursor: pointer;">
+                            <i class="ph ph-calendar-check me-1"></i>Weekend
+                        </button>
+                        
+                        <span class="vr mx-1"></span>
+                        
+                        <button type="button" class="badge bg-primary border-0 f-s-12" data-filter="free" style="cursor: pointer;">
+                            <i class="ph ph-gift me-1"></i>Gratuiti
+                        </button>
+                        <button type="button" class="badge bg-primary border-0 f-s-12" data-filter="nearby" style="cursor: pointer;">
+                            <i class="ph ph-map-pin me-1"></i>Vicini
+                        </button>
+                        
+                        @auth
+                        <span class="vr mx-1"></span>
+                        
+                        <button type="button" class="badge bg-primary border-0 f-s-12" data-filter="my" style="cursor: pointer;">
+                            <i class="ph ph-user me-1"></i>I Miei
+                        </button>
+                        <button type="button" class="badge bg-primary border-0 f-s-12" data-filter="private" style="cursor: pointer;">
+                            <i class="ph ph-lock me-1"></i>Privati
+                        </button>
+                        <button type="button" class="badge bg-primary border-0 f-s-12" data-filter="past" style="cursor: pointer;">
+                            <i class="ph ph-clock-counter-clockwise me-1"></i>Passati
+                        </button>
+                        @endauth
+                    </div>
                 </div>
             </div>
         </div>
