@@ -390,10 +390,10 @@
                             </h5>
                             <div class="activities-list">
                                 @forelse($activities as $activity)
-                                    <div class="activity-item mb-2 p-3 rounded bg-light">
+                                    <div class="activity-item mb-2 p-3 rounded bg-white shadow-sm">
                                         <div class="d-flex align-items-start gap-3">
                                             <div class="activity-icon flex-shrink-0">
-                                                <i class="{{ $activity->icon }} f-s-24 text-{{ $activity->color_class }}"></i>
+                                                <i class="{{ $activity->icon }} f-s-24 text-primary"></i>
                                             </div>
                                             <div class="flex-grow-1">
                                                 <p class="mb-1 f-s-14 f-w-600">{{ $activity->formatted_description }}</p>
