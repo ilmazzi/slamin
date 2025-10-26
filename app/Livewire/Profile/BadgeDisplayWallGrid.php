@@ -81,13 +81,13 @@ class BadgeDisplayWallGrid extends Component
                 ]);
                 $this->showInProfile = true;
             } else {
-                // Disabling
+                // Disabling - set to 0 instead of null
                 $userBadge->update([
                     'show_in_profile' => false,
-                    'profile_order' => null
+                    'profile_order' => 0
                 ]);
                 $this->showInProfile = false;
-                $this->profileOrder = null;
+                $this->profileOrder = 0;
             }
             
             $this->loadBadges();
@@ -120,13 +120,13 @@ class BadgeDisplayWallGrid extends Component
                 ]);
                 $this->showInSidebar = true;
             } else {
-                // Disabling
+                // Disabling - set to 0 instead of null
                 $userBadge->update([
                     'show_in_sidebar' => false,
-                    'sidebar_order' => null
+                    'sidebar_order' => 0
                 ]);
                 $this->showInSidebar = false;
-                $this->sidebarOrder = null;
+                $this->sidebarOrder = 0;
             }
             
             $this->loadBadges();
