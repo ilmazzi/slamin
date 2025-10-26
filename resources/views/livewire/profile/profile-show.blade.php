@@ -3,7 +3,7 @@
         <div class="col-12">
             <div class="card mb-4">
                 <div class="card-body p-0">
-                    <div class="position-relative" style="height: 300px; overflow: hidden;">
+                    <div class="position-relative overflow-hidden" style="height: 200px;">
                         <img src="{{ $user->getBannerImageUrlAttribute() }}" 
                              alt="{{ $user->getDisplayName() }}" 
                              class="w-100 h-100" 
@@ -12,8 +12,52 @@
                 </div>
             </div>
         </div>
-        <!-- Left Sidebar -->
-        <div class="col-lg-3 col-md-4 mb-4">
+        
+        <!-- Mobile Navigation - Horizontal Tabs (visible only on mobile) -->
+        <div class="col-12 d-md-none mb-3">
+            <div class="d-flex gap-2 overflow-auto pb-2" style="scrollbar-width: none;">
+                <button class="btn {{ $activeTab === 'about' ? 'btn-primary' : 'btn-outline-secondary' }} flex-shrink-0 btn-sm" 
+                        wire:click="setActiveTab('about')">
+                    <i class="ph ph-user-circle me-1"></i>
+                    <span class="d-none d-sm-inline">Profilo</span>
+                </button>
+                <button class="btn {{ $activeTab === 'poems' ? 'btn-primary' : 'btn-outline-secondary' }} flex-shrink-0 btn-sm" 
+                        wire:click="setActiveTab('poems')">
+                    <i class="ph ph-book-open me-1"></i>
+                    <span class="d-none d-sm-inline">Poesie</span>
+                </button>
+                <button class="btn {{ $activeTab === 'events' ? 'btn-primary' : 'btn-outline-secondary' }} flex-shrink-0 btn-sm" 
+                        wire:click="setActiveTab('events')">
+                    <i class="ph ph-calendar me-1"></i>
+                    <span class="d-none d-sm-inline">Eventi</span>
+                </button>
+                <button class="btn {{ $activeTab === 'media' ? 'btn-primary' : 'btn-outline-secondary' }} flex-shrink-0 btn-sm" 
+                        wire:click="setActiveTab('media')">
+                    <i class="ph ph-play-circle me-1"></i>
+                    <span class="d-none d-sm-inline">Media</span>
+                </button>
+                <button class="btn {{ $activeTab === 'articles' ? 'btn-primary' : 'btn-outline-secondary' }} flex-shrink-0 btn-sm" 
+                        wire:click="setActiveTab('articles')">
+                    <i class="ph ph-newspaper me-1"></i>
+                    <span class="d-none d-sm-inline">Articoli</span>
+                </button>
+                <button class="btn {{ $activeTab === 'activities' ? 'btn-primary' : 'btn-outline-secondary' }} flex-shrink-0 btn-sm" 
+                        wire:click="setActiveTab('activities')">
+                    <i class="ph ph-activity me-1"></i>
+                    <span class="d-none d-sm-inline">Attività</span>
+                </button>
+                @if($isOwnProfile)
+                <button class="btn {{ $activeTab === 'settings' ? 'btn-primary' : 'btn-outline-secondary' }} flex-shrink-0 btn-sm" 
+                        wire:click="setActiveTab('settings')">
+                    <i class="ph ph-gear me-1"></i>
+                    <span class="d-none d-sm-inline">Impostazioni</span>
+                </button>
+                @endif
+            </div>
+        </div>
+        
+        <!-- Left Sidebar - Hidden on Mobile -->
+        <div class="col-lg-3 col-md-4 mb-4 d-none d-md-block">
             <div class="card">
                 <div class="card-body">
                     <!-- Navigation -->
@@ -131,52 +175,55 @@
             </div>
         </div>
 
-        <!-- Main Content -->
-        <div class="col-lg-6 col-md-8 mb-4">
+        <!-- Main Content - Full width on mobile -->
+        <div class="col-12 col-md-8 col-lg-6 mb-4">
             @if($activeTab === 'about')
                 <!-- Modern Profile Header Card -->
                 <div class="card overflow-hidden mb-4 border-0 shadow-sm">
                     <div class="card-body p-0">
                         <!-- Banner -->
-                        <div class="profile-banner position-relative" style="height: 200px; background: rgba(var(--primary), 1);">
-                            <!-- Avatar -->
-                            <div class="position-absolute" style="bottom: -50px; left: 50%; transform: translateX(-50%); z-index: 10;">
+                        <div class="profile-banner position-relative" style="height: 180px; background: rgba(var(--primary), 1);">
+                            <!-- Avatar - Responsive Size -->
+                            <div class="position-absolute" style="bottom: -40px; left: 50%; transform: translateX(-50%); z-index: 10;">
                                 <div class="avatar-circle">
                                     <img alt="{{ $user->name }}" 
                                          src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($user) }}"
-                                         style="width: 120px; height: 120px; border-radius: 50%; border: 5px solid white; box-shadow: 0 5px 20px rgba(0,0,0,0.2); object-fit: cover;">
+                                         class="rounded-circle border border-3 border-white shadow"
+                                         style="width: 90px; height: 90px; object-fit: cover;">
+                                    @if($user->verified_at)
+                                    <span class="position-absolute bottom-0 end-0 bg-white rounded-circle p-1">
+                                        <i class="ph ph-check-circle-fill text-success f-s-18"></i>
+                                    </span>
+                                    @endif
                                 </div>
                             </div>
 
-                            <!-- Stats Bar at bottom of banner -->
-                            <div class="position-absolute w-100" style="bottom: 15px; z-index: 5;">
-                                <div class="d-flex justify-content-center gap-4">
+                            <!-- Stats Bar - Responsive -->
+                            <div class="position-absolute w-100" style="bottom: 10px; z-index: 5;">
+                                <div class="d-flex justify-content-center gap-2 gap-md-4">
                                     <div class="text-white text-center">
-                                        <div class="f-w-700 f-s-20">{{ $badgesCount }}</div>
-                                        <small class="opacity-75">{{ __('profile.badge') }}</small>
+                                        <div class="f-w-700 f-s-16 f-s-md-20">{{ $badgesCount }}</div>
+                                        <small class="opacity-75 f-s-10 f-s-md-12">{{ __('profile.badge') }}</small>
                                     </div>
                                     <div class="text-white text-center">
-                                        <div class="f-w-700 f-s-20">{{ $totalPoints }}</div>
-                                        <small class="opacity-75">{{ __('profile.points') }}</small>
+                                        <div class="f-w-700 f-s-16 f-s-md-20">{{ $totalPoints }}</div>
+                                        <small class="opacity-75 f-s-10 f-s-md-12">{{ __('profile.points') }}</small>
                                     </div>
                                     <div class="text-white text-center">
-                                        <div class="f-w-700 f-s-20">{{ $level }}</div>
-                                        <small class="opacity-75">{{ __('profile.level') }}</small>
+                                        <div class="f-w-700 f-s-16 f-s-md-20">{{ $level }}</div>
+                                        <small class="opacity-75 f-s-10 f-s-md-12">{{ __('profile.level') }}</small>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- User Info Below Banner -->
-                        <div class="text-center pt-5 pb-3 px-4" style="margin-top: 50px;">
-                            <h3 class="mb-1 f-w-700">
+                        <div class="text-center pt-5 pb-3 px-3 px-md-4" style="margin-top: 40px;">
+                            <h3 class="mb-1 f-w-700 f-s-18 f-s-md-24">
                                 {{ $user->getDisplayName() }}
-                                @if($user->verified_at)
-                                    <i class="ph ph-check-circle-fill text-success ms-1" title="Verificato"></i>
-                                @endif
                             </h3>
                             @if($user->bio)
-                            <p class="text-muted f-s-14 mb-0">{{ Str::limit($user->bio, 120) }}</p>
+                            <p class="text-muted f-s-13 f-s-md-14 mb-0">{{ Str::limit($user->bio, 120) }}</p>
                             @endif
                         </div>
                     </div>
@@ -197,20 +244,22 @@
 
                 <!-- Badge Showcase - Stack Cards -->
                 <div class="card mb-4 border-0 shadow-sm">
-                    <div class="card-body p-4">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h5 class="mb-0 f-w-700">
+                    <div class="card-body p-3 p-md-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+                            <h5 class="mb-0 f-w-700 f-s-16">
                                 <i class="ph ph-medal-military me-2 text-primary"></i>
                                 Badge in Evidenza
                             </h5>
                             <a href="{{ route('profile.my-badges') }}" class="btn btn-sm btn-primary">
                                 <i class="ph ph-trophy me-1"></i>
-                                Vedi Trophy Case
+                                <span class="d-none d-sm-inline">Vedi</span> Trophy
                             </a>
                         </div>
-                        <p class="text-muted f-s-13 mb-4">I tuoi 3 badge preferiti - gestiscili per scegliere quali mostrare</p>
+                        <p class="text-muted f-s-12 f-s-md-13 mb-3">I tuoi 3 badge preferiti - gestiscili per scegliere quali mostrare</p>
                         
-                        @livewire('profile.badge-display-stack-cards', ['user' => $user])
+                        <div class="overflow-hidden">
+                            @livewire('profile.badge-display-stack-cards', ['user' => $user])
+                        </div>
                     </div>
                 </div>
 
@@ -393,8 +442,8 @@
             @endif
         </div>
 
-        <!-- Right Sidebar -->
-        <div class="col-lg-3 col-md-12 mb-4">
+        <!-- Right Sidebar - Hidden on mobile -->
+        <div class="col-lg-3 col-md-12 mb-4 d-none d-md-block">
             <!-- Statistics Card -->
             <div class="card mb-4">
                 <div class="card-body">
