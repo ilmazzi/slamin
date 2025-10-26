@@ -1,71 +1,87 @@
 <div>
-    <div class="card">
-        <div class="card-header">
-            <h5 class="mb-0">
-                <x-icon name="edit-profile" size="20" class="me-2" />
-                {{ __('profile.edit_profile') }}
-            </h5>
+    <!-- Profile Preview Card -->
+    <div class="card mb-4 overflow-hidden border-0 shadow">
+        <div class="position-relative" style="height: 200px; background: rgba(var(--primary), 1);">
+            @if($bannerPreview)
+                <img src="{{ $bannerPreview }}" alt="Banner" class="w-100 h-100 position-absolute top-0 start-0" style="object-fit: cover; opacity: 0.9;">
+            @elseif($user->banner_image)
+                <img src="{{ $user->getBannerImageUrlAttribute() }}" alt="Banner" class="w-100 h-100 position-absolute top-0 start-0" style="object-fit: cover; opacity: 0.9;">
+            @endif
+            
+            <!-- Avatar Preview -->
+            <div class="position-absolute bottom-0 start-50 translate-middle-x" style="margin-bottom: -60px;">
+                @if($avatarPreview)
+                    <img src="{{ $avatarPreview }}" alt="Avatar" class="rounded-circle border border-4 border-white shadow" style="width: 120px; height: 120px; object-fit: cover;">
+                @else
+                    <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($user) }}" alt="Avatar" class="rounded-circle border border-4 border-white shadow" style="width: 120px; height: 120px; object-fit: cover;">
+                @endif
+            </div>
         </div>
         
-        <div class="card-body">
+        <div class="card-body text-center pt-5 pb-3" style="margin-top: 60px;">
+            <h4 class="fw-bold mb-1">{{ $user->getDisplayName() }}</h4>
+            <p class="text-muted f-s-14 mb-3">{{ __('profile.edit_your_profile_info') }}</p>
+            
             @if (session()->has('success'))
                 <div class="alert alert-success alert-dismissible fade show" role="alert">
                     {{ session('success') }}
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             @endif
-
+        </div>
+    </div>
+    
+    <!-- Edit Form Card -->
+    <div class="card shadow">
+        <div class="card-header bg-white border-bottom border-3 border-primary">
+            <h5 class="mb-0 fw-bold">
+                <i class="ph ph-pencil-simple me-2 text-primary"></i>
+                {{ __('profile.edit_profile') }}
+            </h5>
+        </div>
+        
+        <div class="card-body">
             <form wire:submit.prevent="save">
-                <!-- Avatar and Banner Section -->
+                <!-- Avatar and Banner Upload Section -->
                 <div class="row mb-4">
-                    <div class="col-md-6">
-                        <label class="form-label">{{ __('profile.avatar') }}</label>
-                        <div class="d-flex align-items-center gap-3">
-                            @if($avatarPreview)
-                                <img src="{{ $avatarPreview }}" alt="Avatar Preview" class="rounded-circle" style="width: 80px; height: 80px; object-fit: cover;">
-                            @elseif($user->avatar)
-                                <img src="{{ Storage::url($user->avatar) }}" alt="Current Avatar" class="rounded-circle" style="width: 80px; height: 80px; object-fit: cover;">
-                            @else
-                                <div class="rounded-circle bg-light d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
-                                    <i class="ph ph-user f-s-24 text-muted"></i>
-                                </div>
-                            @endif
-                            <div>
-                                <input type="file" class="form-control form-control-sm" wire:model="avatar" accept="image/*">
-                                @if($avatarPreview || $user->avatar)
-                                    <button type="button" class="btn btn-sm btn-outline-danger mt-1" wire:click="removeAvatar">
-                                        <i class="ph ph-trash me-1"></i>{{ __('profile.remove') }}
-                                    </button>
-                                @endif
-                            </div>
-                        </div>
-                        @error('avatar') <div class="text-danger f-s-12">{{ $message }}</div> @enderror
+                    <div class="col-12 mb-3">
+                        <h6 class="f-w-600 mb-3">
+                            <i class="ph ph-image-square me-2 text-primary"></i>
+                            {{ __('profile.images') }}
+                        </h6>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">
+                            <i class="ph ph-user-circle me-1 text-primary"></i>
+                            {{ __('profile.avatar') }}
+                        </label>
+                        <input type="file" class="form-control @error('avatar') is-invalid @enderror" wire:model="avatar" accept="image/*">
+                        <small class="text-muted f-s-11">JPG, PNG, WEBP - Max 2MB</small>
+                        @error('avatar') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        @if($avatarPreview || $user->avatar)
+                            <button type="button" class="btn btn-sm btn-outline-danger mt-2" wire:click="removeAvatar">
+                                <i class="ph ph-trash me-1"></i>{{ __('profile.remove') }}
+                            </button>
+                        @endif
                     </div>
                     
-                    <div class="col-md-6">
-                        <label class="form-label">{{ __('profile.banner') }}</label>
-                        <div class="d-flex align-items-center gap-3">
-                            @if($bannerPreview)
-                                <img src="{{ $bannerPreview }}" alt="Banner Preview" class="rounded" style="width: 120px; height: 60px; object-fit: cover;">
-                            @elseif($user->banner)
-                                <img src="{{ Storage::url($user->banner) }}" alt="Current Banner" class="rounded" style="width: 120px; height: 60px; object-fit: cover;">
-                            @else
-                                <div class="rounded bg-light d-flex align-items-center justify-content-center" style="width: 120px; height: 60px;">
-                                    <i class="ph ph-image f-s-20 text-muted"></i>
-                                </div>
-                            @endif
-                            <div>
-                                <input type="file" class="form-control form-control-sm" wire:model="banner" accept="image/*">
-                                @if($bannerPreview || $user->banner)
-                                    <button type="button" class="btn btn-sm btn-outline-danger mt-1" wire:click="removeBanner">
-                                        <i class="ph ph-trash me-1"></i>{{ __('profile.remove') }}
-                                    </button>
-                                @endif
-                            </div>
-                        </div>
-                        @error('banner') <div class="text-danger f-s-12">{{ $message }}</div> @enderror
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label fw-bold">
+                            <i class="ph ph-image me-1 text-primary"></i>
+                            {{ __('profile.banner') }}
+                        </label>
+                        <input type="file" class="form-control @error('banner') is-invalid @enderror" wire:model="banner" accept="image/*">
+                        <small class="text-muted f-s-11">JPG, PNG, WEBP - Max 5MB</small>
+                        @error('banner') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                        @if($bannerPreview || $user->banner)
+                            <button type="button" class="btn btn-sm btn-outline-danger mt-2" wire:click="removeBanner">
+                                <i class="ph ph-trash me-1"></i>{{ __('profile.remove') }}
+                            </button>
+                        @endif
                     </div>
                 </div>
+                
+                <hr class="my-4">
 
                 <!-- Basic Information -->
                 <div class="row mb-4">
