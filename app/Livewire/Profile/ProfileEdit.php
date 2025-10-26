@@ -215,15 +215,19 @@ class ProfileEdit extends Component
             // Delete old avatar if exists
             if ($this->user->profile_photo) {
                 Storage::disk('public')->delete($this->user->profile_photo);
+                if ($this->user->avatar_thumbnail) {
+                    Storage::disk('public')->delete($this->user->avatar_thumbnail);
+                }
             }
             
             $avatarPath = $this->avatar->store('avatars', 'public');
             $data['profile_photo'] = $avatarPath;
             
-            // Generate thumbnail
+            // Generate thumbnail (square 150x150)
             $imageService = app(ImageService::class);
-            $thumbnailPath = $imageService->createThumbnail($avatarPath, 150, 150);
-            $data['avatar_thumbnail'] = $thumbnailPath;
+            $thumbnailPath = 'avatars/thumbnails/' . basename($avatarPath);
+            $thumbnailInfo = $imageService->createThumbnail($avatarPath, $thumbnailPath, 150, 150);
+            $data['avatar_thumbnail'] = $thumbnailInfo['path'];
         }
 
         // Handle banner upload
