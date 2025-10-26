@@ -1,3 +1,4 @@
+<div>
 <div class="container-fluid px-3 px-lg-4">
     <!-- Hero Banner with Avatar -->
     <div class="card mb-4 overflow-hidden border-0 shadow-sm">
@@ -621,3 +622,5 @@
     background-color: rgba(var(--primary), 1) !important;
 }
 </style>
+</div>
+</div>
