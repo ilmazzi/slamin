@@ -247,25 +247,25 @@
                                     <div class="col-12">
                                         <a href="{{ route('poems.show', $poem) }}" class="text-decoration-none">
                                             <div class="card hover-effect h-100 border-0 shadow-sm">
-                                                <div class="card-body p-3">
-                                                    <div class="d-flex align-items-start gap-3">
-                                                        <div class="flex-shrink-0">
-                                                            <div class="bg-light-primary p-3 rounded-3">
-                                                                <i class="ph-duotone ph-scroll text-primary f-s-32"></i>
-                                                            </div>
+                                                <div class="card-body p-0">
+                                                    <div class="row g-0">
+                                                        <div class="col-3 col-md-2">
+                                                            <img src="{{ \App\Helpers\PoemImageHelper::getPoemImageUrl($poem) }}" 
+                                                                 alt="{{ $poem->title ?: __('poems.untitled') }}" 
+                                                                 class="w-100 h-100 rounded-start"
+                                                                 style="object-fit: cover; min-height: 100px; max-height: 120px;">
                                                         </div>
-                                                        <div class="flex-grow-1">
-                                                            <h6 class="mb-2 f-w-700 text-dark">{{ $poem->title ?: __('poems.untitled') }}</h6>
-                                                            <p class="text-muted f-s-13 mb-2" style="line-height: 1.6;">{{ Str::limit(strip_tags($poem->content), 120) }}</p>
-                                                            <div class="d-flex align-items-center gap-3 text-muted f-s-12">
-                                                                <span><i class="ph ph-calendar me-1"></i>{{ $poem->created_at->format('d/m/Y') }}</span>
-                                                                @if($poem->like_count > 0)
-                                                                <span><i class="ph ph-heart me-1"></i>{{ $poem->like_count }}</span>
-                                                                @endif
+                                                        <div class="col-9 col-md-10">
+                                                            <div class="p-3">
+                                                                <h6 class="mb-2 f-w-700 text-dark">{{ $poem->title ?: __('poems.untitled') }}</h6>
+                                                                <p class="text-muted f-s-13 mb-2" style="line-height: 1.6;">{{ Str::limit(strip_tags($poem->content), 100) }}</p>
+                                                                <div class="d-flex align-items-center gap-3 text-muted f-s-12">
+                                                                    <span><i class="ph ph-calendar me-1"></i>{{ $poem->created_at->format('d/m/Y') }}</span>
+                                                                    @if($poem->like_count > 0)
+                                                                    <span><i class="ph ph-heart me-1"></i>{{ $poem->like_count }}</span>
+                                                                    @endif
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="flex-shrink-0 align-self-center">
-                                                            <i class="ph ph-caret-right text-muted f-s-20"></i>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -296,15 +296,13 @@
                                             <div class="card hover-effect h-100 border-0 shadow-sm">
                                                 <div class="card-body p-0">
                                                     <div class="row g-0">
-                                                        @if($article->featured_image)
                                                         <div class="col-4 col-md-3">
-                                                            <img src="{{ Storage::url($article->featured_image) }}" 
+                                                            <img src="{{ \App\Helpers\ArticleImageHelper::getArticleImageUrl($article) }}" 
                                                                  alt="{{ is_array($article->title) ? ($article->title[app()->getLocale()] ?? reset($article->title)) : $article->title }}" 
                                                                  class="w-100 h-100 rounded-start"
                                                                  style="object-fit: cover; min-height: 120px; max-height: 150px;">
                                                         </div>
-                                                        @endif
-                                                        <div class="{{ $article->featured_image ? 'col-8 col-md-9' : 'col-12' }}">
+                                                        <div class="col-8 col-md-9">
                                                             <div class="p-3">
                                                                 <h6 class="mb-2 f-w-700 text-dark">
                                                                     {{ is_array($article->title) ? ($article->title[app()->getLocale()] ?? reset($article->title)) : $article->title }}
@@ -460,15 +458,13 @@
                                             <div class="card hover-effect h-100 border-0 shadow-sm">
                                                 <div class="card-body p-0">
                                                     <div class="row g-0">
-                                                        @if($event->image_url)
                                                         <div class="col-4 col-md-3">
-                                                            <img src="{{ $event->image_url }}" 
+                                                            <img src="{{ \App\Helpers\EventImageHelper::getEventImageUrl($event) }}" 
                                                                  alt="{{ $event->title }}" 
                                                                  class="w-100 h-100 rounded-start"
                                                                  style="object-fit: cover; min-height: 120px; max-height: 150px;">
                                                         </div>
-                                                        @endif
-                                                        <div class="{{ $event->image_url ? 'col-8 col-md-9' : 'col-12' }}">
+                                                        <div class="col-8 col-md-9">
                                                             <div class="p-3">
                                                                 <h6 class="mb-2 f-w-700 text-dark">{{ $event->title }}</h6>
                                                                 <p class="text-muted f-s-13 mb-2">{{ Str::limit(strip_tags($event->description), 100) }}</p>
