@@ -63,5 +63,6 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withProviders([
         LanguageServiceProvider::class,
+        \Barryvdh\TranslationManager\ManagerServiceProvider::class,
     ])
     ->create();
