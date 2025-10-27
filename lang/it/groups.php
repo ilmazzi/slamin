@@ -149,6 +149,8 @@ return [
     // Permissions
     'no_permission_create' => 'Non hai i permessi per creare gruppi',
     'no_permission_edit' => 'Non hai i permessi per modificare questo gruppo',
+    'no_permission_delete' => 'Non hai i permessi per eliminare questo gruppo',
+    'deleted_successfully' => 'Gruppo eliminato con successo!',
     
     // Validation
     'validation' => [

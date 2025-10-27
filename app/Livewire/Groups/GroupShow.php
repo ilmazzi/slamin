@@ -119,6 +119,27 @@ class GroupShow extends Component
         return $this->redirect(route('groups.index'));
     }
 
+    public function deleteGroup()
+    {
+        $user = Auth::user();
+
+        if (!$user->isAdminOf($this->group) && !$user->hasRole('admin')) {
+            $this->dispatch('notify', ['message' => __('groups.no_permission_delete'), 'type' => 'error']);
+            return;
+        }
+
+        // Elimina l'immagine se esiste
+        if ($this->group->image) {
+            \Illuminate\Support\Facades\Storage::disk('public')->delete($this->group->image);
+        }
+
+        $this->group->delete();
+
+        session()->flash('success', __('groups.deleted_successfully'));
+        
+        return $this->redirect(route('groups.index'));
+    }
+
     public function render()
     {
         return view('livewire.groups.group-show')
