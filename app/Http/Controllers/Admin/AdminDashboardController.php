@@ -8,7 +8,6 @@ use App\Models\User;
 use App\Models\Event;
 use App\Models\Gig;
 use App\Models\GigApplication;
-use App\Models\TranslationPayment;
 use App\Models\Video;
 use App\Models\Poem;
 use App\Models\Group;
@@ -74,7 +73,6 @@ class AdminDashboardController extends Controller
             'total_users' => User::count(),
             'total_events' => Event::count(),
             'total_gigs' => Gig::count(),
-            'total_payments' => TranslationPayment::count(),
             'total_videos' => Video::count(),
             'total_poems' => Poem::count(),
             'total_groups' => Group::count(),
@@ -130,25 +128,15 @@ class AdminDashboardController extends Controller
     private function getPaymentStats()
     {
         $today = Carbon::today();
-        $thisWeek = Carbon::now()->startOfWeek();
-        $thisMonth = Carbon::now()->startOfMonth();
-
-        $totalRevenue = TranslationPayment::where('status', 'completed')->sum('amount');
-        $todayRevenue = TranslationPayment::where('status', 'completed')
-            ->whereDate('created_at', $today)->sum('amount');
-        $thisWeekRevenue = TranslationPayment::where('status', 'completed')
-            ->where('created_at', '>=', $thisWeek)->sum('amount');
-        $thisMonthRevenue = TranslationPayment::where('status', 'completed')
-            ->where('created_at', '>=', $thisMonth)->sum('amount');
-
+        // Translation payment stats removed (system cleaned up)
         return [
-            'total_revenue' => $totalRevenue,
-            'today_revenue' => $todayRevenue,
-            'this_week_revenue' => $thisWeekRevenue,
-            'this_month_revenue' => $thisMonthRevenue,
-            'pending_payments' => TranslationPayment::where('status', 'pending')->count(),
-            'completed_payments' => TranslationPayment::where('status', 'completed')->count(),
-            'failed_payments' => TranslationPayment::where('status', 'failed')->count(),
+            'total_revenue' => 0,
+            'today_revenue' => 0,
+            'this_week_revenue' => 0,
+            'this_month_revenue' => 0,
+            'pending_payments' => 0,
+            'completed_payments' => 0,
+            'failed_payments' => 0,
         ];
     }
 
@@ -176,13 +164,12 @@ class AdminDashboardController extends Controller
     {
         $recentUsers = User::latest()->take(5)->get();
         $recentEvents = Event::latest()->take(5)->get();
-        $recentPayments = TranslationPayment::latest()->take(5)->get();
         $recentGigs = Gig::latest()->take(5)->get();
 
         return [
             'recent_users' => $recentUsers,
             'recent_events' => $recentEvents,
-            'recent_payments' => $recentPayments,
+            'recent_payments' => collect([]), // Translation payments removed
             'recent_gigs' => $recentGigs,
         ];
     }

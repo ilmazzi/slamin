@@ -1036,21 +1036,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Article::class)->published();
     }
 
-    /**
-     * Get user's translation payments (as translator)
-     */
-    public function translationPayments()
-    {
-        return $this->hasMany(TranslationPayment::class, 'translator_id');
-    }
-
-    /**
-     * Get user's translation payments (as client)
-     */
-    public function translationPaymentsAsClient()
-    {
-        return $this->hasMany(TranslationPayment::class, 'client_id');
-    }
+    // Translation payment relationships removed (system cleaned up)
 
     // ========================================
     // RELAZIONI CON LE LINGUE
