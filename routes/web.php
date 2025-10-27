@@ -743,61 +743,7 @@ Route::get('/invitations/{invitation}/decline', [InvitationController::class, 'd
         Route::get('/stats', [App\Http\Controllers\PermissionController::class, 'getStats'])->name('stats');
     });
 
-        // Admin Translation Management (Simplified System)
-    Route::prefix('admin/translations')->name('admin.translations.')->middleware(['auth', 'admin'])->group(function () {
-        // ROTTE SPECIFICHE PRIMA (senza parametri)
-        Route::get('/', [App\Http\Controllers\Admin\TranslationManagementController::class, 'index'])->name('index');
-        Route::get('/create', [App\Http\Controllers\Admin\TranslationManagementController::class, 'create'])->name('create');
-        Route::post('/', [App\Http\Controllers\Admin\TranslationManagementController::class, 'store'])->name('store');
-        Route::post('/sync', [App\Http\Controllers\Admin\TranslationManagementController::class, 'sync'])->name('sync');
-        Route::post('/sync-all', [App\Http\Controllers\Admin\TranslationManagementController::class, 'syncAllLanguages'])->name('sync-all');
-        Route::post('/clear-cache', [App\Http\Controllers\Admin\TranslationManagementController::class, 'clearCache'])->name('clear-cache');
-
-           // ROTTE PER TESTI HARDCODED (DEVE ESSERE PRIMA DELLE ROTTE CON PARAMETRI)
-           Route::get('/hardcoded', [App\Http\Controllers\Admin\TranslationManagementController::class, 'hardcoded'])->name('hardcoded');
-           Route::post('/convert-to-key', [App\Http\Controllers\Admin\TranslationManagementController::class, 'convertToKey'])->name('convert-to-key');
-
-           // ROTTE PER API DI TRADUZIONE
-           Route::post('/api/test', [App\Http\Controllers\Admin\TranslationManagementController::class, 'testApi'])->name('api.test');
-           Route::post('/api/translate', [App\Http\Controllers\Admin\TranslationManagementController::class, 'translateWithApi'])->name('api.translate');
-           Route::post('/api/translate-page', [App\Http\Controllers\Admin\TranslationManagementController::class, 'translatePage'])->name('api.translate-page');
-           Route::get('/api/providers', [App\Http\Controllers\Admin\TranslationManagementController::class, 'getProviders'])->name('api.providers');
-           Route::get('/api/files', [App\Http\Controllers\Admin\TranslationManagementController::class, 'getAvailableFiles'])->name('api.files');
-           Route::get('/api/status', [App\Http\Controllers\Admin\TranslationManagementController::class, 'getTranslationStatus'])->name('api.status');
-
-           // ROTTE PER SISTEMA SMART DI REVISIONE
-           Route::post('/mark-reviewed', [App\Http\Controllers\Admin\TranslationManagementController::class, 'markAsReviewed'])->name('mark-reviewed');
-           Route::post('/unmark-reviewed', [App\Http\Controllers\Admin\TranslationManagementController::class, 'unmarkAsReviewed'])->name('unmark-reviewed');
-           Route::post('/auto-save', [App\Http\Controllers\Admin\TranslationManagementController::class, 'autoSave'])->name('auto-save');
-           Route::get('/detailed-stats', [App\Http\Controllers\Admin\TranslationManagementController::class, 'getDetailedStats'])->name('detailed-stats');
-           Route::post('/find-usage', [App\Http\Controllers\Admin\TranslationManagementController::class, 'findKeyUsage'])->name('find-usage');
-           Route::post('/find-unused', [App\Http\Controllers\Admin\TranslationManagementController::class, 'findUnusedKeys'])->name('find-unused');
-           Route::post('/remove-unused', [App\Http\Controllers\Admin\TranslationManagementController::class, 'removeUnusedKeys'])->name('remove-unused');
-           Route::post('/create-key', [App\Http\Controllers\Admin\TranslationManagementController::class, 'createKey'])->name('create-key');
-           Route::post('/find-missing', [App\Http\Controllers\Admin\TranslationManagementController::class, 'findMissingKeys'])->name('find-missing');
-           Route::post('/find-all-missing', [App\Http\Controllers\Admin\TranslationManagementController::class, 'findMissingKeys'])->name('find-all-missing');
-
-        // ROTTE CON PARAMETRI LINGUA
-        Route::get('/{language}/smart', [App\Http\Controllers\Admin\TranslationManagementController::class, 'showSmart'])->name('smart');
-        Route::get('/{language}', [App\Http\Controllers\Admin\TranslationManagementController::class, 'show'])->name('show');
-        Route::post('/{language}/update', [App\Http\Controllers\Admin\TranslationManagementController::class, 'update'])->name('update');
-        Route::delete('/{language}', [App\Http\Controllers\Admin\TranslationManagementController::class, 'destroy'])->name('destroy');
-        Route::post('/{language}/copy-from-italian', [App\Http\Controllers\Admin\TranslationManagementController::class, 'copyFromItalian'])->name('copy-from-italian');
-        Route::post('/{language}/clear-all', [App\Http\Controllers\Admin\TranslationManagementController::class, 'clearAll'])->name('clear-all');
-
-        // Gestione coda traduzioni (ROTTE SPECIFICHE)
-        Route::get('/queue', [App\Http\Controllers\Admin\TranslationController::class, 'queue'])->name('queue');
-        Route::post('/queue/convert', [App\Http\Controllers\Admin\TranslationController::class, 'convertFromQueue'])->name('convert-from-queue');
-        Route::post('/queue/mark-processed', [App\Http\Controllers\Admin\TranslationController::class, 'markAsProcessed'])->name('mark-processed');
-        Route::post('/queue/clean-processed', [App\Http\Controllers\Admin\TranslationController::class, 'cleanProcessed'])->name('clean-processed');
-
-        // Sincronizzazione (ROTTE SPECIFICHE)
-        Route::post('/sync/from-file', [App\Http\Controllers\Admin\TranslationController::class, 'syncFromFile'])->name('sync-from-file');
-        Route::post('/sync/to-file', [App\Http\Controllers\Admin\TranslationController::class, 'syncToFile'])->name('sync-to-file');
-        Route::post('/clear-cache', [App\Http\Controllers\Admin\TranslationController::class, 'clearCache'])->name('clear-cache');
-
-        // ROTTE CON PARAMETRI ALLA FINE (rimosse per evitare conflitti con il nuovo sistema)
-    });
+    // Barryvdh Laravel Translation Manager routes are auto-registered in config/translation-manager.php
 
         // Carousel Management (Admin only)
     Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
