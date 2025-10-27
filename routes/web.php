@@ -1222,8 +1222,8 @@ Route::prefix('poem-translations')->name('poem-translations.')->middleware(['aut
 // ========================================
 
 Route::prefix('groups')->name('groups.')->middleware('auth')->group(function () {
-    // Routes principali dei gruppi
-    Route::get('/', [App\Http\Controllers\GroupController::class, 'index'])->name('index');
+    // Routes principali dei gruppi (Livewire 3)
+    Route::get('/', App\Livewire\Groups\GroupIndex::class)->name('index');
     Route::get('/create', [App\Http\Controllers\GroupController::class, 'create'])->name('create');
     Route::post('/', [App\Http\Controllers\GroupController::class, 'store'])->name('store');
 

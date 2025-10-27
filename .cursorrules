@@ -2,6 +2,7 @@
 # Linee guida vincolanti per Cursor su questo repository
 
 ## Principi generali (MUST)
+- Mobile First **sempre**
 - Usa **solo** la documentazione ufficiale di **Livewire 3** per componenti, lifecycle hooks, directives e testing.
   - Sorgente consentita: https://livewire.laravel.com/
   - Evita blog/medium/stack overflow/github issues come fonte normativa.
