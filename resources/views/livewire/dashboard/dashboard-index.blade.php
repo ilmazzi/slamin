@@ -115,7 +115,7 @@
                         <div id="calendar-list-view" class="d-md-none {{ $currentView !== 'list' ? 'd-none' : '' }}">
                             <!-- Controlli navigazione lista -->
                             <div class="d-flex justify-content-between align-items-center mb-3">
-                                <button class="btn btn-primary btn-sm f-s-10 f-md-12" wire:click="previousListPage" {{ $listPage <= 1 ? 'disabled' : '' }}>
+                                <button type="button" class="btn btn-primary btn-sm f-s-10 f-md-12 {{ $listPage <= 1 ? 'disabled' : '' }}" wire:click="previousListPage" >
                                     <i class="ph ph-chevron-left f-s-10 f-md-12"></i> <span class="d-none d-md-inline">{{ __('dashboard.previous') }}</span><span class="d-md-none">Prec</span>
                                 </button>
                                 <span class="f-s-12 f-md-14 f-w-600 text-center">

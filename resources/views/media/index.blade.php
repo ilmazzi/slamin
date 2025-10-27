@@ -157,15 +157,12 @@
                             @foreach($popularVideos->take(6) as $video)
                                 <div class="d-flex align-items-center mb-3 pb-3 border-bottom">
                                     <div class="flex-shrink-0 position-relative" style="cursor: pointer;" onclick="window.location.href='{{ route('videos.show', $video) }}'">
-                                        @if($video->thumbnail_url && $video->thumbnail_url !== asset('assets/images/placeholder/placholder-1.jpg'))
-                                            <img src="{{ $video->thumbnail_url }}" alt="{{ $video->title }}" class="rounded" style="width: 80px; height: 60px; object-fit: cover;">
-                                        @else
-                                            <div class="bg-light d-flex align-items-center justify-content-center rounded" style="width: 80px; height: 60px;">
-                                                <i class="ph-duotone ph-video-camera f-s-24 text-muted"></i>
-                                            </div>
-                                        @endif
+                                        <img src="{{ $video->thumbnail_url }}" 
+                                             alt="{{ $video->title }}" 
+                                             class="rounded" 
+                                             style="width: 80px; height: 60px; object-fit: cover;">
                                         <div class="position-absolute top-50 start-50 translate-middle">
-                                            <i class="ph-duotone ph-play f-s-16 text-white"></i>
+                                            <i class="ph-duotone ph-play f-s-16 text-white" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));"></i>
                                         </div>
                                     </div>
                                     <div class="flex-grow-1 ms-3">
@@ -198,15 +195,12 @@
                             @foreach($newVideos->take(6) as $video)
                                 <div class="d-flex align-items-center mb-3 pb-3 border-bottom">
                                     <div class="flex-shrink-0 position-relative" style="cursor: pointer;" onclick="window.location.href='{{ route('videos.show', $video) }}'">
-                                        @if($video->thumbnail_url && $video->thumbnail_url !== asset('assets/images/placeholder/placholder-1.jpg'))
-                                            <img src="{{ $video->thumbnail_url }}" alt="{{ $video->title }}" class="rounded" style="width: 80px; height: 60px; object-fit: cover;">
-                                        @else
-                                            <div class="bg-light d-flex align-items-center justify-content-center rounded" style="width: 80px; height: 60px;">
-                                                <i class="ph-duotone ph-video-camera f-s-24 text-muted"></i>
-                                            </div>
-                                        @endif
+                                        <img src="{{ $video->thumbnail_url }}" 
+                                             alt="{{ $video->title }}" 
+                                             class="rounded" 
+                                             style="width: 80px; height: 60px; object-fit: cover;">
                                         <div class="position-absolute top-50 start-50 translate-middle">
-                                            <i class="ph-duotone ph-play f-s-16 text-white"></i>
+                                            <i class="ph-duotone ph-play f-s-16 text-white" style="filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8));"></i>
                                         </div>
                                     </div>
                                     <div class="flex-grow-1 ms-3">
