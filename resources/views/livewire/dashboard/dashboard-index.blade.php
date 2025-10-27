@@ -100,7 +100,7 @@
                                 
                                 @foreach($paginatedEvents as $date => $events)
                                     <div class="card hover-effect">
-                                        <div class="card-body p-3">
+                                        <div class="card-body p-3" style="overflow-x: hidden;">
                                             <div class="d-flex justify-content-between align-items-start mb-2">
                                                 <h6 class="mb-0 f-w-600 text-primary">
                                                     {{ \Carbon\Carbon::parse($date)->format('d F Y') }}
@@ -108,12 +108,12 @@
                                                 <span class="badge bg-primary f-s-10">{{ $events->count() }} eventi</span>
                                             </div>
                                             
-                                            <div class="d-grid gap-2">
+                                            <div class="d-grid gap-2" style="overflow-x: hidden;">
                                                 @foreach($events as $event)
                                                     <div class="event-card-mobile p-2 rounded" 
-                                                         style="background: linear-gradient(135deg, rgba({{ ($event['color'] ?? 'secondary') === 'primary' ? '13,110,253' : (($event['color'] ?? 'secondary') === 'secondary' ? '108,117,125' : '255,193,7') }}, 0.1), rgba({{ ($event['color'] ?? 'secondary') === 'primary' ? '13,110,253' : (($event['color'] ?? 'secondary') === 'secondary' ? '108,117,125' : '255,193,7') }}, 0.05));">
+                                                         style="background: linear-gradient(135deg, rgba({{ ($event['color'] ?? 'secondary') === 'primary' ? '13,110,253' : (($event['color'] ?? 'secondary') === 'secondary' ? '108,117,125' : '255,193,7') }}, 0.1), rgba({{ ($event['color'] ?? 'secondary') === 'primary' ? '13,110,253' : (($event['color'] ?? 'secondary') === 'secondary' ? '108,117,125' : '255,193,7') }}, 0.05)); overflow-x: hidden; max-width: 100%;">
                                                         
-                                                        <div class="d-flex align-items-start gap-2">
+                                                        <div class="d-flex align-items-start gap-2" style="overflow-x: hidden; width: 100%;">
                                                             <!-- Immagine evento -->
                                                             <div class="flex-shrink-0">
                                                                 @if(isset($event['image']) && $event['image'])
@@ -129,12 +129,11 @@
                                                             </div>
                                                             
                                                             <!-- Contenuto evento -->
-                                                            <div class="flex-grow-1" style="min-width: 0;">
+                                                            <div class="flex-grow-1 event-content-wrapper">
                                                                 <!-- Titolo e badge -->
                                                                 <div class="d-flex align-items-start gap-2 mb-1">
-                                                                    <h6 class="mb-0 f-s-13 f-w-600 text-dark cursor-pointer flex-grow-1 text-truncate" 
-                                                                        wire:click="viewEvent({{ $event['id'] ?? 0 }})"
-                                                                        style="min-width: 0;">
+                                                                    <h6 class="mb-0 f-s-13 f-w-600 text-dark cursor-pointer flex-grow-1 event-title" 
+                                                                        wire:click="viewEvent({{ $event['id'] ?? 0 }})">
                                                                         {{ $event['title'] ?? __('dashboard.event_without_title') }}
                                                                     </h6>
                                                                     <span class="badge bg-{{ $event['color'] ?? 'secondary' }} f-s-9 flex-shrink-0">
@@ -150,22 +149,10 @@
                                                                         <span class="f-s-11 text-muted">{{ $event['time'] ?? __('dashboard.time_not_available') }}</span>
                                                                     </div>
                                                                     
-                                                                    <!-- Location e azioni -->
-                                                                    <div class="d-flex align-items-center justify-content-between gap-2">
-                                                                        <div class="d-flex align-items-center gap-1 flex-grow-1" style="min-width: 0;">
-                                                                            <i class="ph ph-map-pin f-s-12 text-muted flex-shrink-0"></i>
-                                                                            <span class="f-s-11 text-muted text-truncate">{{ $event['venue'] ?? __('dashboard.location_not_available') }}{{ isset($event['city']) ? ', ' . $event['city'] : '' }}</span>
-                                                                        </div>
-                                                                        
-                                                                        <!-- Social interactions -->
-                                                                        <div class="d-flex align-items-center gap-1 flex-shrink-0">
-                                                                            <button class="btn btn-sm p-0 border-0 bg-transparent" wire:click="toggleInterest({{ $event['id'] ?? 0 }})">
-                                                                                <i class="ph ph-heart f-s-14 text-danger"></i>
-                                                                            </button>
-                                                                            <button class="btn btn-sm p-0 border-0 bg-transparent" wire:click="shareEvent({{ $event['id'] ?? 0 }})">
-                                                                                <i class="ph ph-share-network f-s-14 text-primary"></i>
-                                                                            </button>
-                                                                        </div>
+                                                                    <!-- Location -->
+                                                                    <div class="d-flex align-items-center gap-1 event-location-wrapper">
+                                                                        <i class="ph ph-map-pin f-s-12 text-muted flex-shrink-0"></i>
+                                                                        <span class="f-s-11 text-muted event-location-text">{{ $event['venue'] ?? __('dashboard.location_not_available') }}{{ isset($event['city']) ? ', ' . $event['city'] : '' }}</span>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -177,10 +164,42 @@
                                             <style>
                                                 .event-card-mobile {
                                                     transition: transform 0.2s ease, box-shadow 0.2s ease;
+                                                    overflow-x: hidden !important;
+                                                    max-width: 100% !important;
                                                 }
                                                 
                                                 .event-card-mobile:active {
                                                     transform: scale(0.98);
+                                                }
+                                                
+                                                .event-card-mobile .d-flex {
+                                                    overflow-x: hidden;
+                                                    width: 100%;
+                                                }
+                                                
+                                                .event-content-wrapper {
+                                                    min-width: 0;
+                                                    max-width: 100%;
+                                                    overflow: hidden;
+                                                }
+                                                
+                                                .event-title {
+                                                    min-width: 0;
+                                                    max-width: 100%;
+                                                    overflow: hidden;
+                                                    text-overflow: ellipsis;
+                                                    white-space: nowrap;
+                                                }
+                                                
+                                                .event-location-wrapper {
+                                                    min-width: 0;
+                                                    overflow: hidden;
+                                                }
+                                                
+                                                .event-location-text {
+                                                    overflow: hidden;
+                                                    text-overflow: ellipsis;
+                                                    white-space: nowrap;
                                                 }
                                             </style>
                                         </div>
