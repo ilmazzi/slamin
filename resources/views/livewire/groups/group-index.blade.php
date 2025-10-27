@@ -245,15 +245,15 @@
                                 <!-- Statistiche -->
                                 <div class="details">
                                     <div>
-                                        <h4 class="text-primary">{{ $user->poems_count }}</h4>
+                                        <h4 class="text-primary">{{ $user->poems_count ?? 0 }}</h4>
                                         <p class="text-secondary f-s-12">{{ __('groups.user_poems') }}</p>
                                     </div>
                                     <div>
-                                        <h4 class="text-primary">{{ $user->articles_count }}</h4>
+                                        <h4 class="text-primary">{{ $user->articles_count ?? 0 }}</h4>
                                         <p class="text-secondary f-s-12">{{ __('groups.user_articles') }}</p>
                                     </div>
                                     <div>
-                                        <h4 class="text-primary">{{ number_format($user->total_interactions) }}</h4>
+                                        <h4 class="text-primary">{{ $user->total_interactions ?? 0 }}</h4>
                                         <p class="text-secondary f-s-12">{{ __('groups.user_interactions') }}</p>
                                     </div>
                                 </div>

@@ -136,6 +136,7 @@ class GroupIndex extends Component
         $query->orderBy($this->userSort, $this->userOrder);
 
         return $query->with(['roles'])
+                    ->withCount(['poems as poems_count', 'articles as articles_count'])
                     ->paginate(6, ['*'], 'usersPage');
     }
 
