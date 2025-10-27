@@ -102,7 +102,7 @@
     <style>
         .stack-cards-container {
             width: 100%;
-            padding: 20px;
+            padding: 30px 20px;
         }
 
         .stack-wrapper {
@@ -324,6 +324,77 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             z-index: 40;
             font-size: 1.1rem;
+        }
+
+        /* Responsive Mobile */
+        @media (max-width: 768px) {
+            .stack-cards-container {
+                padding: 15px;
+            }
+
+            .stack-wrapper {
+                height: 500px;
+                padding: 0 10px;
+            }
+
+            .stack-card {
+                width: 100%;
+                max-width: 100%;
+                height: 450px;
+            }
+
+            .card-content {
+                padding: 30px 20px;
+                border-radius: 20px;
+            }
+
+            .badge-icon-large {
+                width: 140px;
+                height: 140px;
+            }
+
+            .badge-name {
+                font-size: 1.4rem;
+            }
+
+            .badge-description {
+                font-size: 0.9rem;
+                max-width: 100%;
+            }
+
+            .badge-stats-row {
+                gap: 15px;
+                flex-wrap: wrap;
+            }
+
+            .stat-item {
+                font-size: 0.85rem;
+            }
+
+            .stack-nav {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+
+            .stack-nav-left {
+                left: 5px;
+            }
+
+            .stack-nav-right {
+                right: 5px;
+            }
+
+            .stack-counter {
+                top: 15px;
+                padding: 8px 16px;
+                font-size: 0.95rem;
+            }
+
+            .swipe-hint {
+                font-size: 0.75rem;
+                bottom: 15px;
+            }
         }
     </style>
 </div>
