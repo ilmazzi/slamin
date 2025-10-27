@@ -41,11 +41,11 @@
 
                         <!-- Layout Articles - Editor Controlled -->
                         <!-- Banner Article -->
-                        @if(isset($layoutArticles['banner']) && count($layoutArticles['banner']) > 0 && isset($layoutArticles['banner'][0]['article']))
+                        @if(isset($layoutArticles['banner']))
                             <div class="row g-3 mb-4">
                                 <!-- Banner Article -->
                                 <div class="col-12">
-                                    @php $bannerArticle = $layoutArticles['banner'][0]['article']; @endphp
+                                    @php $bannerArticle = $layoutArticles['banner']; @endphp
                                     <div class="card hover-effect">
                                         <div class="position-relative">
                                             @if($bannerArticle->featured_image_url)

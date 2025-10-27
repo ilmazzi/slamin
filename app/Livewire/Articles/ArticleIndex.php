@@ -61,20 +61,47 @@ class ArticleIndex extends Component
 
     private function loadLayoutArticles()
     {
-        $layouts = ArticleLayout::with(['article.user', 'article.category'])
-            ->where('is_active', true)
-            ->orderBy('position')
-            ->get()
-            ->groupBy('type');
-        
-        // Converti in array mantenendo la struttura corretta
         $this->layoutArticles = [];
-        foreach ($layouts as $type => $items) {
-            $this->layoutArticles[$type] = $items->map(function($item) {
-                return ['article' => $item->article];
+
+        // Banner - single article
+        $bannerLayout = ArticleLayout::where('position', 'banner')
+            ->where('is_active', true)
+            ->with(['article.user', 'article.category'])
+            ->first();
+        
+        if ($bannerLayout && $bannerLayout->article) {
+            $this->layoutArticles['banner'] = $bannerLayout->article;
+        }
+
+        // Featured - columns 1-2 and horizontal 1-2
+        $featuredPositions = ['column1', 'column2', 'horizontal1', 'horizontal2'];
+        $featuredLayouts = ArticleLayout::whereIn('position', $featuredPositions)
+            ->where('is_active', true)
+            ->with(['article.user', 'article.category'])
+            ->orderBy('order', 'asc')
+            ->get();
+        
+        if ($featuredLayouts->isNotEmpty()) {
+            $this->layoutArticles['featured'] = $featuredLayouts->map(function($layout) {
+                return ['article' => $layout->article];
             })->toArray();
         }
 
+        // Latest - columns 3-6 and horizontal 3
+        $latestPositions = ['column3', 'column4', 'horizontal3', 'column5', 'column6'];
+        $latestLayouts = ArticleLayout::whereIn('position', $latestPositions)
+            ->where('is_active', true)
+            ->with(['article.user', 'article.category'])
+            ->orderBy('order', 'asc')
+            ->get();
+        
+        if ($latestLayouts->isNotEmpty()) {
+            $this->layoutArticles['latest'] = $latestLayouts->map(function($layout) {
+                return ['article' => $layout->article];
+            })->toArray();
+        }
+
+        // Load featured articles (separate from layout)
         $this->featuredArticles = Article::with(['user', 'category'])
             ->published()
             ->where('featured', true)
