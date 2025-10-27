@@ -81,5 +81,12 @@ return [
     'success' => 'Successo',
     'error' => 'Errore',
     'information' => 'Informazione',
+
+    // User Roles (moved from auth.php to follow .cursorrules)
+    'role_admin' => 'Amministratore',
+    'role_moderator' => 'Moderatore',
+    'role_poet' => 'Poeta',
+    'role_judge' => 'Giudice',
+    'role_audience' => 'Spettatore',
 ];
 

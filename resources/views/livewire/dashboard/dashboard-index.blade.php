@@ -6,24 +6,22 @@
         <!-- 1. WELCOME CARD - Mobile First -->
         <div class="row mb-3">
             <div class="col-12">
-                <div class="card project-profit-card">
+                <div class="card project-profit-card position-relative">
                     <div class="card-body bg-light-primary">
-                        <div class="profit-arrow">
-                            <span class="bg-white text-primary h-90 w-90 d-flex-center">
-                                <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($user) }}"
-                                     alt="{{ $user->getDisplayName() }}"
-                                     class="rounded-circle"
-                                     style="width: 90px; height: 90px; object-fit: cover;">
-                            </span>
+                        <!-- Floating Avatar -->
+                        <div class="dashboard-avatar-float">
+                            <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($user) }}"
+                                 alt="{{ $user->getDisplayName() }}"
+                                 class="rounded-circle shadow">
                         </div>
                       
-                        <div class="mt-3">
+                        <div class="dashboard-welcome-content">
                             <h4 class="text-dark mb-1 f-w-600">{{__('dashboard.welcome')}} {{ $user->getDisplayName() }}</h4>
                             <p class="f-w-500 mb-2 f-s-14 text-primary-50">{{ $user->getName() }}</p>
                             <div class="d-flex flex-wrap gap-1">
                                 @foreach($user->getRoleNames() as $role)
                                     <span class="badge bg-primary f-s-12">
-                                        {{ __('auth.role_' . $role) ?: ucfirst($role) }}
+                                        {{ __('dashboard.role_' . $role) ?: ucfirst($role) }}
                                     </span>
                                 @endforeach
                             </div>
@@ -32,6 +30,45 @@
                 </div>
             </div>
         </div>
+        
+        <style>
+            .dashboard-avatar-float {
+                position: absolute;
+                top: 50%;
+                right: 20px;
+                transform: translateY(-50%);
+                z-index: 10;
+            }
+            
+            .dashboard-avatar-float img {
+                width: 80px;
+                height: 80px;
+                object-fit: cover;
+                border: 4px solid white;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            }
+            
+            .dashboard-welcome-content {
+                max-width: calc(100% - 100px);
+                padding-right: 10px;
+            }
+            
+            @media (max-width: 576px) {
+                .dashboard-avatar-float {
+                    right: 15px;
+                }
+                
+                .dashboard-avatar-float img {
+                    width: 70px;
+                    height: 70px;
+                    border-width: 3px;
+                }
+                
+                .dashboard-welcome-content {
+                    max-width: calc(100% - 90px);
+                }
+            }
+        </style>
         <!-- 2. CALENDARIO - Mobile First con visualizzazioni intelligenti -->
         <div class="row mb-4">
             <div class="col-12">
