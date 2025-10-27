@@ -10,7 +10,7 @@
                     </h3>
                     <p class="text-muted mb-0 d-none d-md-block">La tua collezione completa di badge - sblocca nuovi achievement!</p>
                 </div>
-                <a href="{{ route('profile.show', Auth::user()) }}" class="btn btn-outline-primary btn-sm">
+                <a href="{{ route('profile.show', Auth::user()) }}" class="btn btn-primary btn-sm">
                     <i class="ph ph-arrow-left me-2"></i>
                     <span class="d-none d-sm-inline">Torna al Profilo</span>
                     <span class="d-inline d-sm-none">Profilo</span>
@@ -42,7 +42,7 @@
         <div class="col-6 col-md-3">
             <div class="card border-0 shadow-sm h-100">
                 <div class="card-body text-center py-3 px-2">
-                    <i class="ph ph-ranking text-success mb-2 trophy-stat-icon"></i>
+                    <i class="ph ph-chart-line text-success mb-2 trophy-stat-icon"></i>
                     <h3 class="mb-0 f-w-700 trophy-stat-value">{{ Auth::user()->userPoints->level ?? 1 }}</h3>
                     <small class="text-muted d-block trophy-stat-label">Livello Attuale</small>
                 </div>
