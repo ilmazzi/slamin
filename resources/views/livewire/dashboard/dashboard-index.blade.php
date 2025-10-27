@@ -22,7 +22,7 @@
                             <p class="f-w-500 mb-2 f-s-14 text-primary-50">{{ $user->getName() }}</p>
                             <div class="d-flex flex-wrap gap-1">
                                 @foreach($user->getRoleNames() as $role)
-                                    <span class="badge bg-light-info text-dark f-s-12">
+                                    <span class="badge bg-primary f-s-12">
                                         {{ __('auth.role_' . $role) ?: ucfirst($role) }}
                                     </span>
                                 @endforeach
@@ -60,13 +60,13 @@
                         <!-- Toggle visualizzazioni - Solo su mobile -->
                         <div class="d-md-none">
                             <div class="btn-group btn-group-sm w-100" role="group">
-                                <button type="button" class="btn btn-outline-primary btn-sm {{ $currentView === 'list' ? 'active' : '' }}" wire:click="switchView('list')">
+                                <button type="button" class="btn {{ $currentView === 'list' ? 'btn-primary' : 'btn-light-primary' }} btn-sm" wire:click="switchView('list')">
                                     <i class="ph ph-list"></i>
                                 </button>
-                                <button type="button" class="btn btn-outline-primary btn-sm {{ $currentView === 'week' ? 'active' : '' }}" wire:click="switchView('week')">
+                                <button type="button" class="btn {{ $currentView === 'week' ? 'btn-primary' : 'btn-light-primary' }} btn-sm" wire:click="switchView('week')">
                                     <i class="ph ph-calendar"></i>
                                 </button>
-                                <button type="button" class="btn btn-outline-primary btn-sm {{ $currentView === 'month' ? 'active' : '' }}" wire:click="switchView('month')">
+                                <button type="button" class="btn {{ $currentView === 'month' ? 'btn-primary' : 'btn-light-primary' }} btn-sm" wire:click="switchView('month')">
                                     <i class="ph ph-calendar-blank"></i>
                                 </button>
                             </div>
@@ -78,13 +78,13 @@
                         <div id="calendar-list-view" class="d-md-none {{ $currentView !== 'list' ? 'd-none' : '' }}">
                             <!-- Controlli navigazione lista -->
                             <div class="d-flex justify-content-between align-items-center mb-3">
-                                <button class="btn btn-light-primary btn-sm f-s-10 f-md-12" wire:click="previousListPage" {{ $listPage <= 1 ? 'disabled' : '' }}>
+                                <button class="btn btn-primary btn-sm f-s-10 f-md-12" wire:click="previousListPage" {{ $listPage <= 1 ? 'disabled' : '' }}>
                                     <i class="ph ph-chevron-left f-s-10 f-md-12"></i> <span class="d-none d-md-inline">{{ __('dashboard.previous') }}</span><span class="d-md-none">Prec</span>
                                 </button>
                                 <span class="f-s-12 f-md-14 f-w-600 text-center">
                                     {{ __('dashboard.page') }} {{ $listPage }}
                                 </span>
-                                <button class="btn btn-outline-primary btn-sm f-s-10 f-md-12" wire:click="nextListPage">
+                                <button class="btn btn-primary btn-sm f-s-10 f-md-12" wire:click="nextListPage">
                                     <span class="d-none d-md-inline">{{ __('dashboard.next') }}</span><span class="d-md-none">Succ</span> <i class="ph ph-chevron-right f-s-10 f-md-12"></i>
                                 </button>
                             </div>
@@ -105,7 +105,7 @@
                                                 <h6 class="mb-0 f-w-600 text-primary">
                                                     {{ \Carbon\Carbon::parse($date)->format('d F Y') }}
                                                 </h6>
-                                                <span class="badge bg-light-primary text-primary f-s-10">{{ $events->count() }} eventi</span>
+                                                <span class="badge bg-primary f-s-10">{{ $events->count() }} eventi</span>
                                             </div>
                                             
                                             <div class="d-grid gap-2">
@@ -128,22 +128,38 @@
                                                         </div>
                                                         
                                                         <!-- Contenuto evento -->
-                                                        <div class="flex-grow-1">
-                                                            <div class="d-flex justify-content-between align-items-start mb-1">
-                                                                <h6 class="mb-0 f-s-14 f-w-600 text-dark cursor-pointer" 
-                                                                    wire:click="viewEvent({{ $event['id'] ?? 0 }})">
+                                                        <div class="flex-grow-1 overflow-hidden">
+                                                            <div class="d-flex justify-content-between align-items-start mb-1 gap-2">
+                                                                <h6 class="mb-0 f-s-14 f-w-600 text-dark cursor-pointer text-truncate flex-grow-1" 
+                                                                    wire:click="viewEvent({{ $event['id'] ?? 0 }})"
+                                                                    style="min-width: 0;">
                                                                     {{ $event['title'] ?? __('dashboard.event_without_title') }}
                                                                 </h6>
-                                                                <span class="badge bg-{{ $event['color'] ?? 'secondary' }} f-s-9">
+                                                                <span class="badge bg-{{ $event['color'] ?? 'secondary' }} f-s-9 flex-shrink-0">
                                                                     {{ $event['type'] === 'organized' ? __('dashboard.organized') : ($event['type'] === 'participating' ? __('dashboard.participating') : __('dashboard.wish')) }}
                                                                 </span>
                                                             </div>
-                                                            <div class="d-flex align-items-center">
-                                                                <i class="ph ph-clock f-s-12 text-muted me-1"></i>
-                                                                <span class="f-s-12 text-muted">{{ $event['time'] ?? __('dashboard.time_not_available') }}</span>
-                                                                <span class="mx-2 text-muted">•</span>
-                                                                <i class="ph ph-map-pin f-s-12 text-muted me-1"></i>
-                                                                <span class="f-s-12 text-muted">{{ $event['venue'] ?? __('dashboard.location_not_available') }}{{ isset($event['city']) ? ', ' . $event['city'] : '' }}</span>
+                                                            <div class="d-flex align-items-center justify-content-between gap-2 flex-wrap">
+                                                                <div class="d-flex align-items-center gap-2 flex-wrap" style="min-width: 0;">
+                                                                    <div class="d-flex align-items-center">
+                                                                        <i class="ph ph-clock f-s-12 text-muted me-1"></i>
+                                                                        <span class="f-s-12 text-muted">{{ $event['time'] ?? __('dashboard.time_not_available') }}</span>
+                                                                    </div>
+                                                                    <span class="text-muted d-none d-sm-inline">•</span>
+                                                                    <div class="d-flex align-items-center text-truncate" style="max-width: 150px;">
+                                                                        <i class="ph ph-map-pin f-s-12 text-muted me-1 flex-shrink-0"></i>
+                                                                        <span class="f-s-12 text-muted text-truncate">{{ $event['venue'] ?? __('dashboard.location_not_available') }}{{ isset($event['city']) ? ', ' . $event['city'] : '' }}</span>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- Social interactions -->
+                                                                <div class="d-flex align-items-center gap-2 flex-shrink-0">
+                                                                    <button class="btn btn-sm p-0 border-0 bg-transparent" wire:click="toggleInterest({{ $event['id'] ?? 0 }})">
+                                                                        <i class="ph ph-heart f-s-16 text-danger"></i>
+                                                                    </button>
+                                                                    <button class="btn btn-sm p-0 border-0 bg-transparent" wire:click="shareEvent({{ $event['id'] ?? 0 }})">
+                                                                        <i class="ph ph-share-network f-s-16 text-primary"></i>
+                                                                    </button>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
