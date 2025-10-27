@@ -110,61 +110,79 @@
                                             
                                             <div class="d-grid gap-2">
                                                 @foreach($events as $event)
-                                                    <div class="d-flex align-items-center p-2 rounded" 
+                                                    <div class="event-card-mobile p-2 rounded" 
                                                          style="background: linear-gradient(135deg, rgba({{ ($event['color'] ?? 'secondary') === 'primary' ? '13,110,253' : (($event['color'] ?? 'secondary') === 'secondary' ? '108,117,125' : '255,193,7') }}, 0.1), rgba({{ ($event['color'] ?? 'secondary') === 'primary' ? '13,110,253' : (($event['color'] ?? 'secondary') === 'secondary' ? '108,117,125' : '255,193,7') }}, 0.05));">
                                                         
-                                                        <!-- Immagine evento -->
-                                                        <div class="me-3">
-                                                            @if(isset($event['image']) && $event['image'])
-                                                                <img src="{{ $event['image'] }}" alt="{{ $event['title'] ?? 'Evento' }}" 
-                                                                     class="rounded-circle" 
-                                                                     style="width: 40px; height: 40px; object-fit: cover;">
-                                                            @else
-                                                                <div class="bg-{{ $event['color'] ?? 'secondary' }} rounded-circle d-flex align-items-center justify-content-center" 
-                                                                     style="width: 40px; height: 40px;">
-                                                                    <i class="ph ph-calendar text-white f-s-16"></i>
-                                                                </div>
-                                                            @endif
-                                                        </div>
-                                                        
-                                                        <!-- Contenuto evento -->
-                                                        <div class="flex-grow-1 overflow-hidden">
-                                                            <div class="d-flex justify-content-between align-items-start mb-1 gap-2">
-                                                                <h6 class="mb-0 f-s-14 f-w-600 text-dark cursor-pointer text-truncate flex-grow-1" 
-                                                                    wire:click="viewEvent({{ $event['id'] ?? 0 }})"
-                                                                    style="min-width: 0;">
-                                                                    {{ $event['title'] ?? __('dashboard.event_without_title') }}
-                                                                </h6>
-                                                                <span class="badge bg-{{ $event['color'] ?? 'secondary' }} f-s-9 flex-shrink-0">
-                                                                    {{ $event['type'] === 'organized' ? __('dashboard.organized') : ($event['type'] === 'participating' ? __('dashboard.participating') : __('dashboard.wish')) }}
-                                                                </span>
+                                                        <div class="d-flex align-items-start gap-2">
+                                                            <!-- Immagine evento -->
+                                                            <div class="flex-shrink-0">
+                                                                @if(isset($event['image']) && $event['image'])
+                                                                    <img src="{{ $event['image'] }}" alt="{{ $event['title'] ?? 'Evento' }}" 
+                                                                         class="rounded-circle" 
+                                                                         style="width: 40px; height: 40px; object-fit: cover;">
+                                                                @else
+                                                                    <div class="bg-{{ $event['color'] ?? 'secondary' }} rounded-circle d-flex align-items-center justify-content-center" 
+                                                                         style="width: 40px; height: 40px;">
+                                                                        <i class="ph ph-calendar text-white f-s-16"></i>
+                                                                    </div>
+                                                                @endif
                                                             </div>
-                                                            <div class="d-flex align-items-center justify-content-between gap-2 flex-wrap">
-                                                                <div class="d-flex align-items-center gap-2 flex-wrap" style="min-width: 0;">
-                                                                    <div class="d-flex align-items-center">
-                                                                        <i class="ph ph-clock f-s-12 text-muted me-1"></i>
-                                                                        <span class="f-s-12 text-muted">{{ $event['time'] ?? __('dashboard.time_not_available') }}</span>
-                                                                    </div>
-                                                                    <span class="text-muted d-none d-sm-inline">•</span>
-                                                                    <div class="d-flex align-items-center text-truncate" style="max-width: 150px;">
-                                                                        <i class="ph ph-map-pin f-s-12 text-muted me-1 flex-shrink-0"></i>
-                                                                        <span class="f-s-12 text-muted text-truncate">{{ $event['venue'] ?? __('dashboard.location_not_available') }}{{ isset($event['city']) ? ', ' . $event['city'] : '' }}</span>
-                                                                    </div>
+                                                            
+                                                            <!-- Contenuto evento -->
+                                                            <div class="flex-grow-1" style="min-width: 0;">
+                                                                <!-- Titolo e badge -->
+                                                                <div class="d-flex align-items-start gap-2 mb-1">
+                                                                    <h6 class="mb-0 f-s-13 f-w-600 text-dark cursor-pointer flex-grow-1 text-truncate" 
+                                                                        wire:click="viewEvent({{ $event['id'] ?? 0 }})"
+                                                                        style="min-width: 0;">
+                                                                        {{ $event['title'] ?? __('dashboard.event_without_title') }}
+                                                                    </h6>
+                                                                    <span class="badge bg-{{ $event['color'] ?? 'secondary' }} f-s-9 flex-shrink-0">
+                                                                        {{ $event['type'] === 'organized' ? __('dashboard.organized') : ($event['type'] === 'participating' ? __('dashboard.participating') : __('dashboard.wish')) }}
+                                                                    </span>
                                                                 </div>
-                                                                <!-- Social interactions -->
-                                                                <div class="d-flex align-items-center gap-2 flex-shrink-0">
-                                                                    <button class="btn btn-sm p-0 border-0 bg-transparent" wire:click="toggleInterest({{ $event['id'] ?? 0 }})">
-                                                                        <i class="ph ph-heart f-s-16 text-danger"></i>
-                                                                    </button>
-                                                                    <button class="btn btn-sm p-0 border-0 bg-transparent" wire:click="shareEvent({{ $event['id'] ?? 0 }})">
-                                                                        <i class="ph ph-share-network f-s-16 text-primary"></i>
-                                                                    </button>
+                                                                
+                                                                <!-- Info e azioni -->
+                                                                <div class="d-flex flex-column gap-1">
+                                                                    <!-- Ora -->
+                                                                    <div class="d-flex align-items-center gap-1">
+                                                                        <i class="ph ph-clock f-s-12 text-muted flex-shrink-0"></i>
+                                                                        <span class="f-s-11 text-muted">{{ $event['time'] ?? __('dashboard.time_not_available') }}</span>
+                                                                    </div>
+                                                                    
+                                                                    <!-- Location e azioni -->
+                                                                    <div class="d-flex align-items-center justify-content-between gap-2">
+                                                                        <div class="d-flex align-items-center gap-1 flex-grow-1" style="min-width: 0;">
+                                                                            <i class="ph ph-map-pin f-s-12 text-muted flex-shrink-0"></i>
+                                                                            <span class="f-s-11 text-muted text-truncate">{{ $event['venue'] ?? __('dashboard.location_not_available') }}{{ isset($event['city']) ? ', ' . $event['city'] : '' }}</span>
+                                                                        </div>
+                                                                        
+                                                                        <!-- Social interactions -->
+                                                                        <div class="d-flex align-items-center gap-1 flex-shrink-0">
+                                                                            <button class="btn btn-sm p-0 border-0 bg-transparent" wire:click="toggleInterest({{ $event['id'] ?? 0 }})">
+                                                                                <i class="ph ph-heart f-s-14 text-danger"></i>
+                                                                            </button>
+                                                                            <button class="btn btn-sm p-0 border-0 bg-transparent" wire:click="shareEvent({{ $event['id'] ?? 0 }})">
+                                                                                <i class="ph ph-share-network f-s-14 text-primary"></i>
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 @endforeach
                                             </div>
+                                            
+                                            <style>
+                                                .event-card-mobile {
+                                                    transition: transform 0.2s ease, box-shadow 0.2s ease;
+                                                }
+                                                
+                                                .event-card-mobile:active {
+                                                    transform: scale(0.98);
+                                                }
+                                            </style>
                                         </div>
                                     </div>
                                 @endforeach
