@@ -199,7 +199,7 @@
                 <i class="ph ph-paperclip"></i>
             </label>
             
-            <button class="btn btn-link text-muted p-2" type="button" wire:click="$set('showEmojiPicker', !$showEmojiPicker)" style="font-size: 1.3rem;">
+            <button class="btn btn-link text-muted p-2" type="button" wire:click="showEmojiPicker = !showEmojiPicker" style="font-size: 1.3rem;">
                 <i class="ph ph-smiley"></i>
             </button>
             
@@ -406,7 +406,7 @@
                     <i class="ph ph-paperclip"></i>
                 </label>
                 
-                <button class="btn btn-link text-muted p-2" type="button" wire:click="$set('showEmojiPicker', !$showEmojiPicker)" style="font-size: 1.3rem;">
+                <button class="btn btn-link text-muted p-2" type="button" wire:click="showEmojiPicker = !showEmojiPicker" style="font-size: 1.3rem;">
                     <i class="ph ph-smiley"></i>
                 </button>
                 
