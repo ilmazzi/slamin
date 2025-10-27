@@ -211,11 +211,82 @@
         <!-- Lista Utenti -->
         <div class="row">
             @forelse($users as $user)
-                <x-user-card
-                    :user="$user"
-                    :show-follow-button="true"
-                    :show-message-button="true"
-                    card-class="col-12 col-md-6 col-lg-4 mb-3" />
+            <div class="col-12 col-md-6 col-lg-4 mb-3">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="profile-container cursor-pointer" onclick="window.location.href='{{ route('user.show', $user) }}'">
+                            <!-- Banner e Avatar -->
+                            <div class="image-details">
+                                <div class="profile-image">
+                                    <img src="{{ $user->banner_image_url ?? asset('assets/images/avatar/default-banner.webp?v=1') }}"
+                                        alt="{{ $user->name }}" class="w-100 h-100 img-cover">
+                                </div>
+                                <div class="profile-pic">
+                                    <div class="avatar-upload">
+                                        <div class="avatar-preview">
+                                            <div id="imgPreview">
+                                                <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($user) }}"
+                                                    alt="{{ $user->name }}" class="w-100 h-100 img-cover">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Dettagli Utente -->
+                            <div class="person-details">
+                                <h4 class="f-w-600 mb-1">{{ $user->name }}
+                                    @if ($user->nickname)
+                                        <span class="text-muted f-s-14 fw-normal">({{ $user->nickname }})</span>
+                                    @endif
+                                </h4>
+                                <p class="f-s-12 mb-3">{{ $user->city ?? __('groups.location_not_specified') }}</p>
+                                
+                                <!-- Statistiche -->
+                                <div class="details">
+                                    <div>
+                                        <h4 class="text-primary">{{ $user->poems_count }}</h4>
+                                        <p class="text-secondary f-s-12">{{ __('groups.user_poems') }}</p>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-primary">{{ $user->articles_count }}</h4>
+                                        <p class="text-secondary f-s-12">{{ __('groups.user_articles') }}</p>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-primary">{{ number_format($user->total_interactions) }}</h4>
+                                        <p class="text-secondary f-s-12">{{ __('groups.user_interactions') }}</p>
+                                    </div>
+                                </div>
+                                
+                                <!-- Pulsanti Azioni -->
+                                <div class="d-flex justify-content-center gap-2">
+                                    @auth
+                                        <button type="button"
+                                            class="btn {{ $user->is_followed_by_current_user ?? false ? 'btn-success' : 'btn-primary' }} btn-sm"
+                                            onclick="event.stopPropagation(); followUser({{ $user->id }})"
+                                            id="followBtn{{ $user->id }}">
+                                            <i class="ti {{ $user->is_followed_by_current_user ?? false ? 'ti-user-check' : 'ti-user' }} me-1"></i>
+                                            <span id="followText{{ $user->id }}">{{ $user->is_followed_by_current_user ?? false ? __('groups.following') : __('groups.follow') }}</span>
+                                        </button>
+                                        <button type="button"
+                                            class="btn btn-secondary btn-sm"
+                                            onclick="event.stopPropagation(); startChat({{ $user->id }})"
+                                            id="messageBtn{{ $user->id }}">
+                                            <i class="ti ti-message-circle me-1"></i>
+                                            <span>{{ __('groups.send_message') }}</span>
+                                        </button>
+                                    @else
+                                        <div class="btn btn-secondary btn-sm opacity-60">
+                                            <i class="ti ti-user me-1"></i>
+                                            {{ __('groups.follow') }}
+                                        </div>
+                                    @endauth
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             @empty
             <div class="col-12">
                 <div class="text-center py-5">

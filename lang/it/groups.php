@@ -89,6 +89,15 @@ return [
     'no_announcements' => 'Nessun annuncio ancora',
     'no_group_events' => 'Nessun evento per questo gruppo',
     
+    // User card
+    'location_not_specified' => 'Località non specificata',
+    'user_poems' => 'Poesie',
+    'user_articles' => 'Articoli',
+    'user_interactions' => 'Interazioni',
+    'follow' => 'Segui',
+    'following' => 'Seguito',
+    'send_message' => 'Messaggio',
+    
     // Member invitations
     'invite_members' => 'Invita Membri',
     'search_results' => 'Risultati Ricerca',
