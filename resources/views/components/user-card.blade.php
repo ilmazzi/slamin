@@ -9,22 +9,19 @@
 <div class="{{ $cardClass }}">
     <div class="card">
         <div class="card-body">
-            <div class="profile-container"
-                onclick="window.location.href='{{ route('user.show', $user) }}'"
-                style="cursor: pointer;">
+            <div class="profile-container cursor-pointer"
+                onclick="window.location.href='{{ route('user.show', $user) }}'">
                 <div class="image-details">
                     <div class="profile-image">
                         <img src="{{ $user->banner_image_url ?? asset('assets/images/avatar/default-banner.webp?v=1') }}"
-                            alt="{{ $user->name }}" class="w-100 h-100"
-                            style="object-fit: cover;">
+                            alt="{{ $user->name }}" class="w-100 h-100 img-cover">
                     </div>
                     <div class="profile-pic">
                         <div class="avatar-upload">
                             <div class="avatar-preview">
                                 <div id="imgPreview">
                                     <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($user) }}"
-                                        alt="{{ $user->name }}" class="w-100 h-100"
-                                        style="object-fit: cover;">
+                                        alt="{{ $user->name }}" class="w-100 h-100 img-cover">
                                 </div>
                             </div>
                         </div>
@@ -79,7 +76,7 @@
                             @endif
                         @else
                             @if($showFollowButton)
-                            <div class="btn btn-outline-secondary btn-sm" style="opacity: 0.6;">
+                            <div class="btn btn-secondary btn-sm opacity-60">
                                 <i class="ti ti-user me-1"></i>
                                 {{ __('profile.follow_label') }}
                             </div>

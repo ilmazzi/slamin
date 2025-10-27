@@ -211,12 +211,11 @@
         <!-- Lista Utenti -->
         <div class="row">
             @forelse($users as $user)
-            <div class="col-12 col-md-6 col-lg-4 mb-3">
                 <x-user-card
                     :user="$user"
                     :show-follow-button="true"
-                    :show-message-button="true" />
-            </div>
+                    :show-message-button="true"
+                    card-class="col-12 col-md-6 col-lg-4 mb-3" />
             @empty
             <div class="col-12">
                 <div class="text-center py-5">
