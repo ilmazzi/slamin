@@ -31,14 +31,11 @@ class ForumDashboard extends Component
             'active_subreddits' => Subreddit::where('is_active', true)->count(),
             'total_posts' => ForumPost::count(),
             'posts_today' => ForumPost::whereDate('created_at', today())->count(),
-            'total_comments' => ForumComment::count(),
-            'comments_today' => ForumComment::whereDate('created_at', today())->count(),
             'total_votes' => ForumVote::count(),
             'unique_contributors' => DB::table('forum_posts')
                 ->distinct('user_id')
                 ->count('user_id'),
             'pending_posts' => ForumPost::whereNull('approved_at')->count(),
-            'pending_comments' => ForumComment::whereNull('approved_at')->count(),
         ];
     }
 
