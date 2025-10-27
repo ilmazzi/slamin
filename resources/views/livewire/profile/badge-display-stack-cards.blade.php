@@ -1,12 +1,40 @@
 <div class="stack-cards-container" x-data="{ 
     currentIndex: @entangle('currentIndex'),
+    touchStartX: 0,
+    touchEndX: 0,
     swipeCard(direction) {
         if (direction === 'left') @this.nextCard();
         if (direction === 'right') @this.previousCard();
+    },
+    handleTouchStart(e) {
+        this.touchStartX = e.touches[0].clientX;
+    },
+    handleTouchMove(e) {
+        this.touchEndX = e.touches[0].clientX;
+    },
+    handleTouchEnd() {
+        const swipeThreshold = 50;
+        const diff = this.touchStartX - this.touchEndX;
+        
+        if (Math.abs(diff) > swipeThreshold) {
+            if (diff > 0) {
+                // Swipe left - next card
+                this.swipeCard('left');
+            } else {
+                // Swipe right - previous card
+                this.swipeCard('right');
+            }
+        }
+        
+        this.touchStartX = 0;
+        this.touchEndX = 0;
     }
 }">
     @if($badges->count() > 0)
-    <div class="stack-wrapper">
+    <div class="stack-wrapper"
+         @touchstart="handleTouchStart($event)"
+         @touchmove="handleTouchMove($event)"
+         @touchend="handleTouchEnd()">
         <div class="cards-stack">
             @foreach($badges as $index => $userBadge)
             @if($userBadge->badge)
@@ -109,6 +137,8 @@
             position: relative;
             width: 100%;
             height: 550px;
+            touch-action: pan-y;
+            user-select: none;
         }
 
         .cards-stack {
@@ -169,6 +199,11 @@
             justify-content: center;
             position: relative;
             overflow: hidden;
+            cursor: grab;
+        }
+        
+        .card-content:active {
+            cursor: grabbing;
         }
 
         .card-content::before {
