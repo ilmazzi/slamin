@@ -193,25 +193,27 @@
     @endif
     
     <form wire:submit="sendMessage">
-        <div class="d-flex align-items-center gap-2">
+        <div class="d-flex align-items-center gap-2 position-relative">
             <input type="file" class="d-none" id="fileInput" wire:model="files" multiple>
             <label for="fileInput" class="btn btn-link text-muted p-2" style="font-size: 1.3rem;">
                 <i class="ph ph-paperclip"></i>
             </label>
             
-            <button class="btn btn-link text-muted p-2" type="button" wire:click="$toggle('showEmojiPicker')" style="font-size: 1.3rem;">
-                <i class="ph ph-smiley"></i>
-            </button>
-            
-            @if($showEmojiPicker)
-            <div class="position-absolute bottom-100 start-0 mb-2 p-2 bg-white rounded shadow-lg" style="z-index: 1000;">
-                <div class="d-flex flex-wrap gap-1" style="max-width: 280px;">
-                    @foreach(['😀', '😃', '😄', '😁', '😆', '😅', '🤣', '😂', '🙂', '🙃', '😉', '😊', '😇', '🥰', '😍', '🤩', '😘', '😗', '😚', '😙', '🥲', '😋', '😛', '😜', '🤪', '😝', '🤗', '🤭', '🤫', '🤔', '🤐', '🤨', '😐', '😑', '😶', '😏', '😒', '🙄', '😬', '🤥', '😌', '😔', '😪', '🤤', '😴', '👍', '👎', '👏', '🙌', '👋', '🤝', '🙏', '❤️', '🧡', '💛', '💚', '💙', '💜', '🖤', '🤍', '🤎', '💔', '❣️', '💕', '💞', '💓', '💗', '💖', '💘', '💝', '🔥', '✨', '💫', '⭐', '🌟', '💯', '✅', '❌', '⚠️', '🎉', '🎊', '🎈', '🎁', '🎀', '🏆', '🥇', '🥈', '🥉'] as $emoji)
-                        <button type="button" class="btn btn-sm btn-light" wire:click="newMessage = newMessage + '{{ $emoji }}'; showEmojiPicker = false" style="font-size: 1.2rem; padding: 0.25rem 0.5rem;">{{ $emoji }}</button>
-                    @endforeach
+            <div class="position-relative">
+                <button class="btn btn-link text-muted p-2" type="button" wire:click="$toggle('showEmojiPicker')" style="font-size: 1.3rem;">
+                    <i class="ph ph-smiley"></i>
+                </button>
+                
+                @if($showEmojiPicker)
+                <div class="position-absolute bottom-100 start-0 mb-2 p-2 bg-white rounded shadow-lg" style="z-index: 1000;">
+                    <div class="d-flex flex-wrap gap-1" style="max-width: 280px;">
+                        @foreach(['😀', '😃', '😄', '😁', '😆', '😅', '🤣', '😂', '🙂', '🙃', '😉', '😊', '😇', '🥰', '😍', '🤩', '😘', '😗', '😚', '😙', '🥲', '😋', '😛', '😜', '🤪', '😝', '🤗', '🤭', '🤫', '🤔', '🤐', '🤨', '😐', '😑', '😶', '😏', '😒', '🙄', '😬', '🤥', '😌', '😔', '😪', '🤤', '😴', '👍', '👎', '👏', '🙌', '👋', '🤝', '🙏', '❤️', '🧡', '💛', '💚', '💙', '💜', '🖤', '🤍', '🤎', '💔', '❣️', '💕', '💞', '💓', '💗', '💖', '💘', '💝', '🔥', '✨', '💫', '⭐', '🌟', '💯', '✅', '❌', '⚠️', '🎉', '🎊', '🎈', '🎁', '🎀', '🏆', '🥇', '🥈', '🥉'] as $emoji)
+                            <button type="button" class="btn btn-sm btn-light" wire:click="newMessage = newMessage + '{{ $emoji }}'; showEmojiPicker = false" style="font-size: 1.2rem; padding: 0.25rem 0.5rem;">{{ $emoji }}</button>
+                        @endforeach
+                    </div>
                 </div>
+                @endif
             </div>
-            @endif
             
             <input type="text" class="form-control shadow-none" placeholder="Scrivi un messaggio..." wire:model="newMessage" style="border-radius: 20px;">
             
