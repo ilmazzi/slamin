@@ -205,10 +205,10 @@
                 </button>
                 
                 @if($showEmojiPicker)
-                <div class="position-absolute bottom-100 start-0 mb-2 p-3 bg-white rounded shadow-lg border" style="z-index: 1000; max-width: 300px;">
-                    <div class="d-flex flex-wrap gap-2">
+                <div class="position-absolute bottom-100 start-0 mb-2 p-2 bg-white rounded shadow-lg border" style="z-index: 1000; width: 300px;">
+                    <div style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px;">
                         @foreach(['😀', '😃', '😄', '😁', '😆', '😅', '🤣', '😂', '🙂', '🙃', '😉', '😊', '😇', '🥰', '😍', '🤩', '😘', '😗', '😚', '😙', '🥲', '😋', '😛', '😜', '🤪', '😝', '🤗', '🤭', '🤫', '🤔', '🤐', '🤨', '😐', '😑', '😶', '😏', '😒', '🙄', '😬', '🤥', '😌', '😔', '😪', '🤤', '😴', '👍', '👎', '👏', '🙌', '👋', '🤝', '🙏', '❤️', '🧡', '💛', '💚', '💙', '💜', '🖤', '🤍', '🤎', '💔', '❣️', '💕', '💞', '💓', '💗', '💖', '💘', '💝', '🔥', '✨', '💫', '⭐', '🌟', '💯', '✅', '❌', '⚠️', '🎉', '🎊', '🎈', '🎁', '🎀', '🏆', '🥇', '🥈', '🥉'] as $emoji)
-                            <button type="button" class="btn btn-sm btn-white border" wire:click="newMessage = newMessage + '{{ $emoji }}'; showEmojiPicker = false" style="font-size: 1.2rem; padding: 0.3rem 0.5rem; width: 36px; height: 36px;">{{ $emoji }}</button>
+                            <button type="button" class="btn btn-sm btn-white border text-center" wire:click="newMessage = newMessage + '{{ $emoji }}'; showEmojiPicker = false" style="font-size: 1.3rem; padding: 0.25rem; aspect-ratio: 1;">{{ $emoji }}</button>
                         @endforeach
                     </div>
                 </div>
@@ -424,10 +424,10 @@
                     </button>
                     
                     @if($showEmojiPicker)
-                    <div class="position-absolute bottom-100 start-0 mb-2 p-3 bg-white rounded shadow-lg border" style="z-index: 1000; max-width: 300px;">
-                        <div class="d-flex flex-wrap gap-2">
+                    <div class="position-absolute bottom-100 start-0 mb-2 p-2 bg-white rounded shadow-lg border" style="z-index: 1000; width: 300px;">
+                        <div style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px;">
                             @foreach(['😀', '😃', '😄', '😁', '😆', '😅', '🤣', '😂', '🙂', '🙃', '😉', '😊', '😇', '🥰', '😍', '🤩', '😘', '😗', '😚', '😙', '🥲', '😋', '😛', '😜', '🤪', '😝', '🤗', '🤭', '🤫', '🤔', '🤐', '🤨', '😐', '😑', '😶', '😏', '😒', '🙄', '😬', '🤥', '😌', '😔', '😪', '🤤', '😴', '👍', '👎', '👏', '🙌', '👋', '🤝', '🙏', '❤️', '🧡', '💛', '💚', '💙', '💜', '🖤', '🤍', '🤎', '💔', '❣️', '💕', '💞', '💓', '💗', '💖', '💘', '💝', '🔥', '✨', '💫', '⭐', '🌟', '💯', '✅', '❌', '⚠️', '🎉', '🎊', '🎈', '🎁', '🎀', '🏆', '🥇', '🥈', '🥉'] as $emoji)
-                                <button type="button" class="btn btn-sm btn-white border" wire:click="newMessage = newMessage + '{{ $emoji }}'; showEmojiPicker = false" style="font-size: 1.2rem; padding: 0.3rem 0.5rem; width: 36px; height: 36px;">{{ $emoji }}</button>
+                                <button type="button" class="btn btn-sm btn-white border text-center" wire:click="newMessage = newMessage + '{{ $emoji }}'; showEmojiPicker = false" style="font-size: 1.3rem; padding: 0.25rem; aspect-ratio: 1;">{{ $emoji }}</button>
                             @endforeach
                         </div>
                     </div>
