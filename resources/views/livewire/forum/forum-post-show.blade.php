@@ -138,7 +138,7 @@
         {{-- Comments List --}}
         <div class="card-body">
             @forelse($comments as $comment)
-                @livewire('forum-comment', ['comment' => $comment], key('comment-'.$comment->id))
+                @livewire('forum.forum-comment', ['comment' => $comment], key('comment-'.$comment->id))
             @empty
                 <div class="text-center py-5">
                     <i class="ph ph-chat-circle f-s-48 text-muted mb-3"></i>

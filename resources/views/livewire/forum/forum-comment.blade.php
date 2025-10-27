@@ -97,7 +97,7 @@
     @if($comment->replies->isNotEmpty())
         <div class="replies mt-2">
             @foreach($comment->replies as $reply)
-                @livewire('forum-comment', ['comment' => $reply], key('comment-'.$reply->id))
+                @livewire('forum.forum-comment', ['comment' => $reply], key('comment-'.$reply->id))
             @endforeach
         </div>
     @endif

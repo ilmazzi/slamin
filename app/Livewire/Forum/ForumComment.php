@@ -102,6 +102,6 @@ class ForumComment extends Component
 
     public function render()
     {
-        return view('livewire.forum-comment');
+        return view('livewire.forum.forum-comment');
     }
 }
