@@ -150,5 +150,56 @@ return [
   'delete' => 'Elimina',
   'remove' => 'Rimuovi',
   'confirm_delete' => 'Sei sicuro di voler eliminare questo elemento?',
+  
+  // Mobile Navigation Labels
+  'tab_profile' => 'Profilo',
+  'tab_poems' => 'Poesie',
+  'tab_events' => 'Eventi',
+  'tab_media' => 'Media',
+  'tab_articles' => 'Articoli',
+  'tab_activities' => 'Attività',
+  'tab_settings' => 'Impostazioni',
+  
+  // Badge Section
+  'badge_in_evidenza' => 'Badge in Evidenza',
+  'manage' => 'Gestisci',
+  'trophy' => 'Trophy',
+  
+  // Event Date
+  'date_not_available' => 'Data non disponibile',
+  
+  // Settings Card Descriptions
+  'info_personali' => 'Info personali',
+  'badge_e_trophy' => 'Badge e trophy',
+  'gestisci_lingue' => 'Gestisci lingue',
+  'foto_e_video' => 'Foto e video',
+  'vedi_tutte' => 'Vedi tutte',
+  'scrivi_articolo' => 'Scrivi articolo',
+  
+  // Create Actions
+  'create_poem' => 'Crea Poesia',
+  'write_poem' => 'Scrivi poesia',
+  'create_event' => 'Crea Evento',
+  'organize_event' => 'Organizza evento',
+  'create_venue' => 'Crea Venue',
+  'add_venue' => 'Aggiungi locale',
+  'upload_video' => 'Carica Video',
+  'upload_video_desc' => 'Upload video',
+  'upload_photo' => 'Carica Foto',
+  'upload_photo_desc' => 'Upload foto',
+  
+  // Featured Badges
+  'your_featured_badges' => 'I tuoi 3 badge preferiti - gestiscili per scegliere quali mostrare',
+  'user_featured_badges' => 'I 3 badge in evidenza di :name',
+  'featured_in_profile' => 'In evidenza nel profilo',
+  'shown_in_sidebar' => 'Mostrato in sidebar',
+  'unlocked' => 'Sbloccato!',
+  'manage_display' => 'Gestisci Visualizzazione',
+  'profile_stack_cards' => 'Profilo Stack Cards',
+  'show_in_3_featured' => 'Mostra tra i 3 badge in evidenza',
+  'sidebar_badge' => 'Sidebar Badge',
+  'show_main_badge_only_1' => 'Mostra il tuo badge principale (solo 1)',
+  'category' => 'Categoria',
+  'swipe_or_arrows' => 'Swipe o usa le frecce',
 ];
 

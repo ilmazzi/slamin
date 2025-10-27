@@ -1,0 +1,108 @@
+# .cursorrules
+# Linee guida vincolanti per Cursor su questo repository
+
+## Principi generali (MUST)
+- Usa **solo** la documentazione ufficiale di **Livewire 3** per componenti, lifecycle hooks, directives e testing.
+  - Sorgente consentita: https://livewire.laravel.com/
+  - Evita blog/medium/stack overflow/github issues come fonte normativa.
+- Framework UI: **KiAdmin**. **Nessun CSS personalizzato** (no `<style>`, no file CSS nuovi) e **nessun inline style**.
+- JavaScript: **minimo indispensabile** e **solo quando Livewire 3 non basta**. Preferisci:
+  1. Blade + Livewire 3
+  2. Alpine **solo se già presente** nel progetto e strettamente necessario
+  3. NIENTE librerie JS nuove
+- **Nessun testo hardcoded**. Usa **sempre** chiavi di traduzione localizzate nel file di sezione corretta.
+  - ❌ `{{ 'Crea gruppo' }}`
+  - ✅ `{{ __('groups.create') }}`
+- **Helper immagini**: usa sempre gli helper esistenti per:
+  - avatar profilo
+  - banner
+  - eventi
+  - poesie
+  - articoli
+  - gruppi
+  Se l’helper non è noto, **cerca nel progetto** e riutilizza la funzione già esistente.
+- Classi background: **non usare mai `bg-light`**. Usa varianti **`bg-light-xxx`** già presenti in KiAdmin.
+- **Non creare niente di nuovo** (componenti, helpers, partials, assets, traduzioni, tabelle) senza aver cercato nel repo un equivalente riusabile.
+- **Nessun pulsante outline**. Usa solo le varianti piene KiAdmin già presenti.
+- **Non creare il file `common.php`** per le traduzioni. Ogni chiave va nel file di **sezione dedicata** (es. `auth.php`, `groups.php`, `events.php`, `media.php`, ecc.).
+
+## Pattern Livewire 3 (MUST)
+- Componenti: usare la sintassi e le features di **Livewire 3** (→ `@livewireStyles`, `@livewireScripts` non duplicati, `wire:navigate` solo dove già previsto).
+- Props & validation: usare Form Objects/`rules()`/`messages()` dentro al componente quando previsto dallo standard del progetto.
+- Lifecycle: preferire `mount()` → `render()` pulito; side-effects in azioni esplicite.
+- Eventi: usare `dispatch()`/`on()` di LW3, niente bus custom JS.
+- Navigazione: usare `wire:navigate` solo se già abilitato. Altrimenti link standard.
+
+## KiAdmin (MUST)
+- Rispettare i layout esistenti (container, grid, spacing) e le utility class **già previste**.
+- Bottoni: usare solo varianti `btn-` previste da KiAdmin **escludendo** `btn-outline-*`.
+- Cards/panel: usare componenti/pattern esistenti del progetto; evitare markup inventato.
+- Colori: usare solo token/utility KiAdmin già disponibili.
+
+## Traduzioni (MUST)
+- Ogni stringa deve essere una chiave `__('sezione.chiave')`.
+- **Divieto** di introdurre `resources/lang/*/common.php`.
+- Se serve una nuova chiave:
+  1. Cerca una chiave equivalente nella **stessa sezione**.
+  2. Se non esiste, aggiungi **una** chiave nella sezione specifica pertinente (es. `groups.php`).
+- In Blade: **mai** concatenare stringhe traducibili; usare placeholder:
+  - ✅ `__('groups.invite_user', ['name' => $user->name])`
+
+## Immagini & Media (MUST)
+- Usare **solo** gli helper del progetto per generare URL/dimensioni/placeholder per:
+  - avatar profilo
+  - banner canali/gruppi
+  - cover eventi/poesie/articoli
+- Vietato usare path manuali o `<img src="/uploads/...">`.
+- Placeholder: usare quelli definiti dagli helper (es. avatar di fallback, banner di default).
+
+## Ricerca e riuso (MUST)
+- Prima di creare file/feature:
+  - usa la ricerca nel workspace per componenti similari
+  - controlla Blade partials, components, helpers, view models
+  - controlla translation keys esistenti
+- Se trovi duplicati, **refactoring leggero** per riuso, senza rompere API interne.
+
+## JavaScript (SHOULD)
+- Se una interazione è possibile con Livewire 3, **non** usare JS.
+- Dove serve JS:
+  - preferire hooks LW3 o Alpine **già presente**
+  - nessun pacchetto NPM nuovo
+  - nessun inline script in Blade se esiste già un pattern centralizzato
+
+## Accessibilità/UX (SHOULD)
+- Mantieni le convenzioni KiAdmin per focus/hover/active.
+- Aria-label/role dove previsti da KiAdmin; non introdurre custom semantic non standard.
+
+## Naming & Struttura (MUST)
+- Componenti Livewire: `Area/NomeAzione` coerente con quanto già in repo.
+- Blade partials in cartelle di sezione (es. `resources/views/groups/partials/...`).
+- Traduzioni: snake case nelle chiavi, short e descrittive (`groups.invite_user`, non `groups.inviteUserText`).
+
+## Performance (MUST)
+- Evita N+1: usare `->with()` dove serve in query dei componenti.
+- Paginazione server-side per liste > 20 items.
+- Debounce sugli input Livewire (`wire:model.debounce.300ms`) dove opportuno.
+- Cache solo se **pattern già presente**; non introdurre sistemi nuovi.
+
+## Revisioni automatiche in PR (CHECKLIST)
+- [ ] Nessuna stringa hardcoded
+- [ ] Nessun `bg-light` semplice (solo `bg-light-xxx`)
+- [ ] Nessun `btn-outline-*`
+- [ ] Nessun nuovo file CSS/inline style
+- [ ] Nessun nuovo pacchetto JS/NPM
+- [ ] Helper immagini usati correttamente
+- [ ] Traduzioni aggiunte nella sezione giusta (non `common.php`)
+- [ ] Componente/partial riusato se esistente
+- [ ] Query senza N+1; paginate dove necessario
+- [ ] Conformità a Livewire 3 (eventi, lifecycle, props)
+
+## Esempi conformi
+
+### Blade + Livewire (senza testo hardcoded)
+```blade
+<x-layouts.app>
+    <x-page.header :title="__('groups.index_title')" />
+
+    <livewire:Groups/Index :filters="$filters" />
+</x-layouts.app>

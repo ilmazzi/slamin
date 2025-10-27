@@ -19,14 +19,14 @@
                 
                 <!-- Profile indicator -->
                 @if($userBadge->show_in_profile)
-                <div class="profile-indicator" title="In evidenza nel profilo">
+                <div class="profile-indicator" title="{{ __('profile.featured_in_profile') }}">
                     <i class="ph ph-star-fill"></i>
                 </div>
                 @endif
                 
                 <!-- Sidebar indicator -->
                 @if($userBadge->show_in_sidebar)
-                <div class="sidebar-indicator" title="Mostrato in sidebar">
+                <div class="sidebar-indicator" title="{{ __('profile.shown_in_sidebar') }}">
                     <i class="ph ph-layout-fill"></i>
                 </div>
                 @endif
@@ -66,7 +66,7 @@
             <div class="detail-content">
                 <div class="earned-banner">
                     <i class="ph ph-check-circle me-2"></i>
-                    Sbloccato!
+                    {{ __('profile.unlocked') }}
                 </div>
 
                 <img src="{{ $selectedBadge->badge->icon_url }}" 
@@ -79,7 +79,7 @@
                 <div class="detail-stats">
                     <div class="detail-stat">
                         <i class="ph ph-star text-warning"></i>
-                        <span>{{ $selectedBadge->badge->points }} punti</span>
+                        <span>{{ $selectedBadge->badge->points }} {{ __('profile.points') }}</span>
                     </div>
                     <div class="detail-stat">
                         <i class="ph ph-calendar text-primary"></i>
@@ -91,7 +91,7 @@
                 <div class="badge-management mt-4 pt-4" style="border-top: 2px solid #e2e8f0;">
                     <h6 class="mb-3 f-w-600">
                         <i class="ph ph-gear me-2"></i>
-                        Gestisci Visualizzazione
+                        {{ __('profile.manage_display') }}
                     </h6>
                     
                     <div class="d-flex flex-column gap-3">
@@ -100,8 +100,8 @@
                             <div class="d-flex align-items-center gap-2">
                                 <i class="ph ph-star f-s-24 text-primary"></i>
                                 <div>
-                                    <div class="f-w-600">Profilo Stack Cards</div>
-                                    <small class="text-muted">Mostra tra i 3 badge in evidenza</small>
+                                    <div class="f-w-600">{{ __('profile.profile_stack_cards') }}</div>
+                                    <small class="text-muted">{{ __('profile.show_in_3_featured') }}</small>
                                 </div>
                             </div>
                             <div class="form-check form-switch mb-0">
@@ -117,8 +117,8 @@
                             <div class="d-flex align-items-center gap-2">
                                 <i class="ph ph-layout f-s-24 text-success"></i>
                                 <div>
-                                    <div class="f-w-600">Sidebar Badge</div>
-                                    <small class="text-muted">Mostra il tuo badge principale (solo 1)</small>
+                                    <div class="f-w-600">{{ __('profile.sidebar_badge') }}</div>
+                                    <small class="text-muted">{{ __('profile.show_main_badge_only_1') }}</small>
                                 </div>
                             </div>
                             <div class="form-check form-switch mb-0">

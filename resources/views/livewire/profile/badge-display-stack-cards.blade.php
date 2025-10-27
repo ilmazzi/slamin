@@ -37,7 +37,7 @@
                             <i class="ph ph-star text-warning f-s-24"></i>
                             <div>
                                 <strong>{{ $userBadge->badge->points }}</strong>
-                                <small class="d-block text-muted">Punti</small>
+                                <small class="d-block text-muted">{{ __('profile.points') }}</small>
                             </div>
                         </div>
                         <div class="stat-item">
@@ -51,7 +51,7 @@
                             <i class="ph ph-tag text-success f-s-24"></i>
 <div>
                                 <strong>{{ ucfirst($userBadge->badge->category) }}</strong>
-                                <small class="d-block text-muted">Categoria</small>
+                                <small class="d-block text-muted">{{ __('profile.category') }}</small>
                             </div>
                         </div>
                     </div>
@@ -59,7 +59,7 @@
                     <!-- Swipe Hint -->
                     <div class="swipe-hint" x-show="currentIndex === {{ $index }}">
                         <i class="ph ph-swipe-left me-2"></i>
-                        Swipe o usa le frecce
+                        {{ __('profile.swipe_or_arrows') }}
                         <i class="ph ph-swipe-right ms-2"></i>
                     </div>
                 </div>
@@ -95,7 +95,7 @@
     @else
     <div class="text-center py-5 text-muted">
         <i class="ph ph-medal f-s-48 mb-3"></i>
-        <p>Nessun badge guadagnato</p>
+        <p>{{ __('profile.no_badges_earned') }}</p>
     </div>
     @endif
 

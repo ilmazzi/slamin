@@ -36,38 +36,38 @@
                 <button class="btn {{ $activeTab === 'about' ? 'btn-primary' : 'btn-light-primary' }} flex-shrink-0 btn-sm" 
                         wire:click="setActiveTab('about')">
                     <i class="ph ph-user-circle {{ $activeTab === 'about' ? 'text-white' : 'text-primary' }} me-1"></i>
-                    <span class="d-none d-sm-inline {{ $activeTab === 'about' ? 'text-white' : '' }}">Profilo</span>
+                    <span class="d-none d-sm-inline {{ $activeTab === 'about' ? 'text-white' : '' }}">{{ __('profile.tab_profile') }}</span>
                 </button>
                 <button class="btn {{ $activeTab === 'poems' ? 'btn-success' : 'btn-light-success' }} flex-shrink-0 btn-sm" 
                         wire:click="setActiveTab('poems')">
                     <i class="ph ph-book-open {{ $activeTab === 'poems' ? 'text-white' : 'text-success' }} me-1"></i>
-                    <span class="d-none d-sm-inline {{ $activeTab === 'poems' ? 'text-white' : '' }}">Poesie</span>
+                    <span class="d-none d-sm-inline {{ $activeTab === 'poems' ? 'text-white' : '' }}">{{ __('profile.tab_poems') }}</span>
                 </button>
                 <button class="btn {{ $activeTab === 'events' ? 'btn-warning' : 'btn-light-warning' }} flex-shrink-0 btn-sm" 
                         wire:click="setActiveTab('events')">
                     <i class="ph ph-calendar {{ $activeTab === 'events' ? 'text-white' : 'text-warning' }} me-1"></i>
-                    <span class="d-none d-sm-inline {{ $activeTab === 'events' ? 'text-white' : '' }}">Eventi</span>
+                    <span class="d-none d-sm-inline {{ $activeTab === 'events' ? 'text-white' : '' }}">{{ __('profile.tab_events') }}</span>
                 </button>
                 <button class="btn {{ $activeTab === 'media' ? 'btn-danger' : 'btn-light-danger' }} flex-shrink-0 btn-sm" 
                         wire:click="setActiveTab('media')">
                     <i class="ph ph-play-circle {{ $activeTab === 'media' ? 'text-white' : 'text-danger' }} me-1"></i>
-                    <span class="d-none d-sm-inline {{ $activeTab === 'media' ? 'text-white' : '' }}">Media</span>
+                    <span class="d-none d-sm-inline {{ $activeTab === 'media' ? 'text-white' : '' }}">{{ __('profile.tab_media') }}</span>
                 </button>
                 <button class="btn {{ $activeTab === 'articles' ? 'btn-info' : 'btn-light-info' }} flex-shrink-0 btn-sm" 
                         wire:click="setActiveTab('articles')">
                     <i class="ph ph-newspaper {{ $activeTab === 'articles' ? 'text-white' : 'text-info' }} me-1"></i>
-                    <span class="d-none d-sm-inline {{ $activeTab === 'articles' ? 'text-white' : '' }}">Articoli</span>
+                    <span class="d-none d-sm-inline {{ $activeTab === 'articles' ? 'text-white' : '' }}">{{ __('profile.tab_articles') }}</span>
                 </button>
                 <button class="btn {{ $activeTab === 'activities' ? 'btn-secondary' : 'btn-light-secondary' }} flex-shrink-0 btn-sm" 
                         wire:click="setActiveTab('activities')">
                     <i class="ph ph-activity {{ $activeTab === 'activities' ? 'text-white' : 'text-secondary' }} me-1"></i>
-                    <span class="d-none d-sm-inline {{ $activeTab === 'activities' ? 'text-white' : '' }}">Attività</span>
+                    <span class="d-none d-sm-inline {{ $activeTab === 'activities' ? 'text-white' : '' }}">{{ __('profile.tab_activities') }}</span>
                 </button>
                 @if($isOwnProfile)
                 <button class="btn {{ $activeTab === 'settings' ? 'btn-dark' : 'btn-light-dark' }} flex-shrink-0 btn-sm" 
                         wire:click="setActiveTab('settings')">
                     <i class="ph ph-gear {{ $activeTab === 'settings' ? 'text-white' : 'text-dark' }} me-1"></i>
-                    <span class="d-none d-sm-inline {{ $activeTab === 'settings' ? 'text-white' : '' }}">Impostazioni</span>
+                    <span class="d-none d-sm-inline {{ $activeTab === 'settings' ? 'text-white' : '' }}">{{ __('profile.tab_settings') }}</span>
                 </button>
                 @endif
             </div>
@@ -214,17 +214,21 @@
                         <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
                             <h5 class="mb-0 f-w-700 f-s-16">
                                 <i class="ph ph-medal-military me-2 text-primary"></i>
-                                Badge in Evidenza
+                                {{ __('profile.badge_in_evidenza') }}
                             </h5>
                             @if($isOwnProfile)
                             <a href="{{ route('profile.my-badges') }}" class="btn btn-sm btn-primary">
                                 <i class="ph ph-trophy me-1"></i>
-                                <span class="d-none d-sm-inline">Gestisci</span> Trophy
+                                <span class="d-none d-sm-inline">{{ __('profile.manage') }}</span> {{ __('profile.trophy') }}
                             </a>
                             @endif
                         </div>
                         <p class="text-muted f-s-12 f-s-md-13 mb-3">
-                            {{ $isOwnProfile ? 'I tuoi 3 badge preferiti - gestiscili per scegliere quali mostrare' : 'I 3 badge in evidenza di ' . $user->name }}
+                            @if($isOwnProfile)
+                                {{ __('profile.your_featured_badges') }}
+                            @else
+                                {{ __('profile.user_featured_badges', ['name' => $user->name]) }}
+                            @endif
                         </p>
                         
                         <div class="overflow-hidden">
@@ -493,7 +497,7 @@
                                                                         @elseif($event->event_date)
                                                                             {{ $event->event_date->format('d/m/Y H:i') }}
                                                                         @else
-                                                                            Data non disponibile
+                                                                            {{ __('profile.date_not_available') }}
                                                                         @endif
                                                                     </span>
                                                                     @if($event->city)
@@ -597,7 +601,7 @@
                                                 </div>
                                                 <div class="flex-grow-1">
                                                     <h6 class="fw-bold mb-1">{{__('profile.edit_profile')}}</h6>
-                                                    <p class="text-muted f-s-12 mb-0">Info personali</p>
+                                                    <p class="text-muted f-s-12 mb-0">{{__('profile.info_personali')}}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -613,7 +617,7 @@
                                                 </div>
                                                 <div class="flex-grow-1">
                                                     <h6 class="fw-bold mb-1">{{__('profile.manage_badges')}}</h6>
-                                                    <p class="text-muted f-s-12 mb-0">Badge e trophy</p>
+                                                    <p class="text-muted f-s-12 mb-0">{{__('profile.badge_e_trophy')}}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -629,7 +633,7 @@
                                                 </div>
                                                 <div class="flex-grow-1">
                                                     <h6 class="fw-bold mb-1">{{__('profile.manage_languages')}}</h6>
-                                                    <p class="text-muted f-s-12 mb-0">Gestisci lingue</p>
+                                                    <p class="text-muted f-s-12 mb-0">{{__('profile.gestisci_lingue')}}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -645,7 +649,7 @@
                                                 </div>
                                                 <div class="flex-grow-1">
                                                     <h6 class="fw-bold mb-1">{{__('profile.my_media')}}</h6>
-                                                    <p class="text-muted f-s-12 mb-0">Foto e video</p>
+                                                    <p class="text-muted f-s-12 mb-0">{{__('profile.foto_e_video')}}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -661,7 +665,7 @@
                                                 </div>
                                                 <div class="flex-grow-1">
                                                     <h6 class="fw-bold mb-1">{{__('profile.view_all_activities')}}</h6>
-                                                    <p class="text-muted f-s-12 mb-0">Vedi tutte</p>
+                                                    <p class="text-muted f-s-12 mb-0">{{__('profile.vedi_tutte')}}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -677,7 +681,7 @@
                                                 </div>
                                                 <div class="flex-grow-1">
                                                     <h6 class="fw-bold mb-1">{{__('profile.create_article')}}</h6>
-                                                    <p class="text-muted f-s-12 mb-0">Scrivi articolo</p>
+                                                    <p class="text-muted f-s-12 mb-0">{{__('profile.scrivi_articolo')}}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -693,8 +697,8 @@
                                                     <i class="ph-duotone ph-pen-nib text-primary f-s-28"></i>
                                                 </div>
                                                 <div class="flex-grow-1">
-                                                    <h6 class="fw-bold mb-1">Crea Poesia</h6>
-                                                    <p class="text-muted f-s-12 mb-0">Scrivi poesia</p>
+                                                    <h6 class="fw-bold mb-1">{{__('profile.create_poem')}}</h6>
+                                                    <p class="text-muted f-s-12 mb-0">{{__('profile.write_poem')}}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -711,8 +715,8 @@
                                                     <i class="ph-duotone ph-calendar-plus text-warning f-s-28"></i>
                                                 </div>
                                                 <div class="flex-grow-1">
-                                                    <h6 class="fw-bold mb-1">Crea Evento</h6>
-                                                    <p class="text-muted f-s-12 mb-0">Organizza evento</p>
+                                                    <h6 class="fw-bold mb-1">{{__('profile.create_event')}}</h6>
+                                                    <p class="text-muted f-s-12 mb-0">{{__('profile.organize_event')}}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -729,8 +733,8 @@
                                                     <i class="ph-duotone ph-buildings text-secondary f-s-28"></i>
                                                 </div>
                                                 <div class="flex-grow-1">
-                                                    <h6 class="fw-bold mb-1">Crea Venue</h6>
-                                                    <p class="text-muted f-s-12 mb-0">Aggiungi locale</p>
+                                                    <h6 class="fw-bold mb-1">{{__('profile.create_venue')}}</h6>
+                                                    <p class="text-muted f-s-12 mb-0">{{__('profile.add_venue')}}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -746,8 +750,8 @@
                                                     <i class="ph-duotone ph-upload text-danger f-s-28"></i>
                                                 </div>
                                                 <div class="flex-grow-1">
-                                                    <h6 class="fw-bold mb-1">Carica Video</h6>
-                                                    <p class="text-muted f-s-12 mb-0">Upload video</p>
+                                                    <h6 class="fw-bold mb-1">{{__('profile.upload_video')}}</h6>
+                                                    <p class="text-muted f-s-12 mb-0">{{__('profile.upload_video_desc')}}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -762,8 +766,8 @@
                                                     <i class="ph-duotone ph-image-square text-info f-s-28"></i>
                                                 </div>
                                                 <div class="flex-grow-1">
-                                                    <h6 class="fw-bold mb-1">Carica Foto</h6>
-                                                    <p class="text-muted f-s-12 mb-0">Upload foto</p>
+                                                    <h6 class="fw-bold mb-1">{{__('profile.upload_photo')}}</h6>
+                                                    <p class="text-muted f-s-12 mb-0">{{__('profile.upload_photo_desc')}}</p>
                                                 </div>
                                             </div>
                                         </div>
