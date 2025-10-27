@@ -1058,7 +1058,8 @@ class Notification extends Model
                 'user_id' => $recipient->id,
                 'channel' => 'App.Models.User.' . $recipient->id
             ]);
-            event(new \App\Events\ChatNotificationEvent($existingNotification, 'updated'));
+            // TODO: Implement ChatNotificationEvent
+            // event(new \App\Events\ChatNotificationEvent($existingNotification, 'updated'));
         } else {
             // Crea una nuova notifica
             $notification = self::create([
@@ -1085,7 +1086,8 @@ class Notification extends Model
                 'user_id' => $recipient->id,
                 'channel' => 'App.Models.User.' . $recipient->id
             ]);
-            event(new \App\Events\ChatNotificationEvent($notification, 'created'));
+            // TODO: Implement ChatNotificationEvent
+            // event(new \App\Events\ChatNotificationEvent($notification, 'created'));
         }
     }
 
@@ -1095,7 +1097,8 @@ class Notification extends Model
     protected static function broadcastNotification(Notification $notification): void
     {
         try {
-            event(new \App\Events\ChatNotificationEvent($notification, 'created'));
+            // TODO: Implement ChatNotificationEvent
+            // event(new \App\Events\ChatNotificationEvent($notification, 'created'));
         } catch (\Exception $e) {
             \Log::error('Failed to broadcast notification', [
                 'notification_id' => $notification->id,
