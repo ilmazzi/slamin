@@ -229,6 +229,38 @@
 
     @livewireScripts
     
+    <!-- Global Livewire Notifications Handler -->
+    <script>
+        document.addEventListener('livewire:initialized', () => {
+            // Listener per notifiche generiche
+            Livewire.on('notify', (data) => {
+                const event = Array.isArray(data) ? data[0] : data;
+                const message = event.message || 'Operazione completata';
+                const type = event.type || 'success';
+                
+                if (typeof Toastify !== 'undefined') {
+                    const backgrounds = {
+                        success: 'rgba(var(--success), 1)',
+                        error: 'rgba(var(--danger), 1)',
+                        info: 'rgba(var(--info), 1)',
+                        warning: 'rgba(var(--warning), 1)'
+                    };
+                    
+                    Toastify({
+                        text: message,
+                        duration: 3000,
+                        close: true,
+                        gravity: "top",
+                        position: "right",
+                        style: {
+                            background: backgrounds[type] || backgrounds.success
+                        }
+                    }).showToast();
+                }
+            });
+        });
+    </script>
+    
     <!-- Leaflet Maps JS -->
     <script src="{{ asset('assets/vendor/leafletmaps/leaflet.js') }}"></script>
     
