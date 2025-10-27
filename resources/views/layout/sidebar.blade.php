@@ -2,8 +2,8 @@
 <nav>
     <div class="app-logo">
         <a class="logo d-inline-block" href="/">
-            <img alt="{{ __('common.slam_in') }}" class="logo-full" src="{{ asset('../assets/images/Logo_orizzontale_nerosubianco.png') }}">
-            <img alt="{{ __('common.slam_in') }}" class="logo-icon" src="{{ asset('../assets/images/Loghino_nerosubianco.png') }}">
+            <img alt="{{ __('sidebar.slam_in') }}" class="logo-full" src="{{ asset('../assets/images/Logo_orizzontale_nerosubianco.png') }}">
+            <img alt="{{ __('sidebar.slam_in') }}" class="logo-icon" src="{{ asset('../assets/images/Loghino_nerosubianco.png') }}">
         </a>
 
         <span class="bg-light-primary toggle-semi-nav d-flex-center">
@@ -107,7 +107,7 @@
                     @if(auth()->user()?->hasRole('admin'))
                     <li class="dropdown-item">
                         <a class="f-w-500" href="#" data-bs-toggle="offcanvas" data-bs-target="#customizerOptions" aria-controls="customizerOptions">
-                            <i class="ph-duotone ph-palette pe-1 f-s-20"></i> {{ __('common.customize_layout') }}
+                            <i class="ph-duotone ph-palette pe-1 f-s-20"></i> {{ __('sidebar.customize_layout') }}
                         </a>
                     </li>
                     @endif
@@ -191,11 +191,11 @@
 
 
 
-                                <!-- {{ __('common.media_section') }} Section -->
+                                <!-- Media Section -->
                                 <li class="no-sub {{ request()->routeIs('media.*') ? 'active' : '' }}">
                                     <a href="{{ route('media.index') }}">
                                         <x-icon name="media" size="20" class="me-2" />
-                                        {{ __('common.media_section') }}
+                                        {{ __('sidebar.media_section') }}
                                     </a>
                                 </li>
 
@@ -203,7 +203,7 @@
                                 <li class="no-sub {{ request()->routeIs('articles.*') ? 'active' : '' }}">
                                     <a href="{{ route('articles.index') }}">
                                         <x-icon name="article" size="20" class="me-2" />
-                                        {{ __('common.articles_section_menu') }}
+                                        {{ __('sidebar.articles_section_menu') }}
                                         @auth
                                         @if(auth()->user()->can('articles.view'))
                                             @php
@@ -242,7 +242,7 @@
                                 <li class="no-sub {{ request()->routeIs('groups.*') ? 'active' : '' }}">
                                     <a href="{{ route('groups.index') }}">
                                         <x-icon name="team" size="20" class="me-2" />
-                                        {{ __('common.groups_section_menu') }}
+                                        {{ __('sidebar.groups_section_menu') }}
                                         @if(auth()->user()->getGroupsCountAttribute() > 0)
                                             <span class="badge bg-info badge-notification ms-2">
                                                 {{ auth()->user()->getGroupsCountAttribute() }}
@@ -256,7 +256,7 @@
                                 <li class="no-sub {{ request()->routeIs('forum.*') && !request()->routeIs('forum.moderate.*') && !request()->routeIs('admin.forum.*') ? 'active' : '' }}">
                                     <a href="{{ route('forum.index') }}">
                                         <i class="ph-duotone ph-chats-circle f-s-20 me-2"></i>
-                                        {{ __('common.forum') }}
+                                        {{ __('sidebar.forum') }}
                                     </a>
                                 </li>
 
@@ -265,29 +265,29 @@
 
 
                                 @auth
-                                <!-- {{ __('common.didactic') }} Section - DISABILITATO (non implementato) -->
+                                <!-- Didattica Section - DISABILITATO (non implementato) -->
                                 <li class="no-sub nav-item disabled d-none d-lg-block">
                                     <a href="#" class="nav-link disabled pe-none opacity-50">
                                         <i class="ph-duotone ph-microphone-stage text-muted f-s-20 me-2"></i>
-                                        <span class="text-muted">{{ __('common.didactic') }}</span>
+                                        <span class="text-muted">{{ __('sidebar.didactic') }}</span>
                                     </a>
                                 </li>
                                 @endauth
                                 @auth
-                                <!-- {{ __('common.fan_support') }} Section - DISABILITATO (non implementato) -->
+                                <!-- Fan Support Section - DISABILITATO (non implementato) -->
                                 <li class="no-sub nav-item disabled d-none d-lg-block">
                                     <a href="#" class="nav-link disabled pe-none opacity-50">
                                         <i class="ph-duotone ph-microphone-stage text-muted f-s-20 me-2"></i>
-                                        <span class="text-muted">{{ __('common.fan_support') }}</span>
+                                        <span class="text-muted">{{ __('sidebar.fan_support') }}</span>
                                     </a>
                                 </li>
                                 @endauth
                                 @auth
-                                <!-- {{ __('common.wiki') }} Section - DISABILITATO (non implementato) -->
+                                <!-- Wiki Section - DISABILITATO (non implementato) -->
                                 <li class="no-sub nav-item disabled d-none d-lg-block">
                                     <a href="#" class="nav-link disabled pe-none opacity-50">
                                         <i class="ph-duotone ph-microphone-stage text-muted f-s-20 me-2"></i>
-                                        <span class="text-muted">{{ __('common.wiki') }}</span>
+                                        <span class="text-muted">{{ __('sidebar.wiki') }}</span>
                                     </a>
                                 </li>
                                 @endauth
@@ -426,11 +426,11 @@
                                     </a>
                                 </li>
 
-                                <!-- {{ __('common.kanban_board') }} - Solo per admin/moderator -->
+                                <!-- Kanban Board - Solo per admin/moderator -->
                                 <li class="no-sub {{ request()->routeIs('admin.kanban.*') ? 'active' : '' }}">
                                     <a href="{{ route('admin.kanban.index') }}">
                                         <x-icon name="kanban" size="20" class="me-2" />
-                                        {{ __('common.kanban_board') }}
+                                        {{ __('sidebar.kanban_board') }}
                                     </a>
                                 </li>
 

@@ -35,5 +35,17 @@ return [
   'moderation' => 'Moderazione',
   'moderation_tooltip' => 'Centro di moderazione contenuti',
   'system_logs' => 'Log di Sistema',
+  
+  // Main Menu Items (moved from common.php - following .cursorrules)
+  'slam_in' => 'Slam In',
+  'customize_layout' => 'Personalizza Layout',
+  'media_section' => 'Media',
+  'articles_section_menu' => 'Articoli',
+  'groups_section_menu' => 'Gruppi',
+  'forum' => 'Forum',
+  'didactic' => 'Didattica',
+  'fan_support' => 'Fan Support',
+  'wiki' => 'Wiki',
+  'kanban_board' => 'Kanban Board',
 ];
 
