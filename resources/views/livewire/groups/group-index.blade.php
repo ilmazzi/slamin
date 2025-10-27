@@ -101,13 +101,15 @@
                         <div class="d-flex align-items-start mb-3">
                             <div class="flex-shrink-0">
                                 @if($group->image)
-                                    <div class="rounded-circle avatar-md overflow-hidden">
+                                    <div class="rounded-circle overflow-hidden d-flex align-items-center justify-content-center" 
+                                         style="width: 60px; height: 60px; min-width: 60px; min-height: 60px;">
                                         <img src="{{ asset('storage/' . $group->image) }}"
                                              alt="{{ $group->name }}"
                                              class="w-100 h-100 img-cover">
                                     </div>
                                 @else
-                                    <div class="bg-light-primary rounded-circle d-flex align-items-center justify-content-center avatar-md">
+                                    <div class="bg-light-primary rounded-circle d-flex align-items-center justify-content-center" 
+                                         style="width: 60px; height: 60px; min-width: 60px; min-height: 60px;">
                                         <i class="ph-duotone ph-users text-primary f-s-24"></i>
                                     </div>
                                 @endif
