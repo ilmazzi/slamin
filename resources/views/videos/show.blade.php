@@ -292,15 +292,10 @@
                         @foreach($snaps->take(5) as $snap)
                             <div class="d-flex align-items-center mb-2">
                                 <div class="flex-shrink-0 position-relative">
-                                                                    @if($video->thumbnail_path)
-                                    <img src="{{ $video->thumbnail_url }}" alt="{{ __('common.snap') }}" class="rounded" style="width: 40px; height: 30px; object-fit: cover;">
-                                    @elseif($video->peertube_thumbnail_url)
-                                        <img src="{{ $video->peertube_thumbnail_url }}" alt="{{ __('common.snap') }}" class="rounded" style="width: 40px; height: 30px; object-fit: cover;">
-                                    @else
-                                        <div class="bg-light rounded d-flex align-items-center justify-content-center" style="width: 40px; height: 30px;">
-                                            <i class="ph-duotone ph-video-camera f-s-16 text-muted"></i>
-                                        </div>
-                                    @endif
+                                    <img src="{{ $video->thumbnail_url }}" 
+                                         alt="{{ __('common.snap') }}" 
+                                         class="rounded" 
+                                         style="width: 40px; height: 30px; object-fit: cover;">
                                     <div class="position-absolute top-0 end-0 bg-info text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 16px; height: 16px; font-size: 8px; transform: translate(25%, -25%);">
                                         <img src="{{ asset('assets/images/snap.png') }}" alt="Snap" style="width: 8px; height: 8px; filter: brightness(0) invert(1);">
                                     </div>
