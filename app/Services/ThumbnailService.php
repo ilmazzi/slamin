@@ -185,7 +185,7 @@ class ThumbnailService
                     Log::info("✅ Thumbnail URL recuperata per video {$video->id}: {$thumbnailUrl}");
 
                     // Prepara i dati da aggiornare
-                    $updateData = ['peertube_thumbnail_url' => $thumbnailUrl];
+                    $updateData = ['thumbnail_path' => $thumbnailUrl];
 
                     // Recupera anche la durata del video se disponibile
                     if (isset($data['duration'])) {
