@@ -116,7 +116,7 @@
                         <div class="d-flex align-items-center justify-content-between p-3 rounded" style="background: rgba(var(--success), 0.05);">
                             <div class="d-flex align-items-center gap-2">
                                 <i class="ph ph-layout f-s-24 text-success"></i>
-                                <div>
+<div>
                                     <div class="f-w-600">{{ __('profile.sidebar_badge') }}</div>
                                     <small class="text-muted">{{ __('profile.show_main_badge_only_1') }}</small>
                                 </div>
@@ -454,6 +454,129 @@
             align-items: center;
             gap: 10px;
             font-size: 1rem;
+        }
+
+        /* Responsive Mobile */
+        @media (max-width: 768px) {
+            .badge-wall-container {
+                padding: 20px 15px;
+                border-radius: 15px;
+            }
+
+            .wall-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 12px;
+            }
+
+            .badge-frame {
+                padding: 12px;
+                height: 140px;
+                border-radius: 12px;
+            }
+
+            .wall-badge-icon {
+                width: 60px;
+                height: 60px;
+            }
+
+            .badge-label {
+                font-size: 0.65rem;
+                margin-top: 6px;
+            }
+
+            .earned-checkmark {
+                font-size: 1.2rem;
+                top: 3px;
+                right: 3px;
+            }
+
+            .profile-indicator,
+            .sidebar-indicator {
+                width: 22px;
+                height: 22px;
+                font-size: 0.75rem;
+                bottom: 3px;
+            }
+
+            .sidebar-indicator {
+                left: 28px;
+            }
+
+            .progress-ring {
+                width: 24px;
+                height: 24px;
+                bottom: 3px;
+                right: 3px;
+            }
+
+            .progress-text {
+                font-size: 0.6rem;
+            }
+
+            /* Modal responsive */
+            .detail-card {
+                padding: 30px 20px;
+                width: 95%;
+                max-width: 95%;
+            }
+
+            .close-detail-btn {
+                width: 35px;
+                height: 35px;
+                top: 10px;
+                right: 10px;
+            }
+
+            .detail-icon {
+                width: 120px;
+                height: 120px;
+                margin: 15px auto;
+            }
+
+            .detail-card h3 {
+                font-size: 1.5rem;
+            }
+
+            .detail-card p {
+                font-size: 0.9rem;
+            }
+
+            .detail-stats {
+                flex-direction: column;
+                gap: 15px;
+                margin-top: 20px;
+            }
+
+            .badge-management {
+                margin-top: 20px !important;
+                padding-top: 20px !important;
+            }
+
+            .badge-management h6 {
+                font-size: 0.95rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .wall-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .badge-frame {
+                height: 130px;
+                padding: 10px;
+            }
+
+            .wall-badge-icon {
+                width: 50px;
+                height: 50px;
+            }
+
+            .badge-label {
+                font-size: 0.6rem;
+                margin-top: 4px;
+            }
         }
     </style>
 </div>

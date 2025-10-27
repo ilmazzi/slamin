@@ -2,17 +2,18 @@
     <!-- Page Header -->
     <div class="row mb-4">
         <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
                 <div>
                     <h3 class="mb-1 f-w-700">
                         <i class="ph ph-trophy me-2 text-warning"></i>
                         Trophy Case
                     </h3>
-                    <p class="text-muted mb-0">La tua collezione completa di badge - sblocca nuovi achievement!</p>
+                    <p class="text-muted mb-0 d-none d-md-block">La tua collezione completa di badge - sblocca nuovi achievement!</p>
                 </div>
-                <a href="{{ route('profile.show', Auth::user()) }}" class="btn btn-outline-primary">
+                <a href="{{ route('profile.show', Auth::user()) }}" class="btn btn-outline-primary btn-sm">
                     <i class="ph ph-arrow-left me-2"></i>
-                    Torna al Profilo
+                    <span class="d-none d-sm-inline">Torna al Profilo</span>
+                    <span class="d-inline d-sm-none">Profilo</span>
                 </a>
             </div>
         </div>
