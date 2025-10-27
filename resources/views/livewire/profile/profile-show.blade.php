@@ -38,24 +38,24 @@
                     <i class="ph ph-user-circle {{ $activeTab === 'about' ? 'text-white' : 'text-primary' }} me-1"></i>
                     <span class="d-none d-sm-inline {{ $activeTab === 'about' ? 'text-white' : '' }}">{{ __('profile.tab_profile') }}</span>
                 </button>
-                <button class="btn {{ $activeTab === 'poems' ? 'btn-success' : 'btn-light-success' }} flex-shrink-0 btn-sm" 
+                <button class="btn {{ $activeTab === 'poems' ? 'btn-primary' : 'btn-light-primary' }} flex-shrink-0 btn-sm" 
                         wire:click="setActiveTab('poems')">
-                    <i class="ph ph-book-open {{ $activeTab === 'poems' ? 'text-white' : 'text-success' }} me-1"></i>
+                    <i class="ph ph-book-open {{ $activeTab === 'poems' ? 'text-white' : 'text-primary' }} me-1"></i>
                     <span class="d-none d-sm-inline {{ $activeTab === 'poems' ? 'text-white' : '' }}">{{ __('profile.tab_poems') }}</span>
                 </button>
-                <button class="btn {{ $activeTab === 'events' ? 'btn-warning' : 'btn-light-warning' }} flex-shrink-0 btn-sm" 
+                <button class="btn {{ $activeTab === 'events' ? 'btn-primary' : 'btn-light-primary' }} flex-shrink-0 btn-sm" 
                         wire:click="setActiveTab('events')">
-                    <i class="ph ph-calendar {{ $activeTab === 'events' ? 'text-white' : 'text-warning' }} me-1"></i>
+                    <i class="ph ph-calendar {{ $activeTab === 'events' ? 'text-white' : 'text-primary' }} me-1"></i>
                     <span class="d-none d-sm-inline {{ $activeTab === 'events' ? 'text-white' : '' }}">{{ __('profile.tab_events') }}</span>
                 </button>
-                <button class="btn {{ $activeTab === 'media' ? 'btn-danger' : 'btn-light-danger' }} flex-shrink-0 btn-sm" 
+                <button class="btn {{ $activeTab === 'media' ? 'btn-primary' : 'btn-light-primary' }} flex-shrink-0 btn-sm" 
                         wire:click="setActiveTab('media')">
-                    <i class="ph ph-play-circle {{ $activeTab === 'media' ? 'text-white' : 'text-danger' }} me-1"></i>
+                    <i class="ph ph-play-circle {{ $activeTab === 'media' ? 'text-white' : 'text-primary' }} me-1"></i>
                     <span class="d-none d-sm-inline {{ $activeTab === 'media' ? 'text-white' : '' }}">{{ __('profile.tab_media') }}</span>
                 </button>
-                <button class="btn {{ $activeTab === 'articles' ? 'btn-info' : 'btn-light-info' }} flex-shrink-0 btn-sm" 
+                <button class="btn {{ $activeTab === 'articles' ? 'btn-primary' : 'btn-light-primary' }} flex-shrink-0 btn-sm" 
                         wire:click="setActiveTab('articles')">
-                    <i class="ph ph-newspaper {{ $activeTab === 'articles' ? 'text-white' : 'text-info' }} me-1"></i>
+                    <i class="ph ph-newspaper {{ $activeTab === 'articles' ? 'text-white' : 'text-primary' }} me-1"></i>
                     <span class="d-none d-sm-inline {{ $activeTab === 'articles' ? 'text-white' : '' }}">{{ __('profile.tab_articles') }}</span>
                 </button>
                 <button class="btn {{ $activeTab === 'activities' ? 'btn-secondary' : 'btn-light-secondary' }} flex-shrink-0 btn-sm" 
