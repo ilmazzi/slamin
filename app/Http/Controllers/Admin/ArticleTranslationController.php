@@ -5,20 +5,16 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Article;
 use App\Models\ArticleTranslation;
-use App\Services\TranslationApiService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class ArticleTranslationController extends Controller
 {
-    protected $translationService;
-
-    public function __construct(TranslationApiService $translationService)
+    public function __construct()
     {
         $this->middleware('auth');
         $this->middleware('can:articles.manage_news');
-        $this->translationService = $translationService;
     }
 
     /**
