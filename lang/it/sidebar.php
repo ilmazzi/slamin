@@ -30,6 +30,7 @@ return [
   'forum_moderation' => 'Moderazione Forum',
   'admin_dashboard' => 'Dashboard Admin',
   'forum_admin' => 'Forum Admin',
+  'gamification_admin' => 'Gamification',
   'peertube' => 'PeerTube',
   'permissions_management' => 'Gestione Permessi',
   'moderation' => 'Moderazione',

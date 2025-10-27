@@ -355,7 +355,7 @@
                                 <li class="no-sub {{ request()->routeIs('admin.gamification.*') ? 'active' : '' }}">
                                     <a href="{{ route('admin.gamification.badges') }}">
                                         <i class="ph-duotone ph-trophy f-s-20 me-2"></i>
-                                        {{ __('gamification.admin_title') }}
+                                        {{ __('sidebar.gamification_admin') }}
                                     </a>
                                 </li>
                                 @endif
