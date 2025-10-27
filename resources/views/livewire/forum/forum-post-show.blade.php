@@ -15,7 +15,7 @@
             <div class="row">
                 {{-- Vote buttons --}}
                 <div class="col-auto">
-                    @livewire('forum-vote-button', ['voteable' => $post], key('post-vote-'.$post->id))
+                    @livewire('forum.forum-vote-button', ['voteable' => $post], key('post-vote-'.$post->id))
                 </div>
 
                 {{-- Post content --}}

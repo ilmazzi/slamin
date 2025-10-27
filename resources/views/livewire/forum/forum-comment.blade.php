@@ -5,7 +5,7 @@
                 {{-- Vote buttons --}}
                 <div class="col-auto">
                     @if(!$comment->is_deleted)
-                        @livewire('forum-vote-button', ['voteable' => $comment], key('comment-vote-'.$comment->id))
+                        @livewire('forum.forum-vote-button', ['voteable' => $comment], key('comment-vote-'.$comment->id))
                     @endif
                 </div>
 
