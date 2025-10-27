@@ -743,11 +743,9 @@ Route::get('/invitations/{invitation}/decline', [InvitationController::class, 'd
         Route::get('/stats', [App\Http\Controllers\PermissionController::class, 'getStats'])->name('stats');
     });
 
-    // Barryvdh Laravel Translation Manager routes
-    // Note: POST routes are auto-registered, GET routes need manual registration
-    Route::get('admin/translation-manager/{groupKey?}', '\Barryvdh\TranslationManager\Controller@getView')
-        ->middleware(['web', 'auth', 'admin'])
-        ->where('groupKey', '.*');
+    // Barryvdh Laravel Translation Manager routes are auto-registered by ManagerServiceProvider
+    // Configuration in: config/translation-manager.php
+    // Routes file: vendor/barryvdh/laravel-translation-manager/src/routes.php
 
         // Carousel Management (Admin only)
     Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
