@@ -24,10 +24,12 @@ return [
     'invite' => 'Invita',
     'read' => 'Leggi',
     'details' => 'Dettagli',
+    'view' => 'Visualizza',
     'view_all' => 'Vedi tutti',
     'view_profile' => 'Vedi Profilo',
     'view_members' => 'Vedi Membri',
     'quick_actions' => 'Azioni Rapide',
+    'reset_filters' => 'Reimposta Filtri',
     
     // Form fields
     'name' => 'Nome',

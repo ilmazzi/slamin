@@ -82,7 +82,7 @@
                             <div class="col-md-2">
                                 <button wire:click="clearGroupFilters" class="btn btn-secondary w-100">
                                     <i class="ph ph-arrow-clockwise me-1"></i>
-                                    {{ __('common.reset') }}
+                                    {{ __('groups.reset_filters') }}
                                 </button>
                             </div>
                         </div>
@@ -140,7 +140,7 @@
                                 {{ $group->visibility === 'public' ? __('groups.visibility_public') : __('groups.visibility_private') }}
                             </span>
                             <a href="{{ route('groups.show', $group) }}" class="btn btn-primary btn-sm">
-                                {{ __('common.view') }}
+                                {{ __('groups.view') }}
                             </a>
                         </div>
                     </div>
@@ -203,7 +203,7 @@
                             <div class="col-md-2">
                                 <button wire:click="clearUserFilters" class="btn btn-secondary w-100">
                                     <i class="ph ph-arrow-clockwise me-1"></i>
-                                    {{ __('common.reset') }}
+                                    {{ __('groups.reset_filters') }}
                                 </button>
                             </div>
                         </div>
