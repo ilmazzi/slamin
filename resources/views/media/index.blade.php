@@ -34,67 +34,29 @@
                 </div>
                 <div class="card-body p-0">
                     @if($mostPopularVideo)
-                        <div class="position-relative">
-                            @if($mostPopularVideo->thumbnail_url && $mostPopularVideo->thumbnail_url !== asset('assets/images/placeholder/placholder-1.jpg'))
-                                <div class="position-relative" style="cursor: pointer;" onclick="openVideoModal({{ $mostPopularVideo->id }})">
-                                    <img src="{{ $mostPopularVideo->thumbnail_url }}" alt="{{ $mostPopularVideo->title }}" class="card-img-top" style="height: 400px; object-fit: cover;">
-                                    <div class="position-absolute top-50 start-50 translate-middle">
-                                        <div class="play-button bg-white rounded-circle d-flex align-items-center justify-content-center" style="width: 80px; height: 80px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
-                                            <i class="ph-duotone ph-play f-s-32 text-primary"></i>
-                                        </div>
-                                    </div>
-                                    <div class="position-absolute bottom-0 start-0 end-0 p-3" style="background: linear-gradient(transparent, rgba(0,0,0,0.7));">
-                                        <small class="text-white f-s-12">
-                                            <i class="ph-duotone ph-clock me-1"></i>
-                                            @if($mostPopularVideo->duration && $mostPopularVideo->duration > 0)
-                                                {{ $mostPopularVideo->formatted_duration }}
-                                            @else
-                                                <span title="{{ __('videos.duration_unavailable') }}">--:--</span>
-                                            @endif
-                                        </small>
-                                    </div>
-                                    <div class="position-absolute top-0 end-0 m-3">
-                                        <span class="badge bg-dark f-s-12">{{ $mostPopularVideo->view_count ?? $mostPopularVideo->views }} {{ __('profile.views') }}</span>
-                                    </div>
+                        <div class="position-relative" style="cursor: pointer;" onclick="openVideoModal({{ $mostPopularVideo->id }})">
+                            <img src="{{ $mostPopularVideo->thumbnail_url }}" 
+                                 alt="{{ $mostPopularVideo->title }}" 
+                                 class="card-img-top" 
+                                 style="height: 400px; object-fit: cover;">
+                            <div class="position-absolute top-50 start-50 translate-middle">
+                                <div class="play-button bg-white rounded-circle d-flex align-items-center justify-content-center" style="width: 80px; height: 80px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
+                                    <i class="ph-duotone ph-play f-s-32 text-primary"></i>
                                 </div>
-                            @elseif($mostPopularVideo->peertube_uuid)
-                                                            <div class="card-img-top video-preview bg-gradient-primary d-flex align-items-center justify-content-center position-relative"
-                                 style="height: 400px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); cursor: pointer;"
-                                 onclick="openVideoModal({{ $mostPopularVideo->id }})">
-                                    <div class="position-absolute top-50 start-50 translate-middle">
-                                        <div class="play-button bg-white rounded-circle d-flex align-items-center justify-content-center" style="width: 80px; height: 80px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
-                                            <i class="ph-duotone ph-play f-s-32 text-primary"></i>
-                                        </div>
-                                    </div>
-                                    <div class="position-absolute bottom-0 start-0 end-0 p-3" style="background: linear-gradient(transparent, rgba(0,0,0,0.7));">
-                                        <small class="text-white f-s-12">
-                                            <i class="ph-duotone ph-clock me-1"></i>
-                                            @if($mostPopularVideo->duration && $mostPopularVideo->duration > 0)
-                                                {{ $mostPopularVideo->formatted_duration }}
-                                            @else
-                                                <span title="{{ __('videos.duration_unavailable') }}">--:--</span>
-                                            @endif
-                                        </small>
-                                    </div>
-                                    <div class="position-absolute top-0 end-0 m-3">
-                                        <span class="badge bg-dark f-s-12">{{ $mostPopularVideo->view_count ?? $mostPopularVideo->views }} {{ __('profile.views') }}</span>
-                                    </div>
-                                </div>
-                            @else
-                                <div class="position-relative" style="cursor: pointer;" onclick="openVideoModal({{ $mostPopularVideo->id }})">
-                                    <div class="card-img-top bg-light d-flex align-items-center justify-content-center" style="height: 400px;">
-                                        <div class="text-center">
-                                            <i class="ph-duotone ph-video-camera f-s-64 text-muted mb-3"></i>
-                                            <div class="play-button bg-primary rounded-circle d-flex align-items-center justify-content-center mx-auto" style="width: 80px; height: 80px; box-shadow: 0 4px 15px rgba(0,0,0,0.3);">
-                                                <i class="ph-duotone ph-play f-s-32 text-white"></i>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="position-absolute top-0 end-0 m-3">
-                                        <span class="badge bg-dark f-s-12">{{ $mostPopularVideo->view_count ?? $mostPopularVideo->views }} {{ __('profile.views') }}</span>
-                                    </div>
-                                </div>
-                            @endif
+                            </div>
+                            <div class="position-absolute bottom-0 start-0 end-0 p-3" style="background: linear-gradient(transparent, rgba(0,0,0,0.7));">
+                                <small class="text-white f-s-12">
+                                    <i class="ph-duotone ph-clock me-1"></i>
+                                    @if($mostPopularVideo->duration && $mostPopularVideo->duration > 0)
+                                        {{ $mostPopularVideo->formatted_duration }}
+                                    @else
+                                        <span title="{{ __('videos.duration_unavailable') }}">--:--</span>
+                                    @endif
+                                </small>
+                            </div>
+                            <div class="position-absolute top-0 end-0 m-3">
+                                <span class="badge bg-dark f-s-12">{{ $mostPopularVideo->view_count ?? $mostPopularVideo->views }} {{ __('profile.views') }}</span>
+                            </div>
                         </div>
                         <div class="card-body">
                             <h5 class="card-title f-w-600 f-s-16 mb-2">
