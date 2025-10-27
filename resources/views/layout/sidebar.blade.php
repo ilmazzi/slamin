@@ -42,7 +42,7 @@
                                       <img src="{{ $sidebarBadge->badge->icon_url }}" alt="{{ $sidebarBadge->badge->name }}" style="width: 100px; height: 100px; object-fit: contain; margin-bottom: 12px; animation: badgeSpin 0.6s ease;">
                                       <p class="text-muted f-s-13 mb-3">{{ $sidebarBadge->badge->description }}</p>
                                       <div class="d-flex justify-content-center gap-2">
-                                          <span class="badge bg-light-warning"><i class="ph ph-star me-1"></i>{{ $sidebarBadge->badge->points }} pts</span>
+                                          <span class="badge bg-light-warning"><i class="ph ph-star me-1"></i>{{ $sidebarBadge->badge->points }} {{ __('sidebar.points_abbr') }}</span>
                                           <span class="badge bg-light-success"><i class="ph ph-check-circle me-1"></i>{{ $sidebarBadge->earned_at->format("d/m/Y") }}</span>
                                       </div>
                                   </div>'>
@@ -62,12 +62,12 @@
                         @php
                             $role = auth()->user()->getRoleNames()->first();
                             $roleDisplay = match($role) {
-                                'admin' => 'Amministratore',
-                                'moderatore' => 'Moderatore',
+                                'admin' => __('sidebar.role_admin'),
+                                'moderatore' => __('sidebar.role_moderator'),
                                 'organizzatore' => __('events.organizer'),
-                                'poeta' => 'Poeta',
-                                'giudice' => 'Giudice',
-                                'spettatore' => 'Spettatore',
+                                'poeta' => __('sidebar.role_poet'),
+                                'giudice' => __('sidebar.role_judge'),
+                                'spettatore' => __('sidebar.role_audience'),
                                 default => ucfirst($role)
                             };
                         @endphp
@@ -95,7 +95,7 @@
                     </li>
                     <li class="dropdown-item">
                         <a class="f-w-500" href="{{ route('profile.payment-accounts.index') }}">
-                            <i class="ph-duotone ph-credit-card pe-1 f-s-20"></i> Conti di Pagamento
+                            <i class="ph-duotone ph-credit-card pe-1 f-s-20"></i> {{ __('sidebar.payment_accounts') }}
                         </a>
                     </li>
                     <li class="dropdown-item">
@@ -261,7 +261,7 @@
                                 </li>
 
 
-                                <li class="menu-title d-none d-lg-block"><span>PROSSIMAMENTE</span></li>
+                                <li class="menu-title d-none d-lg-block"><span>{{ __('sidebar.coming_soon') }}</span></li>
 
 
                                 @auth
@@ -300,14 +300,14 @@
                                 @if(auth()->user()?->hasRole(['admin', 'moderator']) && auth()->user()?->can('articles.manage_news'))
                                 <!-- Editor Section - Per editor con permessi News -->
                                 <li class="menu-title">
-                                    <span>📝 Editor</span>
+                                    <span>{{ __('sidebar.editor_section') }}</span>
                                 </li>
 
                                 <!-- Article Translations - Per editor -->
                                 <li class="no-sub {{ request()->routeIs('admin.articles.translations.*') ? 'active' : '' }}">
                                     <a href="{{ route('admin.articles.translations.index') }}">
                                         <i class="ph-duotone ph-translate f-s-20 me-2"></i>
-                                        Traduzioni Articoli
+                                        {{ __('sidebar.article_translations') }}
                                         @php
                                             $publishedArticles = \App\Models\Article::published()->count();
                                         @endphp
@@ -330,7 +330,7 @@
                                 <li class="no-sub {{ request()->routeIs('forum.moderate.*') ? 'active' : '' }}">
                                     <a href="{{ route('forum.moderate.queue') }}">
                                         <i class="ph-duotone ph-shield-check f-s-20 me-2"></i>
-                                        Moderazione Forum
+                                        {{ __('sidebar.forum_moderation') }}
                                     </a>
                                 </li>
 
@@ -339,7 +339,7 @@
                                 <li class="no-sub {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                                     <a href="{{ route('admin.dashboard') }}">
                                         <x-icon name="dashboard" size="20" class="me-2" />
-                                        Dashboard Admin
+                                        {{ __('sidebar.admin_dashboard') }}
                                     </a>
                                 </li>
 
@@ -347,7 +347,7 @@
                                 <li class="no-sub {{ request()->routeIs('admin.forum.*') ? 'active' : '' }}">
                                     <a href="{{ route('admin.forum.dashboard') }}">
                                         <i class="ph-duotone ph-chats-circle f-s-20 me-2"></i>
-                                        Forum Admin
+                                        {{ __('sidebar.forum_admin') }}
                                     </a>
                                 </li>
 
@@ -403,7 +403,7 @@
                                 <li class="no-sub {{ request()->routeIs('admin.payment-accounts.*') ? 'active' : '' }}">
                                     <a href="{{ route('admin.payment-accounts.index') }}">
                                         <x-icon name="payment" size="20" class="me-2" />
-                                        Conti di Pagamento
+                                        {{ __('sidebar.payment_accounts') }}
                                         @php
                                             $pendingVerification = \App\Models\User::whereNotNull('paypal_email')
                                                 ->where('paypal_verified', false)
@@ -422,7 +422,7 @@
                                 <li class="no-sub {{ request()->routeIs('admin.peertube.*') ? 'active' : '' }}">
                                     <a href="{{ route('admin.peertube.index') }}">
                                         <x-icon name="peertube" size="20" class="me-2" />
-                                        PeerTube
+                                        {{ __('sidebar.peertube') }}
                                     </a>
                                 </li>
 
