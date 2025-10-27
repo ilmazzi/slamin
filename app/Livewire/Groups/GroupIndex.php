@@ -141,7 +141,10 @@ class GroupIndex extends Component
 
     public function render()
     {
-        return view('livewire.groups.group-index')
+        return view('livewire.groups.group-index', [
+                'groups' => $this->groups,
+                'users' => $this->users,
+            ])
             ->extends('layout.master')
             ->section('main-content');
     }
