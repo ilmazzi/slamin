@@ -65,6 +65,6 @@ class ForumVoteButton extends Component
 
     public function render()
     {
-        return view('livewire.forum-vote-button');
+        return view('livewire.forum.forum-vote-button');
     }
 }
