@@ -103,12 +103,10 @@
                                 @if($group->image)
                                     <img src="{{ asset('storage/' . $group->image) }}"
                                          alt="{{ $group->name }}"
-                                         class="rounded-circle"
-                                         style="width: 60px; height: 60px; object-fit: cover;">
+                                         class="rounded-circle avatar-md">
                                 @else
-                                    <div class="bg-light-primary rounded-circle d-flex align-items-center justify-content-center"
-                                         style="width: 60px; height: 60px;">
-                                        <i class="ph ph-users text-primary" style="font-size: 24px;"></i>
+                                    <div class="bg-light-primary rounded-circle d-flex align-items-center justify-content-center avatar-md">
+                                        <i class="ph-duotone ph-users text-primary f-s-24"></i>
                                     </div>
                                 @endif
                             </div>
@@ -147,7 +145,7 @@
             @empty
             <div class="col-12">
                 <div class="text-center py-5">
-                    <i class="ph ph-users text-muted" style="font-size: 48px;"></i>
+                    <i class="ph-duotone ph-users text-muted f-s-48"></i>
                     <h6 class="text-muted mt-3">{{ __('groups.no_groups') }}</h6>
                 </div>
             </div>
@@ -222,7 +220,7 @@
             @empty
             <div class="col-12">
                 <div class="text-center py-5">
-                    <i class="ph ph-user text-muted" style="font-size: 48px;"></i>
+                    <i class="ph-duotone ph-user text-muted f-s-48"></i>
                     <h6 class="text-muted mt-3">{{ __('groups.no_users') }}</h6>
                 </div>
             </div>

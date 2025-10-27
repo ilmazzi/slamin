@@ -1224,12 +1224,10 @@ Route::prefix('poem-translations')->name('poem-translations.')->middleware(['aut
 Route::prefix('groups')->name('groups.')->middleware('auth')->group(function () {
     // Routes principali dei gruppi (Livewire 3)
     Route::get('/', App\Livewire\Groups\GroupIndex::class)->name('index');
-    Route::get('/create', [App\Http\Controllers\GroupController::class, 'create'])->name('create');
-    Route::post('/', [App\Http\Controllers\GroupController::class, 'store'])->name('store');
+    Route::get('/create', App\Livewire\Groups\GroupCreate::class)->name('create');
 
-    Route::get('/{group}', [App\Http\Controllers\GroupController::class, 'show'])->name('show');
-    Route::get('/{group}/edit', [App\Http\Controllers\GroupController::class, 'edit'])->name('edit');
-    Route::put('/{group}', [App\Http\Controllers\GroupController::class, 'update'])->name('update');
+    Route::get('/{group}', App\Livewire\Groups\GroupShow::class)->name('show');
+    Route::get('/{group}/edit', App\Livewire\Groups\GroupEdit::class)->name('edit');
     Route::delete('/{group}', [App\Http\Controllers\GroupController::class, 'destroy'])->name('destroy');
     Route::get('/{group}/dashboard', [App\Http\Controllers\GroupController::class, 'dashboard'])->name('dashboard');
 

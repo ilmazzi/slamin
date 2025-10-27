@@ -23,193 +23,196 @@ class GroupController extends Controller
 
     /**
      * Show the form for creating a new group
+     * DEPRECATED: Now using Livewire component App\Livewire\Groups\GroupCreate
      */
-    public function create()
-    {
-        if (!Auth::user()->can('groups.create')) {
-            abort(403, 'Non hai i permessi per creare gruppi.');
-        }
+    // public function create()
+    // {
+    //     if (!Auth::user()->can('groups.create')) {
+    //         abort(403, 'Non hai i permessi per creare gruppi.');
+    //     }
 
-        return view('groups.create');
-    }
+    //     return view('groups.create');
+    // }
 
     /**
      * Store a newly created group
+     * DEPRECATED: Now using Livewire component App\Livewire\Groups\GroupCreate
      */
-    public function store(Request $request)
-    {
-        if (!Auth::user()->can('groups.create')) {
-            abort(403, 'Non hai i permessi per creare gruppi.');
-        }
+    // public function store(Request $request)
+    // {
+    //     if (!Auth::user()->can('groups.create')) {
+    //         abort(403, 'Non hai i permessi per creare gruppi.');
+    //     }
 
-        $request->validate([
-            'name' => 'required|string|max:255|unique:groups',
-            'description' => 'nullable|string|max:1000',
-            'visibility' => 'required|in:public,private',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'website' => 'nullable|url|max:255',
-            'social_facebook' => 'nullable|url|max:255',
-            'social_instagram' => 'nullable|url|max:255',
-            'social_youtube' => 'nullable|url|max:255',
-            'social_twitter' => 'nullable|url|max:255',
-            'social_tiktok' => 'nullable|url|max:255',
-            'social_linkedin' => 'nullable|url|max:255',
-        ]);
+    //     $request->validate([
+    //         'name' => 'required|string|max:255|unique:groups',
+    //         'description' => 'nullable|string|max:1000',
+    //         'visibility' => 'required|in:public,private',
+    //         'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+    //         'website' => 'nullable|url|max:255',
+    //         'social_facebook' => 'nullable|url|max:255',
+    //         'social_instagram' => 'nullable|url|max:255',
+    //         'social_youtube' => 'nullable|url|max:255',
+    //         'social_twitter' => 'nullable|url|max:255',
+    //         'social_tiktok' => 'nullable|url|max:255',
+    //         'social_linkedin' => 'nullable|url|max:255',
+    //     ]);
 
-        $group = new Group();
-        $group->name = $request->name;
-        $group->description = $request->description;
-        $group->visibility = $request->visibility;
-        $group->created_by = Auth::id();
-        $group->website = $request->website;
-        $group->social_facebook = $request->social_facebook;
-        $group->social_instagram = $request->social_instagram;
-        $group->social_youtube = $request->social_youtube;
-        $group->social_twitter = $request->social_twitter;
-        $group->social_tiktok = $request->social_tiktok;
-        $group->social_linkedin = $request->social_linkedin;
+    //     $group = new Group();
+    //     $group->name = $request->name;
+    //     $group->description = $request->description;
+    //     $group->visibility = $request->visibility;
+    //     $group->created_by = Auth::id();
+    //     $group->website = $request->website;
+    //     $group->social_facebook = $request->social_facebook;
+    //     $group->social_instagram = $request->social_instagram;
+    //     $group->social_youtube = $request->social_youtube;
+    //     $group->social_twitter = $request->social_twitter;
+    //     $group->social_tiktok = $request->social_tiktok;
+    //     $group->social_linkedin = $request->social_linkedin;
 
-        // Gestione immagine
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('groups', 'public');
-            $group->image = $imagePath;
-        }
+    //     // Gestione immagine
+    //     if ($request->hasFile('image')) {
+    //         $imagePath = $request->file('image')->store('groups', 'public');
+    //         $group->image = $imagePath;
+    //     }
 
-        $group->save();
+    //     $group->save();
 
-        // Gestisci gli inviti se presenti
-        if ($request->has('invited_users') && !empty($request->invited_users)) {
-            $invitedUsers = json_decode($request->invited_users, true);
+    //     // Gestisci gli inviti se presenti
+    //     if ($request->has('invited_users') && !empty($request->invited_users)) {
+    //         $invitedUsers = json_decode($request->invited_users, true);
 
-            if (is_array($invitedUsers)) {
-                foreach ($invitedUsers as $invitedUser) {
-                    if (isset($invitedUser['id']) && $invitedUser['id'] != Auth::id()) {
-                        // Crea l'invito
-                        \App\Models\GroupInvitation::create([
-                            'group_id' => $group->id,
-                            'user_id' => $invitedUser['id'],
-                            'invited_by' => Auth::id(),
-                            'message' => "Sei stato invitato a unirti al gruppo \"{$group->name}\"",
-                            'expires_at' => now()->addDays(7),
-                        ]);
+    //         if (is_array($invitedUsers)) {
+    //             foreach ($invitedUsers as $invitedUser) {
+    //                 if (isset($invitedUser['id']) && $invitedUser['id'] != Auth::id()) {
+    //                     // Crea l'invito
+    //                     \App\Models\GroupInvitation::create([
+    //                         'group_id' => $group->id,
+    //                         'user_id' => $invitedUser['id'],
+    //                         'invited_by' => Auth::id(),
+    //                         'message' => "Sei stato invitato a unirti al gruppo \"{$group->name}\"",
+    //                         'expires_at' => now()->addDays(7),
+    //                     ]);
 
-                        // Crea la notifica
-                        \App\Models\Notification::createGroupInvitation(
-                            \App\Models\GroupInvitation::where('group_id', $group->id)
-                                                      ->where('user_id', $invitedUser['id'])
-                                                      ->latest()
-                                                      ->first()
-                        );
-                    }
-                }
-            }
-        }
+    //                     // Crea la notifica
+    //                     \App\Models\Notification::createGroupInvitation(
+    //                         \App\Models\GroupInvitation::where('group_id', $group->id)
+    //                                                   ->where('user_id', $invitedUser['id'])
+    //                                                   ->latest()
+    //                                                   ->first()
+    //                     );
+    //                 }
+    //             }
+    //         }
+    //     }
 
-        return redirect()->route('groups.show', $group)
-                        ->with('success', 'Gruppo creato con successo!' .
-                              (isset($invitedUsers) && count($invitedUsers) > 0 ?
-                               ' Inviti inviati a ' . count($invitedUsers) . ' utenti.' : ''));
-    }
+    //     return redirect()->route('groups.show', $group)
+    //                     ->with('success', 'Gruppo creato con successo!' .
+    //                           (isset($invitedUsers) && count($invitedUsers) > 0 ?
+    //                            ' Inviti inviati a ' . count($invitedUsers) . ' utenti.' : ''));
+    // }
 
     /**
      * Display the specified group
+     * DEPRECATED: Now using Livewire component App\Livewire\Groups\GroupShow
      */
+    // public function show(Group $group)
+    // {
+    //     $user = Auth::user();
 
+    //     // Verifica se l'utente può visualizzare il gruppo
+    //     if ($group->visibility === 'private' && !$user->isMemberOf($group) && !$user->hasRole('admin')) {
+    //         abort(403, 'Non hai i permessi per visualizzare questo gruppo.');
+    //     }
 
-    public function show(Group $group)
-    {
-        $user = Auth::user();
+    //     $group->load(['creator', 'members.user', 'events', 'linkedEvents']);
 
-        // Verifica se l'utente può visualizzare il gruppo
-        if ($group->visibility === 'private' && !$user->isMemberOf($group) && !$user->hasRole('admin')) {
-            abort(403, 'Non hai i permessi per visualizzare questo gruppo.');
-        }
+    //     // Statistiche del gruppo
+    //     $stats = [
+    //         'total_members' => $group->getMembersCount(),
+    //         'total_events' => $group->events()->count(),
+    //         'pending_invitations' => $group->getPendingInvitations()->count(),
+    //         'pending_requests' => $group->getPendingJoinRequests()->count(),
+    //     ];
 
-        $group->load(['creator', 'members.user', 'events', 'linkedEvents']);
+    //     // Verifica ruolo dell'utente nel gruppo
+    //     $userRole = $user->getRoleInGroup($group);
+    //     $isAdmin = $user->isAdminOf($group);
+    //     $isModerator = $user->isModeratorOf($group);
+    //     $isMember = $user->isMemberOf($group);
 
-        // Statistiche del gruppo
-        $stats = [
-            'total_members' => $group->getMembersCount(),
-            'total_events' => $group->events()->count(),
-            'pending_invitations' => $group->getPendingInvitations()->count(),
-            'pending_requests' => $group->getPendingJoinRequests()->count(),
-        ];
-
-        // Verifica ruolo dell'utente nel gruppo
-        $userRole = $user->getRoleInGroup($group);
-        $isAdmin = $user->isAdminOf($group);
-        $isModerator = $user->isModeratorOf($group);
-        $isMember = $user->isMemberOf($group);
-
-        return view('groups.show', compact('group', 'stats', 'userRole', 'isAdmin', 'isModerator', 'isMember'));
-    }
+    //     return view('groups.show', compact('group', 'stats', 'userRole', 'isAdmin', 'isModerator', 'isMember'));
+    // }
 
     /**
      * Show the form for editing the specified group
+     * DEPRECATED: Now using Livewire component App\Livewire\Groups\GroupEdit
      */
-    public function edit(Group $group)
-    {
-        $user = Auth::user();
+    // public function edit(Group $group)
+    // {
+    //     $user = Auth::user();
 
-        if (!$user->isAdminOf($group) && !$user->hasRole('admin')) {
-            abort(403, 'Non hai i permessi per modificare questo gruppo.');
-        }
+    //     if (!$user->isAdminOf($group) && !$user->hasRole('admin')) {
+    //         abort(403, 'Non hai i permessi per modificare questo gruppo.');
+    //     }
 
-        return view('groups.edit', compact('group'));
-    }
+    //     return view('groups.edit', compact('group'));
+    // }
 
     /**
      * Update the specified group
+     * DEPRECATED: Now using Livewire component App\Livewire\Groups\GroupEdit
      */
-    public function update(Request $request, Group $group)
-    {
-        $user = Auth::user();
+    // public function update(Request $request, Group $group)
+    // {
+    //     $user = Auth::user();
 
-        if (!$user->isAdminOf($group) && !$user->hasRole('admin')) {
-            abort(403, 'Non hai i permessi per modificare questo gruppo.');
-        }
+    //     if (!$user->isAdminOf($group) && !$user->hasRole('admin')) {
+    //         abort(403, 'Non hai i permessi per modificare questo gruppo.');
+    //     }
 
-        $request->validate([
-            'name' => ['required', 'string', 'max:255', Rule::unique('groups')->ignore($group->id)],
-            'description' => 'nullable|string|max:1000',
-            'visibility' => 'required|in:public,private',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'website' => 'nullable|url|max:255',
-            'social_facebook' => 'nullable|url|max:255',
-            'social_instagram' => 'nullable|url|max:255',
-            'social_youtube' => 'nullable|url|max:255',
-            'social_twitter' => 'nullable|url|max:255',
-            'social_tiktok' => 'nullable|url|max:255',
-            'social_linkedin' => 'nullable|url|max:255',
-        ]);
+    //     $request->validate([
+    //         'name' => ['required', 'string', 'max:255', Rule::unique('groups')->ignore($group->id)],
+    //         'description' => 'nullable|string|max:1000',
+    //         'visibility' => 'required|in:public,private',
+    //         'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+    //         'website' => 'nullable|url|max:255',
+    //         'social_facebook' => 'nullable|url|max:255',
+    //         'social_instagram' => 'nullable|url|max:255',
+    //         'social_youtube' => 'nullable|url|max:255',
+    //         'social_twitter' => 'nullable|url|max:255',
+    //         'social_tiktok' => 'nullable|url|max:255',
+    //         'social_linkedin' => 'nullable|url|max:255',
+    //     ]);
 
-        $group->name = $request->name;
-        $group->description = $request->description;
-        $group->visibility = $request->visibility;
-        $group->website = $request->website;
-        $group->social_facebook = $request->social_facebook;
-        $group->social_instagram = $request->social_instagram;
-        $group->social_youtube = $request->social_youtube;
-        $group->social_twitter = $request->social_twitter;
-        $group->social_tiktok = $request->social_tiktok;
-        $group->social_linkedin = $request->social_linkedin;
+    //     $group->name = $request->name;
+    //     $group->description = $request->description;
+    //     $group->visibility = $request->visibility;
+    //     $group->website = $request->website;
+    //     $group->social_facebook = $request->social_facebook;
+    //     $group->social_instagram = $request->social_instagram;
+    //     $group->social_youtube = $request->social_youtube;
+    //     $group->social_twitter = $request->social_twitter;
+    //     $group->social_tiktok = $request->social_tiktok;
+    //     $group->social_linkedin = $request->social_linkedin;
 
-        // Gestione immagine
-        if ($request->hasFile('image')) {
-            // Elimina l'immagine precedente se esiste
-            if ($group->image) {
-                Storage::disk('public')->delete($group->image);
-            }
+    //     // Gestione immagine
+    //     if ($request->hasFile('image')) {
+    //         // Elimina l'immagine precedente se esiste
+    //         if ($group->image) {
+    //             Storage::disk('public')->delete($group->image);
+    //         }
 
-            $imagePath = $request->file('image')->store('groups', 'public');
-            $group->image = $imagePath;
-        }
+    //         $imagePath = $request->file('image')->store('groups', 'public');
+    //         $group->image = $imagePath;
+    //     }
 
-        $group->save();
+    //     $group->save();
 
-        return redirect()->route('groups.show', $group)
-                        ->with('success', 'Gruppo aggiornato con successo!');
-    }
+    //     return redirect()->route('groups.show', $group)
+    //                     ->with('success', 'Gruppo aggiornato con successo!');
+    // }
 
     /**
      * Remove the specified group
