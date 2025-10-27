@@ -63,14 +63,14 @@ class AuthController extends Controller
             'roles' => 'nullable|array',
             'roles.*' => 'exists:roles,name',
         ], [
-            'name.required' => 'Il nome è obbligatorio',
-            'nickname.unique' => 'Questo nickname è già in uso',
-            'email.required' => 'L\'email è obbligatoria',
-            'email.email' => 'Inserisci un\'email valida',
-            'email.unique' => 'Questa email è già registrata',
-            'password.required' => 'La password è obbligatoria',
-            'password.min' => 'La password deve essere di almeno 8 caratteri',
-            'password.confirmed' => 'Le password non coincidono',
+            'name.required' => __('auth.name_required'),
+            'nickname.unique' => __('auth.nickname_unique'),
+            'email.required' => __('auth.email_required'),
+            'email.email' => __('auth.email_valid'),
+            'email.unique' => __('auth.email_unique'),
+            'password.required' => __('auth.password_required'),
+            'password.min' => __('auth.password_min'),
+            'password.confirmed' => __('auth.password_confirmed'),
         ]);
 
         if ($validator->fails()) {
@@ -206,7 +206,7 @@ class AuthController extends Controller
         ]);
 
         return back()->withErrors([
-            'email' => 'Credenziali non valide.',
+            'email' => __('auth.credentials_invalid'),
         ])->onlyInput('email');
     }
 
@@ -245,7 +245,7 @@ class AuthController extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('login')->with('success', 'Logout effettuato con successo!');
+        return redirect()->route('login')->with('success', __('auth.logout_success'));
     }
 
     /**

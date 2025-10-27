@@ -46,7 +46,7 @@
 
                             <form method="POST" action="{{ route('verification.send') }}">
                                 @csrf
-                                <button type="submit" class="btn btn-outline-primary btn-sm">
+                                <button type="submit" class="btn btn-primary btn-sm">
                                     <i class="ph ph-paper-plane-tilt me-2"></i>
                                     Invia di nuovo l'email
                                 </button>
@@ -62,7 +62,7 @@
 
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
-                            <button type="submit" class="btn btn-outline-secondary">
+                            <button type="submit" class="btn btn-secondary">
                                 <i class="ph ph-sign-out me-2"></i>
                                 Logout
                             </button>

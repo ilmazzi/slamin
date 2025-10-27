@@ -410,7 +410,7 @@
                     <div class="text-center border-top pt-3 mt-4">
                         <p class="text-muted mb-3">{{ __('register.already_have_account') }}</p>
                         <div class="d-flex gap-3 justify-content-center flex-wrap">
-                            <a href="{{ route('login') }}" class="btn btn-outline-secondary btn-sm">
+                            <a href="{{ route('login') }}" class="btn btn-primary btn-sm">
                                 <i class="bi bi-box-arrow-in-right"></i> {{ __('register.login') }}
                             </a>
 
@@ -423,8 +423,8 @@
                             <h6>🌟 {{ __('register.why_join_slam_in') }}</h6>
                             <ul class="list-unstyled mb-0 small">
                                 <li>• <strong>{{ __('register.fast_registration') }}:</strong> {{ __('register.only_essential_data') }}</li>
-                                <li>• <strong>{{ __('register.flexible_roles') }}:</strong> {{ __('register.poet') }}, {{ __('events.organizer') }}, {{ __('register.venue_owner') }}, {{ __('register.audience') }}</li>
-                                <li>• <strong>{{ __('register.complete_ecosystem') }}:</strong> {{ __('register.artists') }}, {{ __('events.organizers') }}, {{ __('register.venues') }} {{ __('register.and') }} {{ __('register.audience') }}</li>
+                                <li>• <strong>{{ __('register.flexible_roles') }}:</strong> {{ __('register.poet') }}, {{ __('register.organizer') }}, {{ __('register.venue_owner') }}, {{ __('register.audience') }}</li>
+                                <li>• <strong>{{ __('register.complete_ecosystem') }}:</strong> {{ __('register.artists') }}, {{ __('register.organizers') }}, {{ __('register.venues') }} {{ __('register.and') }} {{ __('register.audience') }}</li>
                             </ul>
                         </div>
                     </div>

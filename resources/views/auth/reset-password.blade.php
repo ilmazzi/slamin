@@ -55,7 +55,7 @@
                                        placeholder="{{ __('auth.new_password_placeholder') }}"
                                        required
                                        autofocus>
-                                <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                <button class="btn btn-light-secondary" type="button" id="togglePassword">
                                     <i class="ph ph-eye" id="togglePasswordIcon"></i>
                                 </button>
                             </div>
@@ -79,7 +79,7 @@
                                        name="password_confirmation"
                                        placeholder="{{ __('auth.confirm_password_placeholder') }}"
                                        required>
-                                <button class="btn btn-outline-secondary" type="button" id="togglePasswordConfirmation">
+                                <button class="btn btn-light-secondary" type="button" id="togglePasswordConfirmation">
                                     <i class="ph ph-eye" id="togglePasswordConfirmationIcon"></i>
                                 </button>
                             </div>
