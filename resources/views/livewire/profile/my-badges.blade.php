@@ -20,44 +20,72 @@
     </div>
 
     <!-- Stats Overview -->
-    <div class="row mb-4">
-        <div class="col-md-3">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body text-center">
-                    <i class="ph ph-medal f-s-48 text-primary mb-2"></i>
-                    <h3 class="mb-0 f-w-700">{{ $badges->count() }}</h3>
-                    <small class="text-muted">Badge Sbloccati</small>
+    <div class="row mb-4 g-3">
+        <div class="col-6 col-md-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body text-center py-3 px-2">
+                    <i class="ph ph-medal text-primary mb-2 trophy-stat-icon"></i>
+                    <h3 class="mb-0 f-w-700 trophy-stat-value">{{ $badges->count() }}</h3>
+                    <small class="text-muted d-block trophy-stat-label">Badge Sbloccati</small>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body text-center">
-                    <i class="ph ph-star f-s-48 text-warning mb-2"></i>
-                    <h3 class="mb-0 f-w-700">{{ $badges->sum(fn($b) => $b->badge->points ?? 0) }}</h3>
-                    <small class="text-muted">Punti Totali</small>
+        <div class="col-6 col-md-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body text-center py-3 px-2">
+                    <i class="ph ph-star text-warning mb-2 trophy-stat-icon"></i>
+                    <h3 class="mb-0 f-w-700 trophy-stat-value">{{ $badges->sum(fn($b) => $b->badge->points ?? 0) }}</h3>
+                    <small class="text-muted d-block trophy-stat-label">Punti Totali</small>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body text-center">
-                    <i class="ph ph-ranking f-s-48 text-success mb-2"></i>
-                    <h3 class="mb-0 f-w-700">{{ Auth::user()->userPoints->level ?? 1 }}</h3>
-                    <small class="text-muted">Livello Attuale</small>
+        <div class="col-6 col-md-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body text-center py-3 px-2">
+                    <i class="ph ph-ranking text-success mb-2 trophy-stat-icon"></i>
+                    <h3 class="mb-0 f-w-700 trophy-stat-value">{{ Auth::user()->userPoints->level ?? 1 }}</h3>
+                    <small class="text-muted d-block trophy-stat-label">Livello Attuale</small>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body text-center">
-                    <i class="ph ph-lock-open f-s-48 text-info mb-2"></i>
-                    <h3 class="mb-0 f-w-700">{{ \App\Models\Badge::active()->count() - $badges->count() }}</h3>
-                    <small class="text-muted">Da Sbloccare</small>
+        <div class="col-6 col-md-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body text-center py-3 px-2">
+                    <i class="ph ph-lock-open text-info mb-2 trophy-stat-icon"></i>
+                    <h3 class="mb-0 f-w-700 trophy-stat-value">{{ \App\Models\Badge::active()->count() - $badges->count() }}</h3>
+                    <small class="text-muted d-block trophy-stat-label">Da Sbloccare</small>
                 </div>
             </div>
         </div>
     </div>
+
+    <style>
+        .trophy-stat-icon {
+            font-size: 2rem;
+        }
+        
+        .trophy-stat-value {
+            font-size: 1.5rem;
+        }
+        
+        .trophy-stat-label {
+            font-size: 0.75rem;
+        }
+        
+        @media (min-width: 768px) {
+            .trophy-stat-icon {
+                font-size: 3rem;
+            }
+            
+            .trophy-stat-value {
+                font-size: 2rem;
+            }
+            
+            .trophy-stat-label {
+                font-size: 0.875rem;
+            }
+        }
+    </style>
 
     <!-- Trophy Case Grid -->
     <div class="row">
