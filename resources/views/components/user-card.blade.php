@@ -41,11 +41,11 @@
                     <div class="details">
                         <div>
                             <h4 class="text-primary">{{ $user->poems_count }}</h4>
-                            <p class="text-secondary f-s-12">{{ __('common.poems') }}</p>
+                            <p class="text-secondary f-s-12">{{ __('social.poems') }}</p>
                         </div>
                         <div>
                             <h4 class="text-primary">{{ $user->articles_count }}</h4>
-                            <p class="text-secondary f-s-12">{{ __('common.articles') }}</p>
+                            <p class="text-secondary f-s-12">{{ __('social.articles') }}</p>
                         </div>
                         <div>
                             <h4 class="text-primary">{{ number_format($user->total_interactions) }}</h4>

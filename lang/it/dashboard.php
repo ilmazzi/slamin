@@ -88,5 +88,12 @@ return [
     'role_poet' => 'Poeta',
     'role_judge' => 'Giudice',
     'role_audience' => 'Spettatore',
+    
+    // Quick Actions (Shortcuts)
+    'write_poem' => 'Scrivi Poesia',
+    'organize_event' => 'Crea Evento',
+    'upload_performance' => 'Carica Video',
+    'write_article' => 'Scrivi Articolo',
+    'upload_photo' => 'Carica Foto',
 ];
 

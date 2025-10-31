@@ -42,13 +42,13 @@
                         <div class="flex-shrink-0 dropdown">
                             <a aria-expanded="false" class="d-block head-icon bg-light-dark rounded-circle f-s-22 p-2 d-flex align-items-center justify-content-center"
                                data-bs-toggle="dropdown"
-                               href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('common.shortcuts') }}" style="width: 40px; height: 40px;">
+                               href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('header.shortcuts') }}" style="width: 40px; height: 40px;">
                                 <i class="ph ph-lightning"></i>
                             </a>
                             <ul class="dropdown-menu header-card border-0">
                                 <li class="dropdown-header">
                                     <h6 class="mb-0">
-                                        <x-icon name="shortcuts" size="20" class="me-2" />{{ __('common.shortcuts') }}
+                                        <x-icon name="shortcuts" size="20" class="me-2" />{{ __('header.shortcuts') }}
                                     </h6>
                                 </li>
                                 <li class="dropdown-divider"></li>
@@ -127,16 +127,16 @@
                                     <button class="btn btn-outline-primary btn-sm me-2" onclick="markAllNotificationsRead()" title="{{ __('notifications.mark_all_read') }}">
                                         <i class="ph ph-check-circle"></i>
                                     </button>
-                                    <button aria-label="{{ __('common.close') }}" class="btn-close" data-bs-dismiss="offcanvas" type="button"></button>
+                                    <button aria-label="{{ __('header.close') }}" class="btn-close" data-bs-dismiss="offcanvas" type="button"></button>
                                 </div>
                             </div>
                             <div class="offcanvas-body app-scroll p-0" id="notificationsContainer">
                                 <!-- Loading state -->
                                 <div id="notificationsLoading" class="text-center p-4">
                                     <div class="spinner-border text-primary" role="status">
-                                        <span class="visually-hidden">Caricamento...</span>
+                                        <span class="visually-hidden">{{ __('notifications.loading') }}</span>
                                     </div>
-                                    <p class="mt-2 text-muted">Caricamento notifiche...</p>
+                                    <p class="mt-2 text-muted">{{ __('notifications.loading_notifications') }}</p>
                                 </div>
 
                                 <!-- Notifications will be loaded here -->
@@ -155,13 +155,13 @@
                                 <div class="p-3 border-top" id="notificationsFooter" class="d-none">
                                     <div class="row g-2">
                                         <div class="col-6">
-                                            <a href="{{ route('notifications.index') }}" class="btn btn-outline-primary btn-sm w-100">
-                                                <i class="ph ph-list me-1"></i>Vedi Tutte
+                                            <a href="{{ route('notifications.index') }}" class="btn btn-primary btn-sm w-100">
+                                                <i class="ph ph-list me-1"></i>{{ __('notifications.view_all') }}
                                             </a>
                                         </div>
                                         <div class="col-6">
-                                            <button class="btn btn-outline-secondary btn-sm w-100" onclick="clearOldNotifications()">
-                                                <i class="ph ph-trash me-1"></i>Pulisci
+                                            <button class="btn btn-secondary btn-sm w-100" onclick="clearOldNotifications()">
+                                                <i class="ph ph-trash me-1"></i>{{ __('notifications.clear_old') }}
                                             </button>
                                         </div>
                                     </div>
@@ -176,11 +176,11 @@
                     <!-- Theme Toggle - Per tutti gli utenti -->
                     <li class="header-dark">
                         <div class="sun-logo head-icon bg-light-dark rounded-circle f-s-22 p-2 d-flex align-items-center justify-content-center"
-                             data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('common.dark_theme') }}" style="width: 40px; height: 40px;">
+                             data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('header.dark_theme') }}" style="width: 40px; height: 40px;">
                             <i class="ph ph-moon-stars"></i>
                         </div>
                         <div class="moon-logo head-icon bg-light-dark rounded-circle f-s-22 p-2 d-flex align-items-center justify-content-center"
-                             data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('common.light_theme') }}" style="width: 40px; height: 40px;">
+                             data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('header.light_theme') }}" style="width: 40px; height: 40px;">
                             <i class="ph ph-sun-dim"></i>
                         </div>
                     </li>
@@ -190,7 +190,7 @@
                         <div class="flex-shrink-0 dropdown" id="lang_selector">
                             <a aria-expanded="false" class="d-block head-icon ps-0"
                                data-bs-toggle="dropdown"
-                               href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('common.language_selector') }}">
+                               href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('header.language_selector') }}">
                                 <div class="lang-flag lang-{{ app()->getLocale() }}">
                                     <span class="flag rounded-circle overflow-hidden">
                                         <i class="flag-icon flag-icon-{{ \App\Providers\LanguageServiceProvider::getFlagCode(app()->getLocale()) }}"></i>
