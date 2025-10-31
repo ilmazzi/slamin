@@ -208,7 +208,7 @@
                         <div class="mb-2">
                             <small class="text-muted">
                                 <i class="ph ph-user me-1"></i>
-                                <a href="{{ route('user.show', $poem->user->id) }}" class="text-decoration-none hover-effect">{{ $poem->user->getDisplayName() }}</a>
+                                <a href="{{ route('user.show', $poem->user) }}" class="text-decoration-none hover-effect">{{ $poem->user->getDisplayName() }}</a>
                             </small>
                         </div>
 

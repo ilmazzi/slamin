@@ -255,7 +255,7 @@
                             </div>
                         </div>
 
-                        <a href="{{ route('user.show', $gig->user->id) }}" class="btn btn-light-primary w-100">
+                        <a href="{{ route('user.show', $gig->user) }}" class="btn btn-light-primary w-100">
                             {{ __('gigs.view_profile') }}
                         </a>
                     </div>

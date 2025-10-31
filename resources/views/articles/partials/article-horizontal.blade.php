@@ -39,7 +39,7 @@
 
                 <div class="d-flex align-items-center text-muted mb-3">
                     <small>{{ __('articles.by') }}
-                        <a href="{{ route('user.show', $article->user->id) }}" class="text-decoration-none">
+                        <a href="{{ route('user.show', $article->user) }}" class="text-decoration-none">
                             <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($article->user) }}"
                                  class="rounded-circle me-1" style="width: 16px; height: 16px;"
                                  alt="{{ $article->user->name }}">

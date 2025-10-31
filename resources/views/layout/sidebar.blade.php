@@ -22,7 +22,7 @@
                 <span class="position-absolute top-0 end-0 p-1 bg-success border border-light rounded-circle"></span>
             </span>
             <div class="flex-grow-1 ps-2 sidebar-text">
-                <a href="{{ route('user.show', auth()->id()) }}" class="text-primary mb-0 d-flex flex-column">
+                <a href="{{ route('user.show', auth()->user()) }}" class="text-primary mb-0 d-flex flex-column">
                     <div class="d-flex align-items-center gap-2">
                         @php
                             $sidebarBadge = auth()->user()->userBadges()

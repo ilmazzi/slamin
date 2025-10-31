@@ -251,7 +251,7 @@
                                         <div class="d-flex justify-content-between align-items-start mb-2">
                                             <div>
                                                 <h6 class="mb-1 fw-bold">
-                                                    Da <a href="{{ route('user.show', $request->user->id) }}" class="text-decoration-none hover-effect">{{ $request->user->getDisplayName() }}</a>
+                                                    Da <a href="{{ route('user.show', $request->user) }}" class="text-decoration-none hover-effect">{{ $request->user->getDisplayName() }}</a>
                                                     @if($request->user->username)
                                                         <span class="text-muted">({{ $request->user->username }})</span>
                                                     @endif
@@ -336,7 +336,7 @@
                                         <div class="d-flex justify-content-between align-items-start">
                                 <div class="flex-grow-1">
                                             <h6 class="mb-1">
-                                                <a href="{{ route('user.show', $invitation->invitedUser->id) }}" class="text-decoration-none hover-effect">
+                                                <a href="{{ route('user.show', $invitation->invitedUser) }}" class="text-decoration-none hover-effect">
                                                     {{ $invitation->invitedUser->getDisplayName() }}
                                                 </a>
                                             </h6>
@@ -425,7 +425,7 @@
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <div>
                                                 <h6 class="mb-1">
-                                                    <a href="{{ route('user.show', $participant['user']->id) }}" class="text-decoration-none hover-effect">
+                                                    <a href="{{ route('user.show', $participant['user']) }}" class="text-decoration-none hover-effect">
                                                         {{ $participant['user']->getDisplayName() }}
                                                     </a>
                                                 </h6>

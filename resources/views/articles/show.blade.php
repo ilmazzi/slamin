@@ -86,7 +86,7 @@ use App\Helpers\PlaceholderHelper;
                                  class="rounded-circle me-2" style="width: 28px; height: 28px;"
                                  alt="{{ $article->user->name }}">
                             <span class="f-s-14">{{ __('articles.by') }}
-                                <a href="{{ route('user.show', $article->user->id) }}" class="text-decoration-none">
+                                <a href="{{ route('user.show', $article->user) }}" class="text-decoration-none">
                                     {{ Str::limit($article->user->name, 20) }}
                                 </a>
                             </span>
@@ -210,14 +210,14 @@ use App\Helpers\PlaceholderHelper;
                     <div class="card bg-light-success">
                         <div class="card-body">
                             <div class="d-flex flex-column flex-sm-row align-items-start align-items-sm-center gap-3">
-                                <a href="{{ route('user.show', $article->user->id) }}" class="text-decoration-none">
+                                <a href="{{ route('user.show', $article->user) }}" class="text-decoration-none">
                                     <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($article->user) }}"
                                          class="rounded-circle" style="width: 56px; height: 56px;"
                                          alt="{{ $article->user->name }}">
                                 </a>
                                 <div class="flex-grow-1">
                                     <h6 class="mb-2 f-s-16 f-w-600">{{ __('articles.by') }}
-                                        <a href="{{ route('user.show', $article->user->id) }}" class="text-decoration-none hover-effect">
+                                        <a href="{{ route('user.show', $article->user) }}" class="text-decoration-none hover-effect">
                                             {{ $article->user->name }}
                                         </a>
                                     </h6>

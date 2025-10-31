@@ -218,7 +218,7 @@
                         </div>
                         <div class="flex-grow-1 ms-3">
                             <h6 class="mb-1">
-                                <a href="{{ route('user.show', $member->user->id) }}" class="text-decoration-none hover-effect">
+                                <a href="{{ route('user.show', $member->user) }}" class="text-decoration-none hover-effect">
                                     {{ $member->user->getDisplayName() }}
                                 </a>
                             </h6>
@@ -322,7 +322,7 @@
                             <img src="{{ \App\Helpers\AvatarHelper::getUserAvatarUrl($group->creator) }}"
                                  alt="{{ $group->creator->getDisplayName() }}"
                                  class="rounded-circle me-2 avatar-sm">
-                            <a href="{{ route('user.show', $group->creator->id) }}" class="text-decoration-none hover-effect">
+                            <a href="{{ route('user.show', $group->creator) }}" class="text-decoration-none hover-effect">
                                 {{ $group->creator->getDisplayName() }}
                             </a>
                         </div>
