@@ -691,7 +691,7 @@ use App\Helpers\PlaceholderHelper;
                                                                 </a>
                                                             </h6>
                                                             <p class="text-muted f-s-12 mb-1">
-                                                                <a href="{{ route('user.show', $poem->user) }}"
+                                                                <a href="{{ route('user.show', $poem->user->id) }}"
                                                                     class="text-decoration-none hover-effect">
                                                                     {{ $poem->user->getDisplayName() }}
                                                                 </a>
@@ -763,7 +763,7 @@ use App\Helpers\PlaceholderHelper;
                                                                 </a>
                                                             </h6>
                                                             <p class="text-muted f-s-12 mb-1">
-                                                                <a href="{{ route('user.show', $poem->user) }}"
+                                                                <a href="{{ route('user.show', $poem->user->id) }}"
                                                                     class="text-decoration-none hover-effect">
                                                                     {{ $poem->user->getDisplayName() }}
                                                                 </a>
@@ -863,7 +863,7 @@ use App\Helpers\PlaceholderHelper;
                                                                 </a>
                                                             </h6>
                                                             <p class="text-muted f-s-12 mb-1">
-                                                                <a href="{{ route('user.show', $article->user) }}"
+                                                                <a href="{{ route('user.show', $article->user->id) }}"
                                                                     class="text-decoration-none hover-effect">
                                                                     {{ $article->user->getDisplayName() }}
                                                                 </a>
@@ -941,7 +941,7 @@ use App\Helpers\PlaceholderHelper;
                                                                 </a>
                                                             </h6>
                                                             <p class="text-muted f-s-12 mb-1">
-                                                                <a href="{{ route('user.show', $article->user) }}"
+                                                                <a href="{{ route('user.show', $article->user->id) }}"
                                                                     class="text-decoration-none hover-effect">
                                                                     {{ $article->user->getDisplayName() }}
                                                                 </a>

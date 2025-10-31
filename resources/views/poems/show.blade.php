@@ -139,7 +139,7 @@
                             --}}
                             <div class="d-flex align-items-center text-muted small">
                                 <i class="ph ph-user me-1"></i>
-                                <a href="{{ route('user.show', $poem->user) }}" class="text-decoration-none hover-effect">{{ $poem->user->getDisplayName() }}</a>
+                                <a href="{{ route('user.show', $poem->user->id) }}" class="text-decoration-none hover-effect">{{ $poem->user->getDisplayName() }}</a>
                                 <span class="mx-2">•</span>
                                 <i class="ph ph-calendar me-1"></i>
                                 {{ $poem->published_at ? $poem->published_at->format('d/m/Y') : $poem->created_at->format('d/m/Y') }}
@@ -316,7 +316,7 @@
                    <img src="{{ $poem->user->getProfilePhotoUrlAttribute() }}"
                              class="rounded-circle mb-3" width="80" height="80" alt="{{ $poem->user->name }}">
                     <h6>
-                        <a href="{{ route('user.show', $poem->user) }}" class="text-decoration-none hover-effect">
+                        <a href="{{ route('user.show', $poem->user->id) }}" class="text-decoration-none hover-effect">
                             {{ $poem->user->getDisplayName() }}
                         </a>
                     </h6>
@@ -368,7 +368,7 @@
                                     @endif
                                 </h6>
                                 <small class="text-muted">
-                                    <a href="{{ route('user.show', $relatedPoem->user) }}" class="text-decoration-none hover-effect">
+                                    <a href="{{ route('user.show', $relatedPoem->user->id) }}" class="text-decoration-none hover-effect">
                                         {{ $relatedPoem->user->getDisplayName() }}
                                     </a>
                                 </small>

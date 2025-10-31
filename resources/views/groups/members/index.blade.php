@@ -93,7 +93,7 @@
                             <div class="d-flex justify-content-between align-items-start">
                                 <div>
                                     <h6 class="mb-1">
-                                        <a href="{{ route('user.show', $member->user) }}" class="text-decoration-none hover-effect">
+                                        <a href="{{ route('user.show', $member->user->id) }}" class="text-decoration-none hover-effect">
                                             {{ $member->user->getDisplayName() }}
                                         </a>
                                     </h6>
@@ -108,7 +108,7 @@
                                         @if($member->invited_by)
                                             <small class="text-muted">
                                                 {{ __('groups.invited_by') }}
-                                                <a href="{{ route('user.show', $member->invitedBy) }}" class="text-decoration-none hover-effect">
+                                                <a href="{{ route('user.show', $member->invitedBy->id) }}" class="text-decoration-none hover-effect">
                                                     {{ $member->invitedBy->getDisplayName() }}
                                                 </a>
                                             </small>

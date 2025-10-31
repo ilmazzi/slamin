@@ -391,7 +391,7 @@
                             <div class="d-flex align-items-center text-muted mb-1">
                                 <i class="ph ph-user me-1 f-s-12"></i>
                                 <span class="f-s-12">
-                                    <a href="{{ route('user.show', $event->organizer) }}" class="text-decoration-none hover-effect">
+                                    <a href="{{ route('user.show', $event->organizer->id) }}" class="text-decoration-none hover-effect">
                                         {{ $event->organizer->getDisplayName() }}
                                     </a>
                                 </span>

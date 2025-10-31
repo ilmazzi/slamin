@@ -10,7 +10,7 @@
     <div class="card">
         <div class="card-body">
             <div class="profile-container cursor-pointer"
-                onclick="window.location.href='{{ route('user.show', $user) }}'">
+                onclick="window.location.href='{{ route('user.show', $user->id) }}'">
                 <div class="image-details">
                     <div class="profile-image">
                         <img src="{{ $user->banner_image_url ?? asset('assets/images/avatar/default-banner.webp?v=1') }}"

@@ -120,7 +120,7 @@
                                         @if($application->user->nickname)
                                             <p class="text-muted f-s-13 mb-2">{{ '@' . $application->user->nickname }}</p>
                                         @endif
-                                        <a href="{{ route('user.show', $application->user) }}" class="btn btn-sm btn-light-primary w-100">
+                                        <a href="{{ route('user.show', $application->user->id) }}" class="btn btn-sm btn-light-primary w-100">
                                             {{ __('gigs.view_profile') }}
                                         </a>
                                     </div>

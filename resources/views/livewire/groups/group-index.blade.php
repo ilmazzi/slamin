@@ -218,7 +218,7 @@
             <div class="col-12 col-md-6 col-lg-4 mb-3">
                 <div class="card h-100">
                     <div class="card-body">
-                        <div class="profile-container cursor-pointer" onclick="window.location.href='{{ route('user.show', $user) }}'">
+                        <div class="profile-container cursor-pointer" onclick="window.location.href='{{ route('user.show', $user->id) }}'">
                             <!-- Banner e Avatar -->
                             <div class="image-details">
                                 <div class="profile-image">

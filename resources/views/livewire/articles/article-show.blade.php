@@ -221,7 +221,7 @@
                         @if($article->user->bio)
                             <p class="f-s-14 text-muted mb-3">{{ Str::limit($article->user->bio, 150) }}</p>
                         @endif
-                        <a href="{{ route('user.show', $article->user) }}" 
+                        <a href="{{ route('user.show', $article->user->id) }}" 
                            class="btn btn-primary btn-sm">
                             {{ __('articles.view_profile') }}
                         </a>

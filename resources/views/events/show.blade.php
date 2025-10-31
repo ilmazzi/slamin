@@ -95,7 +95,7 @@
                     </div>
                     <div class="d-flex align-items-center">
                         <i class="ph ph-user me-1 f-s-12"></i>
-                        <span class="f-s-12">{{ __('events.organized_by') }} <a href="{{ route('user.show', $event->organizer) }}" class="text-decoration-none hover-effect">{{ $event->organizer->getDisplayName() }}</a></span>
+                        <span class="f-s-12">{{ __('events.organized_by') }} <a href="{{ route('user.show', $event->organizer->id) }}" class="text-decoration-none hover-effect">{{ $event->organizer->getDisplayName() }}</a></span>
                     </div>
                 </div>
             </div>
@@ -441,7 +441,7 @@
                                                     </div>
                                                     <div class="flex-grow-1">
                                                         <h6 class="mb-1 fw-bold f-s-14">
-                                                            <a href="{{ route('user.show', $invitation->invitedUser) }}" class="text-decoration-none hover-effect">
+                                                            <a href="{{ route('user.show', $invitation->invitedUser->id) }}" class="text-decoration-none hover-effect">
                                                                 {{ $invitation->invitedUser->getDisplayName() }}
                                                             </a>
                                                         </h6>
@@ -476,7 +476,7 @@
                                                     </div>
                                                     <div class="flex-grow-1">
                                                         <h6 class="mb-1 fw-bold f-s-14">
-                                                            <a href="{{ route('user.show', $request->user) }}" class="text-decoration-none hover-effect">
+                                                            <a href="{{ route('user.show', $request->user->id) }}" class="text-decoration-none hover-effect">
                                                                 {{ $request->user->getDisplayName() }}
                                                             </a>
                                                         </h6>
@@ -521,7 +521,7 @@
                                                     </div>
                                                     <div class="flex-grow-1">
                                                         <h6 class="mb-1 fw-bold f-s-14">
-                                                            <a href="{{ route('user.show', $invitation->invitedUser) }}" class="text-decoration-none hover-effect">
+                                                            <a href="{{ route('user.show', $invitation->invitedUser->id) }}" class="text-decoration-none hover-effect">
                                                                 {{ $invitation->invitedUser->getDisplayName() }}
                                                             </a>
                                                         </h6>
@@ -556,7 +556,7 @@
                                                     </div>
                                                     <div class="flex-grow-1">
                                                         <h6 class="mb-1 fw-bold f-s-14">
-                                                            <a href="{{ route('user.show', $request->user) }}" class="text-decoration-none hover-effect">
+                                                            <a href="{{ route('user.show', $request->user->id) }}" class="text-decoration-none hover-effect">
                                                                 {{ $request->user->getDisplayName() }}
                                                             </a>
                                                         </h6>
