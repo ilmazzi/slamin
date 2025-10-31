@@ -11,7 +11,6 @@ class ProfileShow extends Component
 {
     use WithPagination;
 
-    public $user; // Parametro dalla route {user}
     public $userId;
     public $activeTab = 'about';
     public $perPage = 6;
@@ -23,27 +22,27 @@ class ProfileShow extends Component
     // Force Livewire to use Bootstrap pagination
     protected $paginationTheme = 'bootstrap';
 
-    public function mount()
+    public function mount($user = null)
     {
-        // Livewire 3: il parametro {user} dalla route viene automaticamente
-        // iniettato nella proprietà pubblica $this->user
+        // Livewire 3: i parametri della route POSSONO essere passati al mount()
+        // ma SOLO se non c'è una proprietà pubblica con lo stesso nome
         
-        if ($this->user) {
+        if ($user) {
             // $user può essere un oggetto User (da model binding) o un ID (stringa)
-            if (is_object($this->user) && isset($this->user->id)) {
-                $this->userId = (int) $this->user->id;
+            if (is_object($user) && isset($user->id)) {
+                $this->userId = (int) $user->id;
             } else {
                 // Se è una stringa, proviamo prima come ID, poi come nickname
                 $userModel = null;
                 
                 // Prova come ID numerico
-                if (is_numeric($this->user)) {
-                    $userModel = User::find($this->user);
+                if (is_numeric($user)) {
+                    $userModel = User::find($user);
                 }
                 
                 // Se non trovato come ID, prova come nickname
                 if (!$userModel) {
-                    $userModel = User::where('nickname', $this->user)->first();
+                    $userModel = User::where('nickname', $user)->first();
                 }
                 
                 if ($userModel) {
