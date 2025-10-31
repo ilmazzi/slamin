@@ -206,48 +206,6 @@
                     </div>
                 </div>
 
-                <!-- Privacy Settings -->
-                <div class="row mb-4">
-                    <div class="col-12">
-                        <h6 class="f-w-600 mb-3">{{ __('profile.privacy_settings') }}</h6>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" id="is_public" wire:model="is_public">
-                            <label class="form-check-label" for="is_public">
-                                {{ __('profile.public_profile') }}
-                            </label>
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-6 mb-3">
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" id="show_email" wire:model="show_email">
-                            <label class="form-check-label" for="show_email">
-                                {{ __('profile.show_email') }}
-                            </label>
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-6 mb-3">
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" id="show_phone" wire:model="show_phone">
-                            <label class="form-check-label" for="show_phone">
-                                {{ __('profile.show_phone') }}
-                            </label>
-                        </div>
-                    </div>
-                    
-                    <div class="col-md-6 mb-3">
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" id="show_birth_date" wire:model="show_birth_date">
-                            <label class="form-check-label" for="show_birth_date">
-                                {{ __('profile.show_birth_date') }}
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Submit Buttons -->
                 <div class="d-flex gap-2 align-items-center">
                     <button type="submit" class="btn btn-primary" wire:loading.attr="disabled" onclick="console.log('Save button clicked')">
