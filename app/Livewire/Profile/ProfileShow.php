@@ -24,10 +24,20 @@ class ProfileShow extends Component
 
     public function mount($user = null)
     {
+        // DEBUG: Log per capire cosa arriva
+        \Log::info('ProfileShow mount called', [
+            'user_param' => $user,
+            'user_type' => gettype($user),
+            'is_object' => is_object($user),
+            'is_numeric' => is_numeric($user),
+            'auth_id' => Auth::id()
+        ]);
+        
         if ($user) {
             // $user può essere un oggetto User (da model binding) o un ID (stringa)
             if (is_object($user) && isset($user->id)) {
                 $this->userId = (int) $user->id;
+                \Log::info('ProfileShow: usando user object', ['userId' => $this->userId]);
             } else {
                 // Se è una stringa, proviamo prima come ID, poi come nickname
                 $userModel = null;
@@ -35,21 +45,26 @@ class ProfileShow extends Component
                 // Prova come ID numerico
                 if (is_numeric($user)) {
                     $userModel = User::find($user);
+                    \Log::info('ProfileShow: tentativo find by ID', ['user' => $user, 'found' => !!$userModel]);
                 }
                 
                 // Se non trovato come ID, prova come nickname
                 if (!$userModel) {
                     $userModel = User::where('nickname', $user)->first();
+                    \Log::info('ProfileShow: tentativo find by nickname', ['user' => $user, 'found' => !!$userModel]);
                 }
                 
                 if ($userModel) {
                     $this->userId = (int) $userModel->id;
+                    \Log::info('ProfileShow: usando userModel', ['userId' => $this->userId]);
                 } else {
+                    \Log::error('ProfileShow: user not found', ['user' => $user]);
                     abort(404, 'User not found');
                 }
             }
         } else {
             $this->userId = (int) Auth::id();
+            \Log::info('ProfileShow: usando Auth::id()', ['userId' => $this->userId]);
         }
     }
 
