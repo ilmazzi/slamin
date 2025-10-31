@@ -474,20 +474,30 @@
                             </h5>
                             <div class="row g-3">
                                 @forelse($events as $event)
+                                    @php
+                                        $eventDate = $event->start_datetime ?? $event->event_date;
+                                        $isPast = $eventDate ? $eventDate->isPast() : false;
+                                    @endphp
                                     <div class="col-12">
                                         <a href="{{ route('events.show', $event) }}" class="text-decoration-none">
-                                            <div class="card hover-effect h-100 border-0 shadow-sm">
+                                            <div class="card hover-effect h-100 border-0 shadow-sm {{ $isPast ? 'opacity-75' : '' }}" 
+                                                 style="{{ $isPast ? 'filter: grayscale(40%);' : '' }}">
                                                 <div class="card-body p-0">
                                                     <div class="row g-0">
-                                                        <div class="col-4 col-md-3">
+                                                        <div class="col-4 col-md-3 position-relative">
                                                             <img src="{{ \App\Helpers\EventImageHelper::getEventImageUrl($event) }}" 
                                                                  alt="{{ $event->title }}" 
                                                                  class="w-100 h-100 rounded-start"
                                                                  style="object-fit: cover; min-height: 120px; max-height: 150px;">
+                                                            @if($isPast)
+                                                            <span class="position-absolute top-0 start-0 m-2 badge bg-secondary">
+                                                                <i class="ph ph-clock-countdown me-1"></i>{{ __('profile.event_past') }}
+                                                            </span>
+                                                            @endif
                                                         </div>
                                                         <div class="col-8 col-md-9">
                                                             <div class="p-3">
-                                                                <h6 class="mb-2 f-w-700 text-dark">{{ $event->title }}</h6>
+                                                                <h6 class="mb-2 f-w-700 {{ $isPast ? 'text-muted' : 'text-dark' }}">{{ $event->title }}</h6>
                                                                 <p class="text-muted f-s-13 mb-2">{{ Str::limit(strip_tags($event->description), 100) }}</p>
                                                                 <div class="d-flex align-items-center gap-3 text-muted f-s-12 flex-wrap">
                                                                     <span>

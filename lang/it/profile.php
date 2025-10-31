@@ -87,6 +87,7 @@ return [
   'participated_events' => 'Eventi Partecipati',
   'no_participated_events' => 'Nessun evento partecipato',
   'no_events_available' => 'Nessun evento disponibile',
+  'event_past' => 'Passato',
   'no_photos_available' => 'Nessuna foto disponibile',
   'no_videos_available' => 'Nessun video disponibile',
   'no_articles_available' => 'Nessun articolo disponibile',
