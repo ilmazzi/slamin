@@ -10,7 +10,7 @@
                     </h3>
                     <p class="text-muted mb-0 d-none d-md-block">La tua collezione completa di badge - sblocca nuovi achievement!</p>
                 </div>
-                <a href="{{ route('profile.show', Auth::user()) }}" class="btn btn-primary btn-sm">
+                <a href="{{ route('profile.show') }}" class="btn btn-primary btn-sm">
                     <i class="ph ph-arrow-left me-2"></i>
                     <span class="d-none d-sm-inline">Torna al Profilo</span>
                     <span class="d-inline d-sm-none">Profilo</span>

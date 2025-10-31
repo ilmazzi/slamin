@@ -145,7 +145,7 @@
                                             </div>
                                         </td>
                                         <td>
-                                            <a href="{{ route('profile.show', $post->user->id) }}" target="_blank">
+                                            <a href="{{ route('user.show', $post->user->id) }}" target="_blank">
                                                 {{ $post->user->name }}
                                             </a>
                                         </td>

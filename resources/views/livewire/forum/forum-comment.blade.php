@@ -12,7 +12,7 @@
                 {{-- Comment content --}}
                 <div class="col">
                     <div class="d-flex align-items-center mb-2">
-                        <a href="{{ route('profile.show', $comment->user->id) }}" class="text-decoration-none me-2">
+                        <a href="{{ route('user.show', $comment->user->id) }}" class="text-decoration-none me-2">
                             <strong>{{ $comment->user->name }}</strong>
                         </a>
                         <span class="text-muted small">

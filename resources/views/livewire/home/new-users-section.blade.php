@@ -15,7 +15,7 @@
                             <div class="card-body p-0">
                                 <!-- Banner Image -->
                                 <div class="position-relative">
-                                    <a href="{{ route('profile.show', $user->id) }}" class="text-decoration-none">
+                                    <a href="{{ route('user.show', $user->id) }}" class="text-decoration-none">
                                         @if ($user->banner_image_url)
                                             <img src="{{ $user->banner_image_url }}" class="w-100" alt="{{ $user->name }}" style="height: 100px; object-fit: cover; border-radius: 8px 8px 0 0;">
                                         @else
@@ -39,7 +39,7 @@
                                 
                                 <!-- Content -->
                                 <div class="p-3" style="margin-top: 30px;">
-                                    <a href="{{ route('profile.show', $user->id) }}" class="text-decoration-none">
+                                    <a href="{{ route('user.show', $user->id) }}" class="text-decoration-none">
                                         <h5 class="f-w-600 mb-1 f-s-14 text-dark">{{ Str::limit($user->name, 18) }}</h5>
                                     </a>
                                     <p class="text-muted f-s-11 mb-3">

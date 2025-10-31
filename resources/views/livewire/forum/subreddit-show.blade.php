@@ -124,7 +124,7 @@
                                 <div class="d-flex align-items-start mb-2">
                                     <span class="text-muted small">
                                         {{ __('forum.posted_by') }} 
-                                        <a href="{{ route('profile.show', $post->user->id) }}">{{ $post->user->name }}</a>
+                                        <a href="{{ route('user.show', $post->user->id) }}">{{ $post->user->name }}</a>
                                         • {{ $post->created_at->diffForHumans() }}
                                     </span>
                                 </div>

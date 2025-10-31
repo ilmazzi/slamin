@@ -76,7 +76,7 @@
                                                         </div>
                                                         <!-- Avatar utente cliccabile -->
                                                         <div class="d-flex align-items-center mt-3 pt-2 border-top">
-                                                            <a href="{{ route('profile.show', $video->user->id) }}" class="text-decoration-none d-flex align-items-center">
+                                                            <a href="{{ route('user.show', $video->user->id) }}" class="text-decoration-none d-flex align-items-center">
                                                                 <img src="{{ $video->user->profile_photo_url }}" class="rounded-circle me-2" alt="{{ $video->user->name }}" style="width: 32px; height: 32px; object-fit: cover;">
                                                                 <span class="text-muted f-s-12">{{ $video->user->name }}</span>
                                                             </a>
