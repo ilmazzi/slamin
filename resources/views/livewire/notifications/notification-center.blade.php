@@ -1,14 +1,20 @@
-<div>
+<div wire:poll.15s="loadNotifications">
     <!-- Notification Bell Button -->
-    <li class="header-notification" wire:poll.15s="loadNotifications">
-        <a class="d-flex-center position-relative header-icon"
-           href="#"
-           data-bs-toggle="offcanvas"
+    <li class="header-notification">
+        <a aria-controls="notificationOffcanvas"
+           class="d-block head-icon position-relative bg-light-dark rounded-circle f-s-22 p-2 d-flex align-items-center justify-content-center"
            data-bs-target="#notificationOffcanvas"
-           aria-controls="notificationOffcanvas">
-            <x-icon name="notification" size="24" />
+           data-bs-toggle="offcanvas"
+           href="#"
+           role="button"
+           data-bs-toggle="tooltip" 
+           data-bs-placement="bottom" 
+           title="{{ __('notifications.notifications') }}" 
+           style="width: 40px; height: 40px;">
+            <img src="{{ asset('assets/images/bell.svg') }}" alt="{{ __('notifications.notifications') }}" style="width: 20px; height: 20px;">
             @if($unreadCount > 0)
-                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                <span class="position-absolute translate-middle badge rounded-pill bg-danger badge-notification"
+                      style="top: 0; right: 0;">
                     {{ $unreadCount > 99 ? '99+' : $unreadCount }}
                 </span>
             @endif

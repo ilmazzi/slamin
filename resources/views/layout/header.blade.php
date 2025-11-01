@@ -102,73 +102,8 @@
                     </li>
 
                     <!-- Notifications - Solo per utenti autenticati -->
-                    <li class="header-notification">
-                        <a aria-controls="notificationcanvasRight"
-                           class="d-block head-icon position-relative bg-light-dark rounded-circle f-s-22 p-2 d-flex align-items-center justify-content-center"
-                           data-bs-target="#notificationcanvasRight"
-                           data-bs-toggle="offcanvas"
-                           href="#"
-                           role="button"
-                           id="notificationTrigger"
-                           data-bs-toggle="tooltip" data-bs-placement="bottom" title="{{ __('notifications.notifications') }}" style="width: 40px; height: 40px;">
-                            <img src="{{ asset('assets/images/bell.svg') }}" alt="Notifiche" style="width: 20px; height: 20px;">
-                            <!-- Dynamic notification badge -->
-                            <span id="notificationBadge" class="position-absolute translate-middle badge rounded-pill bg-danger badge-notification d-none">0</span>
-                        </a>
-                        <div aria-labelledby="notificationcanvasRightLabel"
-                             class="offcanvas offcanvas-end header-notification-canvas"
-                             id="notificationcanvasRight" tabindex="-1">
-                            <div class="offcanvas-header">
-                                <h5 class="offcanvas-title" id="notificationcanvasRightLabel">
-                                    <x-icon name="notification" size="20" class="me-2" />{{ __('notifications.notifications') }}
-                                    <span id="notificationCount" class="badge bg-primary ms-2">0</span>
-                                </h5>
-                                <div class="d-flex align-items-center">
-                                    <button class="btn btn-outline-primary btn-sm me-2" onclick="markAllNotificationsRead()" title="{{ __('notifications.mark_all_read') }}">
-                                        <i class="ph ph-check-circle"></i>
-                                    </button>
-                                    <button aria-label="{{ __('header.close') }}" class="btn-close" data-bs-dismiss="offcanvas" type="button"></button>
-                                </div>
-                            </div>
-                            <div class="offcanvas-body app-scroll p-0" id="notificationsContainer">
-                                <!-- Loading state -->
-                                <div id="notificationsLoading" class="text-center p-4">
-                                    <div class="spinner-border text-primary" role="status">
-                                        <span class="visually-hidden">{{ __('notifications.loading') }}</span>
-                                    </div>
-                                    <p class="mt-2 text-muted">{{ __('notifications.loading_notifications') }}</p>
-                                </div>
-
-                                <!-- Notifications will be loaded here -->
-                                <div id="notificationsList" class="d-none">
-                                    <!-- Dynamic notifications loaded via JavaScript -->
-                                </div>
-
-                                <!-- Empty state -->
-                                <div id="notificationsEmpty" class="text-center p-4 d-none">
-                                    <i class="ph ph-bell-slash display-4 text-muted mb-3"></i>
-                                    <h6 class="text-muted">{{ __('notifications.no_notifications') }}</h6>
-                                    <p class="text-muted small">{{ __('notifications.notifications_placeholder') }}</p>
-                                </div>
-
-                                <!-- Footer actions -->
-                                <div class="p-3 border-top" id="notificationsFooter" class="d-none">
-                                    <div class="row g-2">
-                                        <div class="col-6">
-                                            <a href="{{ route('notifications.index') }}" class="btn btn-primary btn-sm w-100">
-                                                <i class="ph ph-list me-1"></i>{{ __('notifications.view_all') }}
-                                            </a>
-                                        </div>
-                                        <div class="col-6">
-                                            <button class="btn btn-secondary btn-sm w-100" onclick="clearOldNotifications()">
-                                                <i class="ph ph-trash me-1"></i>{{ __('notifications.clear_old') }}
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </li>
+                    @auth
+                    @livewire('notifications.notification-center')
                     @endauth
 
 
