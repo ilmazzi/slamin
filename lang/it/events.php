@@ -473,4 +473,37 @@ return array (
   'participants' => 'Partecipanti',
   'quick_filters' => 'Filtri Rapidi',
   'all_cities' => 'Tutte le Città',
+  
+  // Gig Types
+  'gig_type_performer' => 'Performer',
+  'gig_type_artist_poet' => 'Artista/Poeta',
+  'gig_type_host' => 'Host',
+  'gig_type_mc_host' => 'MC/Host',
+  'gig_type_judge' => 'Giudice',
+  'gig_type_technician' => 'Tecnico',
+  'gig_type_technical_support' => 'Supporto Tecnico',
+  'gig_type_volunteer' => 'Volontario',
+  
+  // Event Categories
+  'category_poetry_slam' => 'Poetry Slam',
+  'category_open_mic' => 'Open Mic',
+  'category_workshop' => 'Workshop',
+  'category_contest' => 'Contest',
+  'category_reading' => 'Lettura',
+  'category_performance' => 'Performance',
+  'category_festival' => 'Festival',
+  'category_concert' => 'Concerto',
+  'category_exhibition' => 'Mostra',
+  'category_conference' => 'Conferenza',
+  'category_meetup' => 'Incontro',
+  'category_other' => 'Altro',
+  
+  // Languages
+  'language_italian' => 'Italiano',
+  'language_english' => 'Inglese',
+  'language_spanish' => 'Spagnolo',
+  'language_french' => 'Francese',
+  'language_german' => 'Tedesco',
+  'language_portuguese' => 'Portoghese',
+  'language_no_preference' => 'Nessuna Preferenza',
 );
