@@ -284,7 +284,7 @@
                         @foreach($this->categories->take(10) as $category)
                             <div class="d-flex justify-content-between align-items-center mb-2">
                                 <button wire:click="$set('category', '{{ $category->slug }}')" 
-                                        class="btn btn-link text-decoration-none p-0 text-start">
+                                        class="btn btn-link text-decoration-none p-0 text-start text-dark">
                                     {{ $category->name }}
                                 </button>
                                 <span class="badge bg-secondary">{{ $category->articles_count }}</span>
