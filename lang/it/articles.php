@@ -260,4 +260,9 @@ return [
     // Utility
     'created' => 'Creato',
     'updated' => 'Aggiornato',
-];
+    'all_categories' => 'Tutte le categorie',
+    'all_tags' => 'Tutti i tag',
+    'show_all_articles' => 'Mostra tutti gli articoli',
+
+];  
+
