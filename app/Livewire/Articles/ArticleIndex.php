@@ -82,9 +82,14 @@ class ArticleIndex extends Component
             ->get();
         
         if ($featuredLayouts->isNotEmpty()) {
-            $this->layoutArticles['featured'] = $featuredLayouts->map(function($layout) {
-                return ['article' => $layout->article];
-            })->toArray();
+            $this->layoutArticles['featured'] = $featuredLayouts
+                ->filter(function($layout) {
+                    return $layout->article !== null;
+                })
+                ->map(function($layout) {
+                    return ['article' => $layout->article];
+                })
+                ->toArray();
         }
 
         // Latest - columns 3-6 and horizontal 3
@@ -96,9 +101,14 @@ class ArticleIndex extends Component
             ->get();
         
         if ($latestLayouts->isNotEmpty()) {
-            $this->layoutArticles['latest'] = $latestLayouts->map(function($layout) {
-                return ['article' => $layout->article];
-            })->toArray();
+            $this->layoutArticles['latest'] = $latestLayouts
+                ->filter(function($layout) {
+                    return $layout->article !== null;
+                })
+                ->map(function($layout) {
+                    return ['article' => $layout->article];
+                })
+                ->toArray();
         }
 
         // Load featured articles (separate from layout)

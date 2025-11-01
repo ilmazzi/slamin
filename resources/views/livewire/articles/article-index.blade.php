@@ -90,7 +90,8 @@
                                     </h5>
                                 </div>
                                 @foreach($layoutArticles['featured'] as $layoutItem)
-                                    @php $article = $layoutItem['article']; @endphp
+                                    @php $article = $layoutItem['article'] ?? null; @endphp
+                                    @if($article)
                                     <div class="col-md-6">
                                         <div class="card hover-effect h-100">
                                             @if($article->featured_image_url)
@@ -114,6 +115,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    @endif
                                 @endforeach
                             </div>
                         @endif
@@ -127,7 +129,8 @@
                                     </h5>
                                 </div>
                                 @foreach($layoutArticles['latest'] as $layoutItem)
-                                    @php $article = $layoutItem['article']; @endphp
+                                    @php $article = $layoutItem['article'] ?? null; @endphp
+                                    @if($article)
                                     <div class="col-md-6 col-lg-4">
                                         <div class="card hover-effect h-100">
                                             @if($article->featured_image_url)
@@ -151,6 +154,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                    @endif
                                 @endforeach
                             </div>
                         @endif
