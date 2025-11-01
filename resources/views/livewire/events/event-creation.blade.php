@@ -76,7 +76,7 @@
                             <div class="mb-3">
                                 <div class="form-check form-switch">
                                     <input type="checkbox"
-                                           wire:click="toggleSubtitle"
+                                           wire:click="toggleSubtitle()"
                                            class="form-check-input"
                                            id="subtitle-toggle"
                                            {{ $has_subtitle ? 'checked' : '' }}>
@@ -1121,8 +1121,8 @@
                                         <!-- Add Position Button -->
                                         <div class="text-center">
                                             <button type="button"
-                                                    wire:click="addGigPosition"
-                                                    class="btn btn-warning">
+                                                    wire:click="addGigPosition()"
+                                                    class="btn btn-primary">
                                                 <i class="ph ph-plus me-2"></i>{{ __('events.add_gig_position') }}
                                             </button>
                                         </div>
@@ -1871,13 +1871,13 @@
                         <div class="d-grid gap-2">
                             @if($currentStep < $totalSteps)
                                 <button type="button"
-                                        wire:click="nextStep"
+                                        wire:click="nextStep()"
                                         class="btn btn-primary">
                                     {{ __('events.next') }}<i class="ph ph-arrow-right ms-2"></i>
                                 </button>
                             @else
                                 <button type="button"
-                                        wire:click="save"
+                                        wire:click="save()"
                                         class="btn btn-primary btn-lg">
                                     <i class="ph ph-check-circle me-2"></i>{{ __('events.create_event') }}
                                 </button>
@@ -1885,7 +1885,7 @@
 
                             @if($currentStep > 1)
                                 <button type="button"
-                                        wire:click="prevStep"
+                                        wire:click="prevStep()"
                                         class="btn btn-secondary">
                                     <i class="ph ph-arrow-left me-2"></i>{{ __('events.previous') }}
                                 </button>
