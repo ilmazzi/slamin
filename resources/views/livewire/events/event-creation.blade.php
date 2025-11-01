@@ -345,6 +345,116 @@
                                 </div>
                             </div>
 
+                            <!-- RECURRENCE SECTION -->
+                            <div class="mb-4">
+                                <h6 class="text-primary mb-3">
+                                    <i class="ph ph-arrows-clockwise me-2"></i>{{ __('events.recurrence') }}
+                                </h6>
+
+                                <div class="form-check mb-3">
+                                    <input type="checkbox"
+                                           wire:model.live="is_recurring"
+                                           class="form-check-input"
+                                           id="is_recurring">
+                                    <label class="form-check-label f-w-600" for="is_recurring">
+                                        {{ __('events.recurring_event') }}
+                                    </label>
+                                </div>
+
+                                @if($is_recurring)
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="mb-3">
+                                                    <label class="form-label">{{ __('events.recurrence_type') }} *</label>
+                                                    <select wire:model.live="recurrence_type"
+                                                            class="form-select @error('recurrence_type') is-invalid @enderror"
+                                                            required>
+                                                        <option value="">{{ __('events.select') }}</option>
+                                                        <option value="daily">{{ __('events.daily') }}</option>
+                                                        <option value="weekly">{{ __('events.weekly') }}</option>
+                                                        <option value="monthly">{{ __('events.monthly') }}</option>
+                                                        <option value="yearly">{{ __('events.yearly') }}</option>
+                                                    </select>
+                                                    @error('recurrence_type')
+                                                        <div class="invalid-feedback">{{ $message }}</div>
+                                                    @enderror
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <div class="mb-3">
+                                                    <label class="form-label">{{ __('events.recurrence_interval') }}</label>
+                                                    <input type="number"
+                                                           wire:model.live="recurrence_interval"
+                                                           class="form-control"
+                                                           min="1"
+                                                           value="1">
+                                                        <small class="text-secondary">{{ __('events.recurrence_interval_help') }}</small>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <div class="mb-3">
+                                                    <label class="form-label">{{ __('events.recurrence_count') }}</label>
+                                                    <input type="number"
+                                                           wire:model.live="recurrence_count"
+                                                           class="form-control"
+                                                           min="1"
+                                                           max="100"
+                                                           placeholder="10">
+                                                        <small class="text-secondary">{{ __('events.recurrence_count_help') }}</small>
+                                                    </div>
+                                                </div>
+
+                                                @if($recurrence_type == 'weekly')
+                                                    <div class="col-12">
+                                                        <label class="form-label">{{ __('events.recurrence_weekdays') }} *</label>
+                                                        <div class="row g-2">
+                                                            @foreach(['1' => __('events.weekday_1'), '2' => __('events.weekday_2'), '3' => __('events.weekday_3'), '4' => __('events.weekday_4'), '5' => __('events.weekday_5'), '6' => __('events.weekday_6'), '7' => __('events.weekday_7')] as $day => $label)
+                                                                <div class="col-md-3 col-sm-4 col-6">
+                                                                    <div class="form-check">
+                                                                        <input class="form-check-input"
+                                                                               type="checkbox"
+                                                                               wire:model.live="recurrence_weekdays"
+                                                                               value="{{ $day }}"
+                                                                               id="weekday_{{ $day }}">
+                                                                        <label class="form-check-label f-w-600" for="weekday_{{ $day }}">
+                                                                            <i class="ph ph-calendar-check me-1 text-primary"></i>{{ $label }}
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            @endforeach
+                                                        </div>
+                                                        @error('recurrence_weekdays')
+                                                            <small class="text-danger d-block mt-1">
+                                                                <i class="ph ph-warning me-1"></i>{{ $message }}
+                                                            </small>
+                                                        @enderror
+                                                    </div>
+                                                @endif
+
+                                                @if($recurrence_type == 'monthly')
+                                                    <div class="col-12">
+                                                        <div class="mb-3">
+                                                        <label class="form-label">{{ __('events.recurrence_monthday') }}</label>
+                                                        <input type="number"
+                                                               wire:model.live="recurrence_monthday"
+                                                               class="form-control"
+                                                               min="1"
+                                                               max="31"
+                                                               placeholder="1">
+                                                            <small class="text-secondary">{{ __('events.recurrence_monthday_help') }}</small>
+                                                        </div>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
+                            </div>
+
                             <!-- LOCATION SECTION -->
                             <div class="mb-4">
                                 <h6 class="text-primary mb-3">
@@ -506,116 +616,6 @@
                                             </div>
                                         </div>
                                     </div>
-                            </div>
-
-                            <!-- RECURRENCE SECTION -->
-                            <div>
-                                <h6 class="text-primary mb-3">
-                                    <i class="ph ph-arrow-clockwise me-2"></i>{{ __('events.recurrence') }}
-                                </h6>
-
-                                <div class="form-check mb-3">
-                                    <input type="checkbox"
-                                           wire:model.live="is_recurring"
-                                           class="form-check-input"
-                                           id="is_recurring">
-                                    <label class="form-check-label f-w-600" for="is_recurring">
-                                        {{ __('events.recurring_event') }}
-                                    </label>
-                                </div>
-
-                                @if($is_recurring)
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="row">
-                                                <div class="col-md-4">
-                                                    <div class="mb-3">
-                                                    <label class="form-label">{{ __('events.recurrence_type') }} *</label>
-                                                    <select wire:model.live="recurrence_type"
-                                                            class="form-select @error('recurrence_type') is-invalid @enderror"
-                                                            required>
-                                                        <option value="">{{ __('events.select') }}</option>
-                                                        <option value="daily">{{ __('events.daily') }}</option>
-                                                        <option value="weekly">{{ __('events.weekly') }}</option>
-                                                        <option value="monthly">{{ __('events.monthly') }}</option>
-                                                        <option value="yearly">{{ __('events.yearly') }}</option>
-                                                    </select>
-                                                    @error('recurrence_type')
-                                                        <div class="invalid-feedback">{{ $message }}</div>
-                                                    @enderror
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-4">
-                                                    <div class="mb-3">
-                                                    <label class="form-label">{{ __('events.recurrence_interval') }}</label>
-                                                    <input type="number"
-                                                           wire:model.live="recurrence_interval"
-                                                           class="form-control"
-                                                           min="1"
-                                                           value="1">
-                                                        <small class="text-secondary">{{ __('events.recurrence_interval_help') }}</small>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-4">
-                                                    <div class="mb-3">
-                                                    <label class="form-label">{{ __('events.recurrence_count') }}</label>
-                                                    <input type="number"
-                                                           wire:model.live="recurrence_count"
-                                                           class="form-control"
-                                                           min="1"
-                                                           max="100"
-                                                           placeholder="10">
-                                                        <small class="text-secondary">{{ __('events.recurrence_count_help') }}</small>
-                                                    </div>
-                                                </div>
-
-                                                @if($recurrence_type == 'weekly')
-                                                    <div class="col-12">
-                                                        <label class="form-label">{{ __('events.recurrence_weekdays') }} *</label>
-                                                        <div class="row g-2">
-                                                            @foreach(['1' => __('events.weekday_1'), '2' => __('events.weekday_2'), '3' => __('events.weekday_3'), '4' => __('events.weekday_4'), '5' => __('events.weekday_5'), '6' => __('events.weekday_6'), '7' => __('events.weekday_7')] as $day => $label)
-                                                                <div class="col-md-3 col-sm-4 col-6">
-                                                                    <div class="form-check">
-                                                                        <input class="form-check-input"
-                                                                               type="checkbox"
-                                                                               wire:model.live="recurrence_weekdays"
-                                                                               value="{{ $day }}"
-                                                                               id="weekday_{{ $day }}">
-                                                                        <label class="form-check-label f-w-600" for="weekday_{{ $day }}">
-                                                                            <i class="ph ph-calendar-check me-1 text-primary"></i>{{ $label }}
-                                                                        </label>
-                                                                    </div>
-                                                                </div>
-                                                            @endforeach
-                                                        </div>
-                                                        @error('recurrence_weekdays')
-                                                            <small class="text-danger d-block mt-1">
-                                                                <i class="ph ph-warning me-1"></i>{{ $message }}
-                                                            </small>
-                                                        @enderror
-                                                    </div>
-                                                @endif
-
-                                                @if($recurrence_type == 'monthly')
-                                                    <div class="col-12">
-                                                        <div class="mb-3">
-                                                        <label class="form-label">{{ __('events.recurrence_monthday') }}</label>
-                                                        <input type="number"
-                                                               wire:model.live="recurrence_monthday"
-                                                               class="form-control"
-                                                               min="1"
-                                                               max="31"
-                                                               placeholder="1">
-                                                            <small class="text-secondary">{{ __('events.recurrence_monthday_help') }}</small>
-                                                        </div>
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endif
                             </div>
                         </div>
                     </div>
