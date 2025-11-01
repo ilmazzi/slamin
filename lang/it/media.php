@@ -44,4 +44,6 @@ return [
     
     // Common actions
     'comments_section' => 'Sezione Commenti',
+    'open_video' => 'Apri Video',
+    'open' =>'Apri'
 ];

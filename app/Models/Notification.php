@@ -299,10 +299,8 @@ class Notification extends Model
             'priority' => self::PRIORITY_HIGH,
         ]);
 
-        // Send email notification
-        self::sendEmailNotification($notification, $invitation);
-
-
+        // Broadcast real-time notification
+        self::broadcastNotification($notification);
     }
 
     /**
@@ -326,16 +324,7 @@ class Notification extends Model
             'priority' => $hoursUntil <= 2 ? self::PRIORITY_HIGH : self::PRIORITY_NORMAL,
         ]);
 
-        // Send email for 24h and 2h reminders
-        if (in_array($hoursUntil, [24, 2])) {
-            \Mail::to($user)->send(new \App\Mail\EventUpdateMail(
-                $event,
-                $user,
-                'reminder'
-            ));
-        }
-
-        // Always broadcast
+        // Broadcast real-time notification
         self::broadcastNotification($notification);
     }
 
@@ -361,19 +350,7 @@ class Notification extends Model
             'priority' => self::isImportantChange($changes) ? self::PRIORITY_HIGH : self::PRIORITY_NORMAL,
         ]);
 
-        // Send email for important changes
-        if (self::isImportantChange($changes) || $customMessage) {
-            $updateType = self::getUpdateType($changes);
-            \Mail::to($user)->send(new \App\Mail\EventUpdateMail(
-                $event,
-                $user,
-                $updateType,
-                $changes,
-                $customMessage
-            ));
-        }
-
-        // Always broadcast
+        // Broadcast real-time notification
         self::broadcastNotification($notification);
     }
 
@@ -394,45 +371,9 @@ class Notification extends Model
             'priority' => self::PRIORITY_HIGH,
         ]);
 
-        // Always send email for cancellations
-        \Mail::to($user)->send(new \App\Mail\EventUpdateMail(
-            $event,
-            $user,
-            'cancelled',
-            [],
-            $reason
-        ));
-
-        // Always broadcast
+        // Broadcast real-time notification
         self::broadcastNotification($notification);
     }
-
-    /**
-     * Send email notification based on type
-     */
-    protected static function sendEmailNotification(self $notification, $relatedModel = null): void
-    {
-        try {
-            switch ($notification->type) {
-                case self::TYPE_EVENT_INVITATION:
-                    if ($relatedModel instanceof EventInvitation) {
-                        \Mail::to($notification->user)->send(
-                            new \App\Mail\EventInvitationMail($relatedModel)
-                        );
-                    }
-                    break;
-
-                // Add other email types as needed
-            }
-        } catch (\Exception $e) {
-            \Log::error('Failed to send email notification', [
-                'notification_id' => $notification->id,
-                'error' => $e->getMessage()
-            ]);
-        }
-    }
-
-
 
     /**
      * Format changes summary for display
@@ -1092,13 +1033,12 @@ class Notification extends Model
     }
 
     /**
-     * Broadcast notification to user
+     * Broadcast notification to user via Reverb
      */
     protected static function broadcastNotification(Notification $notification): void
     {
         try {
-            // TODO: Implement ChatNotificationEvent
-            // event(new \App\Events\ChatNotificationEvent($notification, 'created'));
+            event(new \App\Events\NotificationSent($notification));
         } catch (\Exception $e) {
             \Log::error('Failed to broadcast notification', [
                 'notification_id' => $notification->id,

@@ -6,6 +6,9 @@ return [
     
     // Actions
     'mark_all_read' => 'Segna tutte come lette',
+    'mark_as_read' => 'Segna come letta',
+    'delete' => 'Elimina',
+    'new' => 'Nuova',
     
     // Empty States
     'no_notifications' => 'Nessuna notifica',
