@@ -16,6 +16,7 @@ return [
     // Titles
     'untitled_photo' => 'Foto Senza Titolo',
     'most_popular_photo' => 'Foto Più Popolare',
+    'most_popular_video' => 'Video Più Popolare',
     
     // Tabs/Filters
     'popular' => 'Popolari',
@@ -26,6 +27,10 @@ return [
     'keywords' => 'Parole Chiave',
     'search_placeholder' => 'Cerca per titolo, descrizione, tag...',
     'username_placeholder' => 'Nome utente',
+    
+    // Date filters
+    'date_from' => 'Data da',
+    'date_to' => 'Data a',
     
     // Stats
     'views' => 'Visualizzazioni',
