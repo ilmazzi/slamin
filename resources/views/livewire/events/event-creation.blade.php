@@ -176,9 +176,9 @@
                                 </div>
                                         <small class="text-secondary d-block mt-2">
                                     @if($is_public)
-                                            <i class="ph ph-info text-info me-1"></i>{{ __('events.public_event_help') }}
+                                            <i class="ph ph-info text-secondary me-1"></i>{{ __('events.public_event_help') }}
                                     @else
-                                        <i class="ph ph-info text-warning me-1"></i>{{ __('events.private_event_help') }}
+                                        <i class="ph ph-info text-primary me-1"></i>{{ __('events.private_event_help') }}
                                     @endif
                                         </small>
                                 </div>
@@ -638,7 +638,7 @@
                                 <div class="card border-primary">
                                     <div class="card-header py-2">
                                         <h6 class="mb-0 text-primary">
-                                                <i class="ph ph-image me-2"></i>{{ __('events.media_and_content') }}
+                                            <i class="ph ph-image me-2"></i>{{ __('events.media_and_content') }}
                                         </h6>
                         </div>
                                     <div class="card-body p-3">
@@ -682,9 +682,9 @@
 
                             <!-- PAYMENT SECTION -->
                             <div class="col-md-6">
-                                <div class="card border-success">
+                                <div class="card border-primary">
                                     <div class="card-header py-2">
-                                        <h6 class="mb-0 text-success">
+                                        <h6 class="mb-0 text-primary">
                                             <i class="ph ph-currency-circle-dollar me-2"></i>{{ __('events.payment') }}
                                         </h6>
                                     </div>
@@ -732,9 +732,9 @@
 
                             <!-- GROUPS SECTION -->
                             <div class="col-md-6">
-                                <div class="card border-info">
+                                <div class="card border-secondary">
                                     <div class="card-header py-2">
-                                        <h6 class="mb-0 text-info">
+                                        <h6 class="mb-0 text-secondary">
                                             <i class="ph ph-users me-2"></i>{{ __('events.associations') }}
                                         </h6>
                                     </div>
@@ -821,9 +821,9 @@
 
                             <!-- FESTIVAL SECTION -->
                             <div class="col-md-6">
-                                <div class="card border-warning">
+                                <div class="card border-primary">
                                     <div class="card-header py-2">
-                                        <h6 class="mb-0 text-warning">
+                                        <h6 class="mb-0 text-primary">
                                             <i class="ph ph-trophy me-2"></i>{{ __('events.festival') }}
                                         </h6>
                                     </div>
@@ -914,7 +914,7 @@
                                                    id="status_published">
                                             <label for="status_published" class="form-check-label">
                                                 <div class="d-flex align-items-center mb-1">
-                                                    <i class="ph ph-globe me-2 text-success"></i>
+                                                    <i class="ph ph-globe me-2 text-primary"></i>
                                                     <span class="f-w-600">{{ __('events.publish_immediately') }}</span>
                                                 </div>
                                                 <small class="text-secondary">{{ __('events.publish_immediately_help') }}</small>
@@ -928,7 +928,7 @@
                                                    id="status_draft">
                                             <label for="status_draft" class="form-check-label">
                                                 <div class="d-flex align-items-center mb-1">
-                                                    <i class="ph ph-note-pencil me-2 text-warning"></i>
+                                                    <i class="ph ph-note-pencil me-2 text-primary"></i>
                                                     <span class="f-w-600">{{ __('events.save_as_draft') }}</span>
                                                 </div>
                                                 <small class="text-secondary">{{ __('events.save_as_draft_help') }}</small>
@@ -940,11 +940,11 @@
 
                             <!-- GIG POSITIONS -->
                             <div class="col-12">
-                                <div class="card border-warning">
+                                <div class="card border-primary">
                                     <div class="card-header py-2">
-                                        <h6 class="mb-0 text-warning">
+                                        <h6 class="mb-0 text-primary">
                                             <i class="ph ph-briefcase me-2"></i>{{ __('events.gig_positions') }}
-                                            <span class="badge bg-warning ms-2">{{ count($gig_positions) }}</span>
+                                            <span class="badge bg-primary ms-2">{{ count($gig_positions) }}</span>
                                         </h6>
                                     </div>
                                     <div class="card-body p-3">
@@ -1239,11 +1239,11 @@
 
                             <!-- SEZIONE 3: INVITA AD ASSISTERE (Audience) -->
                             <div class="col-12">
-                                <div class="card border-info">
+                                <div class="card border-secondary">
                                     <div class="card-header py-2">
-                                        <h6 class="mb-0 text-info">
+                                        <h6 class="mb-0 text-secondary">
                                             <i class="ph ph-ticket me-2"></i>{{ __('events.invite_audience') }} 
-                                            <span class="badge bg-info ms-2">{{ count($audienceInvitations) }}</span>
+                                            <span class="badge bg-secondary ms-2">{{ count($audienceInvitations) }}</span>
                                         </h6>
                                     </div>
                                     <div class="card-body p-3">
@@ -1416,9 +1416,9 @@
 
                             <!-- DATE & LOCATION -->
                             <div class="col-md-6">
-                                <div class="card border-info">
+                                <div class="card border-secondary">
                                     <div class="card-header py-2">
-                                        <h6 class="mb-0 text-info">
+                                        <h6 class="mb-0 text-secondary">
                                             <i class="ph ph-calendar me-2"></i>{{ __('events.date_and_time') }}
                                         </h6>
                                     </div>
@@ -1433,7 +1433,7 @@
                                                 @foreach($availability_options as $option)
                                                     @if(is_array($option) && isset($option['datetime']))
                                                         <div class="d-flex align-items-center mb-1">
-                                                            <i class="ph ph-calendar-check me-2 text-success"></i>
+                                                            <i class="ph ph-calendar-check me-2 text-primary"></i>
                                                             <span>{{ $option['datetime'] }}</span>
                                                             @if(!empty($option['description']))
                                                                 <small class="text-secondary ms-2">- {{ $option['description'] }}</small>
@@ -1444,7 +1444,7 @@
                                             @endif
                             @else
                                             <p class="mb-1">
-                                                <i class="ph ph-calendar-check me-2 text-success"></i>
+                                                <i class="ph ph-calendar-check me-2 text-primary"></i>
                                                 <strong>{{ __('events.start') }}:</strong> {{ $start_datetime ?: '-' }}
                                             </p>
                                             <p class="mb-0">
@@ -1466,9 +1466,9 @@
 
                             <!-- LOCATION -->
                             <div class="col-md-6">
-                                <div class="card border-warning">
+                                <div class="card border-primary">
                                     <div class="card-header py-2">
-                                        <h6 class="mb-0 text-warning">
+                                        <h6 class="mb-0 text-primary">
                                                 <i class="ph ph-map-pin me-2"></i>{{ __('events.location') }}
                                         </h6>
                                     </div>
@@ -1526,7 +1526,7 @@
                                                 @if($is_paid_event)
                                                     <div class="col-md-6">
                                                         <p class="mb-2">
-                                                            <i class="ph ph-currency-circle-dollar me-2 text-success"></i>
+                                                            <i class="ph ph-currency-circle-dollar me-2 text-primary"></i>
                                                             <strong>{{ __('events.ticket_price') }}:</strong>
                                                             {{ number_format($ticket_price, 2) }} {{ $ticket_currency }}
                                                         </p>
@@ -1556,7 +1556,7 @@
                                                 @if($allow_requests)
                                                     <div class="col-md-6">
                                                         <p class="mb-2">
-                                                            <i class="ph ph-check-circle me-2 text-success"></i>
+                                                            <i class="ph ph-check-circle me-2 text-primary"></i>
                                                             {{ __('events.allow_requests') }}
                                                         </p>
                                                     </div>
@@ -1570,11 +1570,11 @@
                             <!-- GIG POSITIONS -->
                             @if(count($gig_positions) > 0)
                                 <div class="col-12">
-                                    <div class="card border-warning">
+                                    <div class="card border-primary">
                                         <div class="card-header py-2">
-                                            <h6 class="mb-0 text-warning">
+                                            <h6 class="mb-0 text-primary">
                                                 <i class="ph ph-briefcase me-2"></i>{{ __('events.gig_positions') }}
-                                                <span class="badge bg-warning ms-2">{{ count($gig_positions) }}</span>
+                                                <span class="badge bg-primary ms-2">{{ count($gig_positions) }}</span>
                                             </h6>
                                         </div>
                                         <div class="card-body">
@@ -1607,17 +1607,17 @@
                                                                 </td>
                                                                 <td class="text-secondary">
                                                                     @if($position['has_cachet'] && $position['cachet_amount'])
-                                                                        <i class="ph ph-currency-circle-dollar me-1 text-success"></i>{{ $position['cachet_amount'] }} {{ $position['cachet_currency'] }}
+                                                                        <i class="ph ph-currency-circle-dollar me-1 text-primary"></i>{{ $position['cachet_amount'] }} {{ $position['cachet_currency'] }}
                                                                     @endif
                                                                     @if($position['has_travel'] && $position['travel_max'])
-                                                                        <br><i class="ph ph-airplane me-1 text-info"></i>{{ __('events.travel') }}: {{ $position['travel_max'] }} {{ $position['travel_currency'] }}
+                                                                        <br><i class="ph ph-airplane me-1 text-secondary"></i>{{ __('events.travel') }}: {{ $position['travel_max'] }} {{ $position['travel_currency'] }}
                                                                     @endif
                                                                     @if($position['has_accommodation'])
-                                                                        <br><i class="ph ph-bed me-1 text-warning"></i>{{ __('events.accommodation_included') }}
+                                                                        <br><i class="ph ph-bed me-1 text-primary"></i>{{ __('events.accommodation_included') }}
                                                                     @endif
                                                                 </td>
                                                                 <td>
-                                                                    <span class="badge bg-warning">{{ $position['quantity'] ?? 1 }}</span>
+                                                                    <span class="badge bg-primary">{{ $position['quantity'] ?? 1 }}</span>
                                                                 </td>
                                                             </tr>
                                                         @endforeach
@@ -1632,11 +1632,11 @@
                             <!-- INVITATIONS -->
                             @if(count($invitations) > 0)
                                 <div class="col-12">
-                                    <div class="card border-success">
+                                    <div class="card border-primary">
                                         <div class="card-header py-2">
-                                            <h6 class="mb-0 text-success">
-                                                <i class="ph ph-envelope me-2"></i>{{ __('events.invitations') }}
-                                                <span class="badge bg-success ms-2">{{ count($invitations) }}</span>
+                                            <h6 class="mb-0 text-primary">
+                                                <i class="ph ph-users me-2"></i>{{ __('events.invited_participants') }}
+                                                <span class="badge bg-primary ms-2">{{ count($invitations) }}</span>
                                             </h6>
                                         </div>
                                         <div class="card-body">
@@ -1667,12 +1667,50 @@
                                 </div>
                             @endif
 
+                            <!-- AUDIENCE INVITATIONS -->
+                            @if(count($audienceInvitations) > 0)
+                                <div class="col-12">
+                                    <div class="card border-secondary">
+                                        <div class="card-header py-2">
+                                            <h6 class="mb-0 text-secondary">
+                                                <i class="ph ph-ticket me-2"></i>{{ __('events.invited_audience') }}
+                                                <span class="badge bg-secondary ms-2">{{ count($audienceInvitations) }}</span>
+                                            </h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="table-responsive">
+                                                <table class="table table-sm mb-0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>{{ __('events.name') }}</th>
+                                                            <th>{{ __('events.role') }}</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach($audienceInvitations as $audience)
+                                                            <tr>
+                                                                <td><strong>{{ $audience['name'] }}</strong></td>
+                                                                <td>
+                                                                    <span class="badge bg-secondary">
+                                                                        {{ __('events.invited_as_audience') }}
+                                                                    </span>
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+
                             <!-- GROUPS & FESTIVAL -->
                             @if($is_linked_to_group && count($selected_groups) > 0)
                                 <div class="col-md-6">
-                                    <div class="card border-info">
+                                    <div class="card border-secondary">
                                         <div class="card-header py-2">
-                                            <h6 class="mb-0 text-info">
+                                            <h6 class="mb-0 text-secondary">
                                                 <i class="ph ph-users me-2"></i>{{ __('events.linked_groups') }}
                                             </h6>
                                         </div>
@@ -1682,7 +1720,7 @@
                                             @endphp
                                             @foreach($linkedGroups as $group)
                                                 <div class="d-flex align-items-center mb-2">
-                                                    <i class="ph ph-check-circle me-2 text-success"></i>
+                                                    <i class="ph ph-check-circle me-2 text-primary"></i>
                                                     <strong>{{ $group->name }}</strong>
                                                 </div>
                                             @endforeach
@@ -1693,9 +1731,9 @@
 
                             @if($is_festival_event && $festival_id)
                                 <div class="col-md-6">
-                                    <div class="card border-warning">
+                                    <div class="card border-primary">
                                         <div class="card-header py-2">
-                                            <h6 class="mb-0 text-warning">
+                                            <h6 class="mb-0 text-primary">
                                                 <i class="ph ph-trophy me-2"></i>{{ __('events.festival') }}
                                             </h6>
                                         </div>
@@ -1756,7 +1794,7 @@
                         </div>
                     </div>
 
-                    <small class="text-success d-block mb-3">
+                    <small class="text-primary d-block mb-3">
                         <i class="ph ph-check-circle me-1"></i>
                         {{ __('events.step_info', ['current' => $currentStep, 'total' => $totalSteps]) }}:
                     </small>
@@ -1767,7 +1805,7 @@
                         <div class="list-group list-group-flush">
                             <div class="list-group-item px-0 py-2 border-0 {{ $currentStep == 1 ? 'bg-light-primary' : '' }}" 
                                  style="cursor: pointer;" wire:click="goToStep(1)">
-                                <i class="ph ph-{{ $currentStep > 1 ? 'check-circle text-success' : ($currentStep == 1 ? 'arrow-right text-primary' : 'circle text-secondary') }} me-2"></i>
+                                <i class="ph ph-{{ $currentStep > 1 ? 'check-circle text-primary' : ($currentStep == 1 ? 'arrow-right text-primary' : 'circle text-secondary') }} me-2"></i>
                                 <div class="d-inline-block">
                                     <div class="{{ $currentStep == 1 ? 'f-w-600 text-primary' : ($currentStep > 1 ? 'f-w-600' : 'text-secondary') }}">
                                         {{ __('events.step_basic_info') }}
@@ -1778,7 +1816,7 @@
 
                             <div class="list-group-item px-0 py-2 border-0 {{ $currentStep == 2 ? 'bg-light-primary' : '' }}"
                                  style="cursor: pointer;" wire:click="goToStep(2)">
-                                <i class="ph ph-{{ $currentStep > 2 ? 'check-circle text-success' : ($currentStep == 2 ? 'arrow-right text-primary' : 'circle text-secondary') }} me-2"></i>
+                                <i class="ph ph-{{ $currentStep > 2 ? 'check-circle text-primary' : ($currentStep == 2 ? 'arrow-right text-primary' : 'circle text-secondary') }} me-2"></i>
                                 <div class="d-inline-block">
                                     <div class="{{ $currentStep == 2 ? 'f-w-600 text-primary' : ($currentStep > 2 ? 'f-w-600' : 'text-secondary') }}">
                                         {{ __('events.step_date_location') }}
@@ -1789,7 +1827,7 @@
 
                             <div class="list-group-item px-0 py-2 border-0 {{ $currentStep == 3 ? 'bg-light-primary' : '' }}"
                                  style="cursor: pointer;" wire:click="goToStep(3)">
-                                <i class="ph ph-{{ $currentStep > 3 ? 'check-circle text-success' : ($currentStep == 3 ? 'arrow-right text-primary' : 'circle text-secondary') }} me-2"></i>
+                                <i class="ph ph-{{ $currentStep > 3 ? 'check-circle text-primary' : ($currentStep == 3 ? 'arrow-right text-primary' : 'circle text-secondary') }} me-2"></i>
                                 <div class="d-inline-block">
                                     <div class="{{ $currentStep == 3 ? 'f-w-600 text-primary' : ($currentStep > 3 ? 'f-w-600' : 'text-secondary') }}">
                                         {{ __('events.step_event_details') }}
@@ -1800,7 +1838,7 @@
 
                             <div class="list-group-item px-0 py-2 border-0 {{ $currentStep == 4 ? 'bg-light-primary' : '' }}"
                                  style="cursor: pointer;" wire:click="goToStep(4)">
-                                <i class="ph ph-{{ $currentStep > 4 ? 'check-circle text-success' : ($currentStep == 4 ? 'arrow-right text-primary' : 'circle text-secondary') }} me-2"></i>
+                                <i class="ph ph-{{ $currentStep > 4 ? 'check-circle text-primary' : ($currentStep == 4 ? 'arrow-right text-primary' : 'circle text-secondary') }} me-2"></i>
                                 <div class="d-inline-block">
                                     <div class="{{ $currentStep == 4 ? 'f-w-600 text-primary' : ($currentStep > 4 ? 'f-w-600' : 'text-secondary') }}">
                                         {{ __('events.invites_and_gig') }}
@@ -1811,7 +1849,7 @@
 
                             <div class="list-group-item px-0 py-2 border-0 {{ $currentStep == 5 ? 'bg-light-primary' : '' }}"
                                  style="cursor: pointer;" wire:click="goToStep(5)">
-                                <i class="ph ph-{{ $currentStep > 5 ? 'check-circle text-success' : ($currentStep == 5 ? 'arrow-right text-primary' : 'circle text-secondary') }} me-2"></i>
+                                <i class="ph ph-{{ $currentStep > 5 ? 'check-circle text-primary' : ($currentStep == 5 ? 'arrow-right text-primary' : 'circle text-secondary') }} me-2"></i>
                                 <div class="d-inline-block">
                                     <div class="{{ $currentStep == 5 ? 'f-w-600 text-primary' : ($currentStep > 5 ? 'f-w-600' : 'text-secondary') }}">
                                             {{ __('events.event_preview') }}
