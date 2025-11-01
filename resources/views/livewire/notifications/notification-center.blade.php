@@ -157,31 +157,41 @@
     </li>
 </div>
 
-@script
+@assets
 <script>
-    // Listen for real-time notifications via Reverb
-    if (typeof Echo !== 'undefined') {
-        console.log('Echo is available, subscribing to notifications...');
-        console.log('Channel: App.Models.User.{{ Auth::id() }}');
-        
-        Echo.private('App.Models.User.{{ Auth::id() }}')
-            .listen('.notification.sent', (event) => {
-                console.log('✅ New notification received:', event);
-                
-                // Dispatch Livewire event to reload notifications
-                $wire.dispatch('notification-sent', event);
-                
-                // Optional: Play sound
-                // new Audio('/sounds/notification.mp3').play();
-                
-                // Optional: Show toast
-                // Livewire.dispatch('show-toast', { message: event.title, type: 'info' });
-            })
-            .error((error) => {
-                console.error('❌ Echo subscription error:', error);
-            });
-    } else {
+document.addEventListener('livewire:navigated', () => {
+    initNotificationListener();
+});
+
+function initNotificationListener() {
+    if (typeof Echo === 'undefined') {
         console.warn('⚠️ Echo is not available. Real-time notifications will not work. Using polling fallback.');
+        return;
     }
+    
+    const userId = {{ Auth::id() }};
+    const channelName = 'App.Models.User.' + userId;
+    
+    console.log('Echo is available, subscribing to notifications...');
+    console.log('Channel:', channelName);
+    
+    Echo.private(channelName)
+        .listen('.notification.sent', (event) => {
+            console.log('✅ New notification received:', event);
+            
+            // Trigger Livewire to reload notifications
+            Livewire.dispatch('notification-sent', event);
+        })
+        .error((error) => {
+            console.error('❌ Echo subscription error:', error);
+        });
+}
+
+// Initialize on page load
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initNotificationListener);
+} else {
+    initNotificationListener();
+}
 </script>
-@endscript
+@endassets
