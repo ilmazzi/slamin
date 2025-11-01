@@ -56,5 +56,16 @@ return [
     
     // Performance Statistics
     'performance_statistics' => 'Statistiche Performance',
+    'slam_wins' => 'Vittorie Slam',
+    'second_places' => 'Secondi Posti',
+    'third_places' => 'Terzi Posti',
+    'total_participations' => 'Partecipazioni Totali',
+    'performance_coming_soon' => 'Le statistiche di performance saranno disponibili dopo la tua prima partecipazione a un poetry slam',
+    
+    // Temporal Analysis
+    'temporal_analysis' => 'Analisi Temporale',
+    'content_creation' => 'Creazione Contenuti',
+    'engagement_over_time' => 'Coinvolgimento nel Tempo',
+    'event_participation' => 'Partecipazione Eventi',
 ];
 
