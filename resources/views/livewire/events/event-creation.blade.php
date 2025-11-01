@@ -897,43 +897,8 @@
                     </div>
                     <div class="card-body">
                         <div class="row g-3">
-                            <!-- MAX PARTICIPANTS & STATUS -->
-                            <div class="col-md-6">
-                                <div class="card border-primary">
-                                    <div class="card-header py-2">
-                                        <h6 class="mb-0 text-primary">
-                                            <i class="ph ph-users-three me-2"></i>{{ __('events.participants') }}
-                                        </h6>
-                        </div>
-                                    <div class="card-body p-3">
-                                        <div class="mb-3">
-                                            <label class="form-label">{{ __('events.max_participants') }}</label>
-                                            <input type="number"
-                                                   wire:model.live="max_participants"
-                                                   class="form-control"
-                                                   min="1"
-                                                    placeholder="{{ __('events.max_participants_placeholder') }}">
-                                            <small class="text-secondary">{{ __('events.max_participants_help') }}</small>
-                    </div>
-
-                                        <div class="form-check">
-                                            <input type="checkbox"
-                                                   wire:model.live="allow_requests"
-                                                   class="form-check-input"
-                                                   id="allow_requests">
-                                            <label for="allow_requests" class="form-check-label f-w-600">
-                                                {{ __('events.allow_requests') }}
-                                            </label>
-                                        </div>
-                                        <small class="text-secondary d-block mt-1">
-                                            {{ __('events.allow_requests_help') }}
-                                        </small>
-                                    </div>
-                                </div>
-                            </div>
-
                             <!-- EVENT STATUS -->
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="card border-secondary">
                                     <div class="card-header py-2">
                                         <h6 class="mb-0 text-secondary">
@@ -1159,18 +1124,18 @@
                                 </div>
                             </div>
 
-                            <!-- INVITATIONS -->
+                            <!-- SEZIONE 1: INVITA PARTECIPANTI (Organizzatori/Artisti) -->
                             <div class="col-12">
-                                <div class="card border-success">
+                                <div class="card border-primary">
                                     <div class="card-header py-2">
-                                        <h6 class="mb-0 text-success">
-                                            <i class="ph ph-envelope me-2"></i>{{ __('events.invitations') }} 
-                                            <span class="badge bg-success ms-2">{{ count($invitations) }}</span>
+                                        <h6 class="mb-0 text-primary">
+                                            <i class="ph ph-users me-2"></i>{{ __('events.invite_participants') }} 
+                                            <span class="badge bg-primary ms-2">{{ count($invitations) }}</span>
                                         </h6>
                                     </div>
                                     <div class="card-body p-3">
                                         <small class="text-secondary d-block mb-3">
-                                                <i class="ph ph-info me-1"></i>{{ __('events.invitations_optional_help') }}
+                                            <i class="ph ph-info me-1"></i>{{ __('events.invite_participants_help') }}
                                         </small>
 
                                         <!-- User Search -->
@@ -1180,7 +1145,7 @@
                                                 <input type="text"
                                                        wire:model.live.debounce.300ms="userSearchQuery"
                                                        class="form-control"
-                                                       placeholder="{{ __('events.search_users_placeholder') }}">
+                                                       placeholder="{{ __('events.search_participants_placeholder') }}">
                                                 <span class="input-group-text">
                                                     <i class="ph ph-magnifying-glass"></i>
                                                 </span>
@@ -1202,11 +1167,20 @@
                                                                             <br><small class="text-secondary">@{{ $result['nickname'] }}</small>
                                                                         @endif
                                                                     </div>
-                                                                    <button type="button"
-                                                                            wire:click="addInvitation({{ $result['id'] }}, 'performer')"
-                                                                            class="btn btn-sm btn-success">
-                                                                        <i class="ph ph-plus"></i>
-                                                                    </button>
+                                                                    <div class="btn-group">
+                                                                        <button type="button"
+                                                                                wire:click="addInvitation({{ $result['id'] }}, 'performer')"
+                                                                                class="btn btn-sm btn-primary"
+                                                                                title="{{ __('events.artist_poet') }}">
+                                                                            <i class="ph ph-microphone-stage"></i>
+                                                                        </button>
+                                                                        <button type="button"
+                                                                                wire:click="addInvitation({{ $result['id'] }}, 'organizer')"
+                                                                                class="btn btn-sm btn-info"
+                                                                                title="{{ __('events.organizer') }}">
+                                                                            <i class="ph ph-user-gear"></i>
+                                                                        </button>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         @endforeach
@@ -1216,13 +1190,13 @@
                                         @elseif(strlen($userSearchQuery) >= 2 && count($searchResults) === 0)
                                             <div class="alert alert-light mb-3">
                                                 <small><i class="ph ph-warning me-1"></i>{{ __('events.no_users_found') }}</small>
-                </div>
-                @endif
+                                            </div>
+                                        @endif
 
-                                        <!-- Invited Users List -->
+                                        <!-- Invited Participants List -->
                                         @if(count($invitations) > 0)
                                             <div class="mb-2">
-                                                <label class="form-label f-w-600">{{ __('events.invited_users') }}</label>
+                                                <label class="form-label f-w-600">{{ __('events.invited_participants') }}</label>
                                             </div>
                                             <div class="row g-2">
                                                 @foreach($invitations as $index => $invitation)
@@ -1236,10 +1210,8 @@
                                                                     <div class="col-md-5">
                                                                         <select wire:model.live="invitations.{{ $index }}.role"
                                                                                 class="form-select form-select-sm">
-                                                                            <option value="performer">{{ __('events.performer') }}</option>
-                                                                            <option value="judge">{{ __('events.judge') }}</option>
-                                                                            <option value="technician">{{ __('events.technician') }}</option>
-                                                                            <option value="host">{{ __('events.host') }}</option>
+                                                                            <option value="performer">{{ __('events.artist_poet') }}</option>
+                                                                            <option value="organizer">{{ __('events.organizer') }}</option>
                                                                         </select>
                                                                     </div>
                                                                     <div class="col-md-2 text-end">
@@ -1258,7 +1230,103 @@
                                         @else
                                             <div class="alert alert-light text-center">
                                                 <i class="ph ph-user-plus f-s-32 text-secondary mb-2"></i>
-                                                <p class="mb-0 text-secondary">{{ __('events.no_invitations_yet') }}</p>
+                                                <p class="mb-0 text-secondary">{{ __('events.no_participants_invited') }}</p>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- SEZIONE 3: INVITA AD ASSISTERE (Audience) -->
+                            <div class="col-12">
+                                <div class="card border-info">
+                                    <div class="card-header py-2">
+                                        <h6 class="mb-0 text-info">
+                                            <i class="ph ph-ticket me-2"></i>{{ __('events.invite_audience') }} 
+                                            <span class="badge bg-info ms-2">{{ count($audienceInvitations) }}</span>
+                                        </h6>
+                                    </div>
+                                    <div class="card-body p-3">
+                                        <small class="text-secondary d-block mb-3">
+                                            <i class="ph ph-info me-1"></i>{{ __('events.invite_audience_help') }}
+                                        </small>
+
+                                        <!-- Audience Search -->
+                                        <div class="mb-3">
+                                            <label class="form-label f-w-600">{{ __('events.search_users') }}</label>
+                                            <div class="input-group">
+                                                <input type="text"
+                                                       wire:model.live.debounce.300ms="audienceSearchQuery"
+                                                       class="form-control"
+                                                       placeholder="{{ __('events.search_audience_placeholder') }}">
+                                                <span class="input-group-text">
+                                                    <i class="ph ph-magnifying-glass"></i>
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <!-- Search Results -->
+                                        @if(strlen($audienceSearchQuery) >= 2 && count($audienceSearchResults) > 0)
+                                            <div class="card mb-3">
+                                                <div class="card-body p-2">
+                                                    <small class="text-secondary f-w-600">{{ __('events.search_results') }}</small>
+                                                    <div class="list-group list-group-flush">
+                                                        @foreach($audienceSearchResults as $result)
+                                                            <div class="list-group-item list-group-item-action p-2">
+                                                                <div class="d-flex justify-content-between align-items-center">
+                                                                    <div>
+                                                                        <strong>{{ $result['name'] }}</strong>
+                                                                        @if($result['nickname'])
+                                                                            <br><small class="text-secondary">@{{ $result['nickname'] }}</small>
+                                                                        @endif
+                                                                    </div>
+                                                                    <button type="button"
+                                                                            wire:click="addAudienceInvitation({{ $result['id'] }})"
+                                                                            class="btn btn-sm btn-info">
+                                                                        <i class="ph ph-plus"></i>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @elseif(strlen($audienceSearchQuery) >= 2 && count($audienceSearchResults) === 0)
+                                            <div class="alert alert-light mb-3">
+                                                <small><i class="ph ph-warning me-1"></i>{{ __('events.no_users_found') }}</small>
+                                            </div>
+                                        @endif
+
+                                        <!-- Invited Audience List -->
+                                        @if(count($audienceInvitations) > 0)
+                                            <div class="mb-2">
+                                                <label class="form-label f-w-600">{{ __('events.invited_audience') }}</label>
+                                            </div>
+                                            <div class="row g-2">
+                                                @foreach($audienceInvitations as $index => $audience)
+                                                    <div class="col-12">
+                                                        <div class="card">
+                                                            <div class="card-body p-2">
+                                                                <div class="d-flex justify-content-between align-items-center">
+                                                                    <div>
+                                                                        <strong>{{ $audience['name'] }}</strong>
+                                                                        <br><small class="text-muted">{{ __('events.invited_as_audience') }}</small>
+                                                                    </div>
+                                                                    <button type="button"
+                                                                            wire:click="removeAudienceInvitation({{ $index }})"
+                                                                            class="btn btn-sm btn-danger">
+                                                                        <i class="ph ph-trash"></i>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        @else
+                                            <div class="alert alert-light text-center">
+                                                <i class="ph ph-users f-s-32 text-secondary mb-2"></i>
+                                                <p class="mb-0 text-secondary">{{ __('events.no_audience_invited') }}</p>
                                             </div>
                                         @endif
                                     </div>

@@ -114,10 +114,13 @@ class EventCreation extends Component
     public $private_invited_users = [];
     public $artist_invited_users = [];
     public $invitations = [];
+    public $audienceInvitations = [];
     
     // User search for invitations
     public $userSearchQuery = '';
+    public $audienceSearchQuery = '';
     public $searchResults = [];
+    public $audienceSearchResults = [];
     public $searching = false;
 
     // Group search
@@ -488,6 +491,61 @@ class EventCreation extends Component
                 ];
             })
             ->toArray();
+    }
+
+    public function updatedAudienceSearchQuery()
+    {
+        if (strlen($this->audienceSearchQuery) < 2) {
+            $this->audienceSearchResults = [];
+            return;
+        }
+
+        $this->audienceSearchResults = User::where(function ($q) {
+                $q->where('name', 'like', "%{$this->audienceSearchQuery}%")
+                  ->orWhere('email', 'like', "%{$this->audienceSearchQuery}%")
+                  ->orWhere('nickname', 'like', "%{$this->audienceSearchQuery}%");
+            })
+            ->where('id', '!=', Auth::id())
+            ->whereNotIn('id', collect($this->audienceInvitations)->pluck('user_id'))
+            ->limit(10)
+            ->get()
+            ->map(function ($user) {
+                return [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'nickname' => $user->nickname,
+                    'avatar' => $user->avatar_url ?? null,
+                ];
+            })
+            ->toArray();
+    }
+
+    public function addAudienceInvitation($userId)
+    {
+        if (collect($this->audienceInvitations)->contains('user_id', $userId)) {
+            return;
+        }
+
+        $user = User::find($userId);
+        if (!$user) {
+            return;
+        }
+
+        $this->audienceInvitations[] = [
+            'user_id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+        ];
+
+        $this->audienceSearchQuery = '';
+        $this->audienceSearchResults = [];
+    }
+
+    public function removeAudienceInvitation($index)
+    {
+        unset($this->audienceInvitations[$index]);
+        $this->audienceInvitations = array_values($this->audienceInvitations);
     }
 
     public function addInvitation($userId, $role = 'performer')
