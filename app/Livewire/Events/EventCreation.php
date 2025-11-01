@@ -763,7 +763,13 @@ class EventCreation extends Component
             ], Event::class, $event->id);
 
             session()->flash('success', __('events.event_created_successfully'));
-            return $this->redirect(route('events.show', $event), navigate: true);
+            
+            \Log::info('Event created successfully, redirecting', [
+                'event_id' => $event->id,
+                'redirect_url' => route('events.show', $event),
+            ]);
+            
+            return redirect()->route('events.show', $event);
 
         } catch (\Illuminate\Validation\ValidationException $e) {
             // Validation errors - let Livewire handle them
