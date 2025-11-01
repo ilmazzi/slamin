@@ -906,33 +906,39 @@
                                         </h6>
                                     </div>
                                     <div class="card-body p-3">
-                                        <div class="form-check p-3 border rounded mb-2">
-                                            <input type="radio"
-                                                   wire:model.live="status"
-                                                   value="published"
-                                                   class="form-check-input"
-                                                   id="status_published">
-                                            <label for="status_published" class="form-check-label">
-                                                <div class="d-flex align-items-center mb-1">
-                                                    <i class="ph ph-globe me-2 text-primary"></i>
-                                                    <span class="f-w-600">{{ __('events.publish_immediately') }}</span>
+                                        <div class="row g-2">
+                                            <div class="col-md-6">
+                                                <div class="form-check p-3 border rounded h-100">
+                                                    <input type="radio"
+                                                           wire:model.live="status"
+                                                           value="published"
+                                                           class="form-check-input"
+                                                           id="status_published">
+                                                    <label for="status_published" class="form-check-label">
+                                                        <div class="d-flex align-items-center mb-1">
+                                                            <i class="ph ph-globe me-2 text-primary"></i>
+                                                            <span class="f-w-600">{{ __('events.publish_immediately') }}</span>
+                                                        </div>
+                                                        <small class="text-secondary">{{ __('events.publish_immediately_help') }}</small>
+                                                    </label>
                                                 </div>
-                                                <small class="text-secondary">{{ __('events.publish_immediately_help') }}</small>
-                                            </label>
-                                        </div>
-                                        <div class="form-check p-3 border rounded">
-                                            <input type="radio"
-                                                   wire:model.live="status"
-                                                   value="draft"
-                                                   class="form-check-input"
-                                                   id="status_draft">
-                                            <label for="status_draft" class="form-check-label">
-                                                <div class="d-flex align-items-center mb-1">
-                                                    <i class="ph ph-note-pencil me-2 text-primary"></i>
-                                                    <span class="f-w-600">{{ __('events.save_as_draft') }}</span>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-check p-3 border rounded h-100">
+                                                    <input type="radio"
+                                                           wire:model.live="status"
+                                                           value="draft"
+                                                           class="form-check-input"
+                                                           id="status_draft">
+                                                    <label for="status_draft" class="form-check-label">
+                                                        <div class="d-flex align-items-center mb-1">
+                                                            <i class="ph ph-note-pencil me-2 text-primary"></i>
+                                                            <span class="f-w-600">{{ __('events.save_as_draft') }}</span>
+                                                        </div>
+                                                        <small class="text-secondary">{{ __('events.save_as_draft_help') }}</small>
+                                                    </label>
                                                 </div>
-                                                <small class="text-secondary">{{ __('events.save_as_draft_help') }}</small>
-                                            </label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
