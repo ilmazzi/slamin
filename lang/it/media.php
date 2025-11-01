@@ -31,6 +31,7 @@ return [
     // Date filters
     'date_from' => 'Data da',
     'date_to' => 'Data a',
+    'date' => 'Data',
     
     // Stats
     'views' => 'Visualizzazioni',
