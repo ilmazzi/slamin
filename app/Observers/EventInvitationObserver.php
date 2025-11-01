@@ -35,7 +35,7 @@ class EventInvitationObserver
             );
         }
 
-        // Send notification to invited user
+        // Send notification to invited user using new notification system
         if ($eventInvitation->invitedUser && $eventInvitation->event) {
             \Log::info('Sending invitation notification', [
                 'invitation_id' => $eventInvitation->id,
@@ -44,7 +44,8 @@ class EventInvitationObserver
                 'event_title' => $eventInvitation->event->title,
             ]);
             
-            $eventInvitation->invitedUser->notify(new EventInvitationNotification($eventInvitation));
+            // Use new real-time notification system
+            \App\Models\Notification::createEventInvitation($eventInvitation);
         }
     }
 

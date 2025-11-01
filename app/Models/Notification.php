@@ -291,12 +291,19 @@ class Notification extends Model
             'data' => [
                 'event_id' => $invitation->event_id,
                 'invitation_id' => $invitation->id,
+                'inviter_id' => $invitation->inviter_id,
                 'role' => $invitation->role,
-                'compensation' => $invitation->compensation,
+                'compensation' => $invitation->compensation ?? null,
             ],
             'action_url' => route('invitations.index'),
             'action_text' => 'Gestisci Invito',
             'priority' => self::PRIORITY_HIGH,
+        ]);
+
+        \Log::info('Event invitation notification created', [
+            'notification_id' => $notification->id,
+            'user_id' => $invitation->invited_user_id,
+            'event_id' => $invitation->event_id,
         ]);
 
         // Broadcast real-time notification
@@ -1038,11 +1045,23 @@ class Notification extends Model
     protected static function broadcastNotification(Notification $notification): void
     {
         try {
+            \Log::info('Broadcasting notification', [
+                'notification_id' => $notification->id,
+                'user_id' => $notification->user_id,
+                'type' => $notification->type,
+                'channel' => 'App.Models.User.' . $notification->user_id,
+            ]);
+            
             event(new \App\Events\NotificationSent($notification));
+            
+            \Log::info('Notification broadcasted successfully', [
+                'notification_id' => $notification->id,
+            ]);
         } catch (\Exception $e) {
             \Log::error('Failed to broadcast notification', [
                 'notification_id' => $notification->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
             ]);
         }
     }
