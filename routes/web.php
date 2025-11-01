@@ -840,6 +840,7 @@ Route::get('/invitations/{invitation}/decline', [InvitationController::class, 'd
 
         // User Management Routes
         Route::resource('users', App\Http\Controllers\Admin\UserController::class)->names('users');
+        Route::post('/users/{user}/reset-password', [App\Http\Controllers\Admin\UserController::class, 'resetPassword'])->name('users.reset-password');
         Route::post('/users/bulk-assign', [App\Http\Controllers\Admin\UserController::class, 'bulkAssign'])->name('users.bulk-assign');
         Route::get('/users/export', [App\Http\Controllers\Admin\UserController::class, 'export'])->name('users.export');
 

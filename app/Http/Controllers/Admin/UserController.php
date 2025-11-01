@@ -124,6 +124,31 @@ class UserController extends Controller
         }
     }
 
+    public function resetPassword(Request $request, User $user)
+    {
+        $request->validate([
+            'new_password' => 'required|string|min:8|confirmed',
+        ]);
+
+        $user->update([
+            'password' => Hash::make($request->new_password),
+        ]);
+
+        // Opzionalmente, invia notifica all'utente
+        \App\Models\Notification::create([
+            'user_id' => $user->id,
+            'type' => 'password_reset_by_admin',
+            'title' => __('admin.password_reset_title'),
+            'message' => __('admin.password_reset_message'),
+            'priority' => 'high',
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => __('admin.password_reset_successfully')
+        ]);
+    }
+
     public function bulkAssign(Request $request)
     {
         $request->validate([

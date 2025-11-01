@@ -212,7 +212,7 @@
                                             <button class="btn btn-light-secondary icon-btn b-r-4" onclick="editUserRoles({{ $user->id }})" title="{{ __('permissions.edit_roles') }}">
                                                 <i class="ph ph-user-gear"></i>
                                             </button>
-                                            <button class="btn btn-light-info icon-btn b-r-4" onclick="editUserPermissions({{ $user->id }})" title="{{ __('permissions.edit_permissions') }}">
+                                            <button class="btn btn-light-primary icon-btn b-r-4" onclick="editUserPermissions({{ $user->id }})" title="{{ __('permissions.edit_permissions') }}">
                                                 <i class="ph ph-shield-check"></i>
                                             </button>
                                             @php
@@ -221,8 +221,13 @@
                                                 $isOwnAccount = $currentUser->id === $user->id;
                                                 $canDelete = (!$user->hasRole('admin') || $isSuperAdmin) && !$isOwnAccount;
                                             @endphp
+                                            @if(!$isOwnAccount)
+                                            <button class="btn btn-light-secondary icon-btn b-r-4" onclick="resetUserPassword({{ $user->id }})" title="{{ __('admin.reset_password') }}">
+                                                <i class="ph ph-key"></i>
+                                            </button>
+                                            @endif
                                             @if($canDelete)
-                                            <button class="btn btn-light-danger icon-btn b-r-4" onclick="deleteUser({{ $user->id }})" title="{{ __('permissions.delete_user') }}">
+                                            <button class="btn btn-light-primary icon-btn b-r-4" onclick="deleteUser({{ $user->id }})" title="{{ __('permissions.delete_user') }}">
                                                 <i class="ph ph-trash"></i>
                                             </button>
                                             @endif
@@ -279,6 +284,12 @@
                                     $isOwnAccount = $currentUser->id === $user->id;
                                     $canDelete = (!$user->hasRole('admin') || $isSuperAdmin) && !$isOwnAccount;
                                 @endphp
+                                @if(!$isOwnAccount)
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#" onclick="resetUserPassword({{ $user->id }})">
+                                    <i class="ph ph-key me-2"></i>{{ __('admin.reset_password') }}
+                                </a></li>
+                                @endif
                                 @if($canDelete)
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item text-danger" href="#" onclick="deleteUser({{ $user->id }})">
@@ -912,6 +923,88 @@ function deleteUser(userId) {
             .catch(error => {
                 console.error('Error:', error);
                 Swal.fire('Errore!', 'Si è verificato un errore durante l\'eliminazione.', 'error');
+            });
+        }
+    });
+}
+
+/**
+ * Reset password utente
+ */
+function resetUserPassword(userId) {
+    Swal.fire({
+        title: '{{ __("admin.reset_password") }}',
+        html: `
+            <div class="text-start">
+                <div class="mb-3">
+                    <label class="form-label">{{ __("admin.new_password") }}</label>
+                    <input type="password" id="newPassword" class="form-control" minlength="8" required>
+                    <small class="text-muted">{{ __("admin.password_min_chars") }}</small>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">{{ __("admin.confirm_password") }}</label>
+                    <input type="password" id="confirmPassword" class="form-control" minlength="8" required>
+                </div>
+            </div>
+        `,
+        showCancelButton: true,
+        confirmButtonText: '{{ __("admin.reset_password") }}',
+        cancelButtonText: '{{ __("actions.cancel") }}',
+        confirmButtonColor: '#0d6efd',
+        preConfirm: () => {
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            if (!newPassword || !confirmPassword) {
+                Swal.showValidationMessage('{{ __("admin.fill_both_fields") }}');
+                return false;
+            }
+            
+            if (newPassword.length < 8) {
+                Swal.showValidationMessage('{{ __("admin.password_min_8_chars") }}');
+                return false;
+            }
+            
+            if (newPassword !== confirmPassword) {
+                Swal.showValidationMessage('{{ __("admin.passwords_do_not_match") }}');
+                return false;
+            }
+            
+            return { newPassword, confirmPassword };
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            Swal.fire({
+                title: '{{ __("admin.resetting_password") }}',
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+
+            fetch(`{{ route('admin.users.reset-password', ['user' => ':userId']) }}`.replace(':userId', userId), {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({
+                    new_password: result.value.newPassword,
+                    new_password_confirmation: result.value.confirmPassword
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire('{{ __("admin.success") }}!', data.message, 'success');
+                } else {
+                    Swal.fire('{{ __("admin.error") }}!', data.message, 'error');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                Swal.fire('{{ __("admin.error") }}!', '{{ __("admin.connection_error") }}', 'error');
             });
         }
     });
