@@ -705,13 +705,25 @@ class EventCreation extends Component
                 $event->groups()->attach($this->selected_groups);
             }
 
-            // Handle invitations
+            // Handle invitations (participants)
             if (!empty($this->invitations)) {
                 foreach ($this->invitations as $invitation) {
                     $event->invitations()->create([
                         'invited_user_id' => $invitation['user_id'],
                         'inviter_id' => Auth::id(),
                         'role' => $invitation['role'],
+                        'status' => 'pending',
+                    ]);
+                }
+            }
+
+            // Handle audience invitations
+            if (!empty($this->audienceInvitations)) {
+                foreach ($this->audienceInvitations as $audience) {
+                    $event->invitations()->create([
+                        'invited_user_id' => $audience['user_id'],
+                        'inviter_id' => Auth::id(),
+                        'role' => 'audience',
                         'status' => 'pending',
                     ]);
                 }
@@ -751,7 +763,7 @@ class EventCreation extends Component
             ], Event::class, $event->id);
 
             session()->flash('success', __('events.event_created_successfully'));
-            return $this->redirectRoute('events.show', ['event' => $event->id]);
+            return $this->redirect(route('events.show', $event), navigate: true);
 
         } catch (\Illuminate\Validation\ValidationException $e) {
             // Validation errors - let Livewire handle them

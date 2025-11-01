@@ -1872,8 +1872,8 @@
                             @else
                                 <button type="button"
                                         wire:click="save"
-                                        class="btn btn-success btn-lg">
-                                        <i class="ph ph-check-circle me-2"></i>{{ __('events.create_event') }}
+                                        class="btn btn-primary btn-lg">
+                                    <i class="ph ph-check-circle me-2"></i>{{ __('events.create_event') }}
                                 </button>
                             @endif
 
