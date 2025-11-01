@@ -28,34 +28,58 @@
 <!-- App js-->
 <script src="{{asset('assets/js/script.js')}}?v={{ time() }}"></script>
 
-<!-- DISABILITA TOOLTIP BOOTSTRAP GLOBALMENTE -->
+<!-- INIZIALIZZA TOOLTIP BOOTSTRAP CORRETTAMENTE -->
 <script>
-// Disabilita completamente i tooltip Bootstrap prima che si inizializzino
+// Inizializza tooltip Bootstrap con auto-hide
 document.addEventListener('DOMContentLoaded', function() {
-    // Rimuovi tutti gli attributi tooltip dal DOM
-    const tooltipElements = document.querySelectorAll('[data-bs-toggle="tooltip"]');
-    tooltipElements.forEach(function(element) {
-        element.removeAttribute('data-bs-toggle');
-        element.removeAttribute('data-bs-title');
-        element.removeAttribute('data-bs-placement');
+    // Inizializza tutti i tooltip
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+    const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => {
+        return new bootstrap.Tooltip(tooltipTriggerEl, {
+            trigger: 'hover focus',
+            delay: { show: 300, hide: 100 },
+            animation: true,
+            html: false,
+            placement: 'auto'
+        });
     });
 
-    // Rimuovi eventuali tooltip già creati
-    const existingTooltips = document.querySelectorAll('.tooltip');
-    existingTooltips.forEach(function(tooltip) {
-        tooltip.remove();
+    // Auto-hide tooltip quando si clicca sull'elemento
+    tooltipTriggerList.forEach(element => {
+        element.addEventListener('click', function() {
+            const tooltip = bootstrap.Tooltip.getInstance(this);
+            if (tooltip) {
+                tooltip.hide();
+            }
+        });
+    });
+
+    // Auto-hide tutti i tooltip quando si clicca fuori
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('[data-bs-toggle="tooltip"]')) {
+            tooltipTriggerList.forEach(element => {
+                const tooltip = bootstrap.Tooltip.getInstance(element);
+                if (tooltip) {
+                    tooltip.hide();
+                }
+            });
+        }
     });
 });
 
-// Disabilita anche con jQuery se disponibile
+// Cleanup tooltip con jQuery (se disponibile)
 $(document).ready(function() {
-    $('[data-bs-toggle="tooltip"]').removeAttr('data-bs-toggle data-bs-title data-bs-placement');
-    $('.tooltip').remove();
+    // Auto-hide tooltip dopo 3 secondi se resta aperto
+    $(document).on('shown.bs.tooltip', function(e) {
+        setTimeout(function() {
+            const tooltip = bootstrap.Tooltip.getInstance(e.target);
+            if (tooltip) {
+                tooltip.hide();
+            }
+        }, 3000);
+    });
 });
 </script>
-
-<!-- Tooltips js-->
-<script src="{{asset('assets/js/tooltips_popovers.js')}}"></script>
 
 <!-- Sidebar logo responsive -->
 
