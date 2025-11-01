@@ -15,6 +15,9 @@ class NotificationCenter extends Component
 
     public function mount()
     {
+        \Log::info('NotificationCenter mounted for user', [
+            'user_id' => Auth::id(),
+        ]);
         $this->loadNotifications();
     }
 

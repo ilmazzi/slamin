@@ -160,18 +160,28 @@
 @script
 <script>
     // Listen for real-time notifications via Reverb
-    Echo.private('App.Models.User.{{ Auth::id() }}')
-        .listen('.notification.sent', (event) => {
-            console.log('New notification received:', event);
-            
-            // Dispatch Livewire event to reload notifications
-            $wire.dispatch('notification-sent', event);
-            
-            // Optional: Play sound
-            // new Audio('/sounds/notification.mp3').play();
-            
-            // Optional: Show toast
-            // Livewire.dispatch('show-toast', { message: event.title, type: 'info' });
-        });
+    if (typeof Echo !== 'undefined') {
+        console.log('Echo is available, subscribing to notifications...');
+        console.log('Channel: App.Models.User.{{ Auth::id() }}');
+        
+        Echo.private('App.Models.User.{{ Auth::id() }}')
+            .listen('.notification.sent', (event) => {
+                console.log('✅ New notification received:', event);
+                
+                // Dispatch Livewire event to reload notifications
+                $wire.dispatch('notification-sent', event);
+                
+                // Optional: Play sound
+                // new Audio('/sounds/notification.mp3').play();
+                
+                // Optional: Show toast
+                // Livewire.dispatch('show-toast', { message: event.title, type: 'info' });
+            })
+            .error((error) => {
+                console.error('❌ Echo subscription error:', error);
+            });
+    } else {
+        console.warn('⚠️ Echo is not available. Real-time notifications will not work. Using polling fallback.');
+    }
 </script>
 @endscript
