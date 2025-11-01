@@ -145,8 +145,8 @@
                         </div>
                     </li>
 
-                    @auth
                     <!-- Wiki - Prossimamente - Solo per utenti autenticati
+                    <!--
                     <li class="header-wiki">
                         <a href="#" class="d-block head-icon bg-light-dark rounded-circle f-s-22 p-2 disabled d-flex align-items-center justify-content-center"
                            data-bs-toggle="tooltip" data-bs-placement="bottom" title="Wiki (Prossimamente)"
