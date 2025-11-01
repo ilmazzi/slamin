@@ -756,31 +756,62 @@
                                                     {{ __('events.groups_help') }}
                                                 </p>
                                                 
-                                                @php
-                                                    $groups = \App\Models\Group::public()->get();
-                                                @endphp
-                                                
-                                                @if($groups->count() > 0)
-                                                    <div class="mb-2">
-                                                        <label class="form-label">{{ __('events.select_groups') }}</label>
+                                                <!-- Group Search -->
+                                                <div class="mb-3">
+                                                    <label class="form-label">{{ __('events.search_groups') }}</label>
+                                                    <input type="text"
+                                                           wire:model.live.debounce.300ms="groupSearchQuery"
+                                                           class="form-control"
+                                                           placeholder="{{ __('events.search_groups_placeholder') }}">
+                                                </div>
+
+                                                <!-- Group Search Results -->
+                                                @if(strlen($groupSearchQuery) >= 2 && count($groupSearchResults) > 0)
+                                                    <div class="mb-3">
+                                                        <label class="form-label">{{ __('events.search_results') }}</label>
+                                                        @foreach($groupSearchResults as $group)
+                                                            <div class="form-check mb-2">
+                                                                <input type="checkbox"
+                                                                       wire:model.live="selected_groups"
+                                                                       value="{{ $group['id'] }}"
+                                                                       class="form-check-input"
+                                                                       id="group_search_{{ $group['id'] }}">
+                                                                <label for="group_search_{{ $group['id'] }}" class="form-check-label">
+                                                                    <strong>{{ $group['name'] }}</strong>
+                                                                    @if($group['description'])
+                                                                        <br><small class="text-muted">{{ Str::limit($group['description'], 50) }}</small>
+                                                                    @endif
+                                                                </label>
+                                                            </div>
+                                                        @endforeach
                                                     </div>
-                                                    @foreach($groups as $group)
-                                                        <div class="form-check mb-2">
-                                                            <input type="checkbox"
-                                                                   wire:model.live="selected_groups"
-                                                                   value="{{ $group->id }}"
-                                                                   class="form-check-input"
-                                                                   id="group_{{ $group->id }}">
-                                                            <label for="group_{{ $group->id }}" class="form-check-label">
-                                                                <strong>{{ $group->name }}</strong>
-                                                                @if($group->description)
-                                                                    <br><small class="text-muted">{{ Str::limit($group->description, 50) }}</small>
-                                                                @endif
-                                                            </label>
-                                                        </div>
-                                                    @endforeach
-                                                @else
-                                                        <p class="text-muted small">{{ __('events.no_groups_available') }}</p>
+                                                @elseif(strlen($groupSearchQuery) >= 2)
+                                                    <p class="text-muted small">{{ __('events.no_groups_found') }}</p>
+                                                @endif
+
+                                                <!-- Selected Groups -->
+                                                @if(count($selected_groups) > 0)
+                                                    @php
+                                                        $selectedGroupsData = \App\Models\Group::whereIn('id', $selected_groups)->get();
+                                                    @endphp
+                                                    <div class="mb-2">
+                                                        <label class="form-label">{{ __('events.selected_groups') }}</label>
+                                                        @foreach($selectedGroupsData as $group)
+                                                            <div class="d-flex align-items-center justify-content-between mb-2 p-2 bg-light-info rounded">
+                                                                <div>
+                                                                    <strong>{{ $group->name }}</strong>
+                                                                    @if($group->description)
+                                                                        <br><small class="text-muted">{{ Str::limit($group->description, 50) }}</small>
+                                                                    @endif
+                                                                </div>
+                                                                <button type="button"
+                                                                        wire:click="$set('selected_groups', {{ json_encode(array_values(array_diff($selected_groups, [$group->id]))) }})"
+                                                                        class="btn btn-sm btn-danger">
+                                                                    <i class="ph ph-x"></i>
+                                                                </button>
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
                                                 @endif
                                             </div>
                                         @endif

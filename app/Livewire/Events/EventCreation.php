@@ -120,6 +120,10 @@ class EventCreation extends Component
     public $searchResults = [];
     public $searching = false;
 
+    // Group search
+    public $groupSearchQuery = '';
+    public $groupSearchResults = [];
+
     // Tags
     public $tags = [];
 
@@ -459,6 +463,31 @@ class EventCreation extends Component
             ->toArray();
 
         $this->searching = false;
+    }
+
+    public function updatedGroupSearchQuery()
+    {
+        if (strlen($this->groupSearchQuery) < 2) {
+            $this->groupSearchResults = [];
+            return;
+        }
+
+        $this->groupSearchResults = Group::public()
+            ->where(function ($q) {
+                $q->where('name', 'like', "%{$this->groupSearchQuery}%")
+                  ->orWhere('description', 'like', "%{$this->groupSearchQuery}%");
+            })
+            ->whereNotIn('id', $this->selected_groups)
+            ->limit(10)
+            ->get()
+            ->map(function ($group) {
+                return [
+                    'id' => $group->id,
+                    'name' => $group->name,
+                    'description' => $group->description,
+                ];
+            })
+            ->toArray();
     }
 
     public function addInvitation($userId, $role = 'performer')

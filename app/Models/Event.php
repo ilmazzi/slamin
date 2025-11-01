@@ -111,6 +111,7 @@ class Event extends Model
      */
     const CATEGORY_CONCERT = 'concert';
     const CATEGORY_CONFERENCE = 'conference';
+    const CATEGORY_CONTEST = 'contest';
     const CATEGORY_FESTIVAL = 'festival';
     const CATEGORY_WORKSHOP = 'workshop';
     const CATEGORY_OPEN_MIC = 'open_mic';
@@ -344,6 +345,7 @@ class Event extends Model
         return [
             self::CATEGORY_CONCERT => 'Concerto (musica)',
             self::CATEGORY_CONFERENCE => 'Conferenza/Tavola rotonda',
+            self::CATEGORY_CONTEST => 'Concorso',
             self::CATEGORY_FESTIVAL => 'Festival',
             self::CATEGORY_WORKSHOP => 'Laboratorio/Corso',
             self::CATEGORY_OPEN_MIC => 'Open mic',
@@ -373,6 +375,7 @@ class Event extends Model
         return match($this->category) {
             self::CATEGORY_CONCERT => 'bg-primary',           // Blu
             self::CATEGORY_CONFERENCE => 'bg-info',           // Azzurro
+            self::CATEGORY_CONTEST => 'bg-warning',           // Giallo/Oro
             self::CATEGORY_FESTIVAL => 'bg-success',          // Verde
             self::CATEGORY_WORKSHOP => 'bg-warning',          // Giallo
             self::CATEGORY_OPEN_MIC => 'bg-secondary',        // Grigio
@@ -394,6 +397,7 @@ class Event extends Model
         return match($this->category) {
             self::CATEGORY_CONCERT => 'bg-light-primary',
             self::CATEGORY_CONFERENCE => 'bg-light-info',
+            self::CATEGORY_CONTEST => 'bg-light-warning',
             self::CATEGORY_FESTIVAL => 'bg-light-success',
             self::CATEGORY_WORKSHOP => 'bg-light-warning',
             self::CATEGORY_OPEN_MIC => 'bg-light-secondary',
