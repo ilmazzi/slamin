@@ -222,7 +222,7 @@ class GroupIndex extends Component
             
             // Add follow status if user is authenticated
             if ($currentUserId) {
-                $user->is_followed_by_current_user = DB::table('followers')
+                $user->is_followed_by_current_user = DB::table('follows')
                     ->where('follower_id', $currentUserId)
                     ->where('following_id', $user->id)
                     ->exists();
